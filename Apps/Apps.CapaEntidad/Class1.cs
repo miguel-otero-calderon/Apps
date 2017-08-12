@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Apps.CapaDatos
+namespace Apps.CapaEntidad
 {
-    public class Class1
+    public abstract class Entity
     {
+
     }
 }
