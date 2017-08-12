@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 
@@ -6,31 +7,75 @@ namespace Apps.Data
 {
     public class DataSqlServer : Data
     {
-        private string stringConnection;
+        private static SqlConnection Connection;
+        private static SqlCommand Command;
+        private DataSqlServer() { }
         public DataSqlServer(string stringConnection)
         {
-            this.stringConnection = stringConnection;
+            if (DataSqlServer.Connection == null)
+                DataSqlServer.Connection = new SqlConnection(stringConnection);
         }
 
-        public override void ExecuteCommand(DbCommand command)
+        public override void ExecuteCommand(DaCommand Command)
         {
-            SqlCommand store = (SqlCommand)command;
-            store.Connection = (SqlConnection)GetConnection();
-            store.ExecuteNonQuery();
+            try
+            {
+                SqlCommand store = GetCommand(Command);
+                store.Connection = GetConnection();
+                store.ExecuteNonQuery();
+            }
+            finally
+            {
+                GetConnection().Close();
+            }
         }
 
-        public override IDataReader ExecuteDataReader(DbCommand command)
+        public override IDataReader ExecuteDataReader(DaCommand command)
         {
-            SqlCommand store = (SqlCommand)command;
-            store.Connection = (SqlConnection)GetConnection();
-            return store.ExecuteReader();
+            try
+            {
+                SqlCommand store = (SqlCommand)command;
+                store.Connection = GetConnection();
+                return store.ExecuteReader();
+            }
+            finally
+            {
+                GetConnection().Close();
+            }
         }
 
-        protected override DbConnection GetConnection()
+        protected SqlConnection GetConnection()
         {
-            SqlConnection connection = new SqlConnection(stringConnection);
-            connection.Open();
-            return connection;
+            if(DataSqlServer.Connection.State != ConnectionState.Open)
+                DataSqlServer.Connection.Open();
+
+            return DataSqlServer.Connection;
+        }
+
+        protected SqlCommand GetCommand()
+        {
+            if (DataSqlServer.Command == null)
+                DataSqlServer.Command = new SqlCommand();
+
+            return DataSqlServer.Command;
+        }
+
+        protected SqlCommand GetCommand(DaCommand Command)
+        {
+            SqlCommand store = DataSqlServer.Command;
+            store.CommandText = Command.CommandText;
+            store.CommandType = CommandType.StoredProcedure;
+            SetParameters(ref store,Command);
+            return store;
+        }
+
+        private void SetParameters(ref SqlCommand store, DaCommand command)
+        {
+            store.Parameters.Clear();
+            foreach (var par in command.Parameters)
+            {
+
+            }
         }
     }
 }

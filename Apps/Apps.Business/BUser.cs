@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Apps.Entity;
+using Apps.Data;
 
 namespace Apps.Business
 {
@@ -11,6 +12,7 @@ namespace Apps.Business
     {
         public bool Login(EUser user)
         {
+            DUser d = new DUser();
             return false;
         }
     }

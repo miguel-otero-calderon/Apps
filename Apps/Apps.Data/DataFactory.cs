@@ -3,21 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace Apps.Data
 {
     public class DataFactory
     {
-        protected string stringConnection;
-        public DataFactory(string stringConnection)
+        private DataFactory() { }
+        private static DataSqlServer instanceSqlServer;
+        private static string stringConnection;
+        public static Data CreateData()
         {
-            this.stringConnection = stringConnection;
-        }
+            if (string.IsNullOrEmpty(stringConnection))
+                stringConnection = ConfigurationManager.ConnectionStrings[0].ConnectionString;
 
-        public Data CreateData()
-        {
-            if (this.stringConnection.ToLower().Contains("sqlserver"))
-                return new DataSqlServer(this.stringConnection);
+            if (string.IsNullOrEmpty(stringConnection))
+                throw new Exception("String Connection not exists.");
+
+            if (stringConnection.ToLower().Contains("sqlserver"))
+            {
+                if(instanceSqlServer == null)
+                    instanceSqlServer = new DataSqlServer(stringConnection);
+                return instanceSqlServer;
+            }
+               
             return null;
         }
     }
