@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EF4A19FD-EC78-475C-BEE5-40F38B26F80E}</ProjectGuid>
+    <ProjectGuid>{CDD428DC-35EA-4198-AC3D-7966B1C03D2A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Apps.Data</RootNamespace>
-    <AssemblyName>Apps.Data</AssemblyName>
+    <RootNamespace>Apps.Entity</RootNamespace>
+    <AssemblyName>Apps.Entity</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,16 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data.cs" />
-    <Compile Include="DataFactory.cs" />
-    <Compile Include="DataSqlServer.cs" />
+    <Compile Include="Entity.cs" />
+    <Compile Include="EUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Apps.Entity\Apps.Entity.csproj">
-      <Project>{cdd428dc-35ea-4198-ac3d-7966b1c03d2a}</Project>
-      <Name>Apps.Entity</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
