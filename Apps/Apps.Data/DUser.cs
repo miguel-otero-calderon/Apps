@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data;
 using Apps.Entity;
 
 namespace Apps.Data
@@ -10,9 +11,21 @@ namespace Apps.Data
             return true;
         }
 
-        public EUser FindByCodeUser(string CodeUser)
-        {           
-            return null;
+        public IDataReader FindByCodeUser(string CodeUser)
+        {
+            DaCommand command = new DaCommand("usp_select_User");
+            command.AddInParameter("@CodeUser", DbType.String, CodeUser);
+            return ExecuteDataReader(command);
+        }
+
+        public void Insert(EUser user)
+        {
+            DaCommand command = new DaCommand("usp_insert_User");
+            command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);
+            command.AddInParameter("@Name", DbType.String, user.Name);
+            command.AddInParameter("@Password", DbType.String, user.Password);
+            command.AddInParameter("@Estado", DbType.String, user.Estado);
+            ExecuteCommand(command);
         }
     }
 }

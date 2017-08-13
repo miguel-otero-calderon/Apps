@@ -42,11 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DaCommand.cs" />
+    <Compile Include="DaParameter.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DataFactory.cs" />
     <Compile Include="DataSqlServer.cs" />
     <Compile Include="DData.cs" />
     <Compile Include="DUser.cs" />
+    <Compile Include="Extension\DataTableExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +57,7 @@
       <Name>Apps.Entity</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

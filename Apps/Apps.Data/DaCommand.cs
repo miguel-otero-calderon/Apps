@@ -1,69 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Apps.Data
 {
-    public class DaCommand : System.Data.IDbCommand
+    public class DaCommand
     {
-        public string CommandText { get; set; }
+        private List<DaParameter> parameters;
+        public DaCommand() {parameters = new List<DaParameter>();}
+        public DaCommand(string CommandText)
+        {
+            this.CommandText = CommandText;
+            parameters = new List<DaParameter>();
+        }            
 
-        public int CommandTimeout { get; set; }
+        public string CommandText { get; set; }
 
         public CommandType CommandType { get; set; }
 
-        public IDbConnection Connection { get; set; }
+        public List<DaParameter> Parameters { get { return parameters; }}
 
-        public IDataParameterCollection Parameters { get;}
-
-        public IDbTransaction Transaction { get; set; }
-
-        public UpdateRowSource UpdatedRowSource { get; set; }
-
-        public static explicit operator SqlCommand(DaCommand v)
+        public void AddInParameter(string ParameterName, DbType DbType, object Value)
         {
-            throw new NotImplementedException();
+            DaParameter parameter = new DaParameter(ParameterName, DbType, Value);
+            parameter.Direction = ParameterDirection.Input;
+            Parameters.Add(parameter);
         }
 
-        public void Cancel() { }
-
-        public IDbDataParameter CreateParameter()
+        public void AddOutParameter(string ParameterName, DbType DbType, object Value)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int ExecuteNonQuery()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataReader ExecuteReader()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataReader ExecuteReader(CommandBehavior behavior)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object ExecuteScalar()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Prepare()
-        {
-            throw new NotImplementedException();
+            DaParameter parameter = new DaParameter(ParameterName, DbType, Value);
+            parameter.Direction = ParameterDirection.Output;
+            Parameters.Add(parameter);
         }
     }
 }

@@ -11,19 +11,30 @@ namespace Apps.Data
     {
         private DataFactory() { }
         private static DataSqlServer instanceSqlServer;
-        private static string stringConnection;
+        private static ConnectionStringSettings stringConnection = new ConnectionStringSettings();
         public static Data CreateData()
         {
-            if (string.IsNullOrEmpty(stringConnection))
-                stringConnection = ConfigurationManager.ConnectionStrings[0].ConnectionString;
+            if (string.IsNullOrEmpty(stringConnection.ConnectionString))
+            {
+                foreach (ConnectionStringSettings connection in ConfigurationManager.ConnectionStrings)
+                {
+                    if (connection.Name.ToLower().Contains("connection"))
+                    {
+                        stringConnection = connection;
+                        break;
+                    }                        
+                }                
+            }
 
-            if (string.IsNullOrEmpty(stringConnection))
-                throw new Exception("String Connection not exists.");
+            if (string.IsNullOrEmpty(stringConnection.ConnectionString))
+            {
+                throw new Exception("Not exists connectionString, begin 'connection[SqlServer or Oracle]'.");
+            }
 
-            if (stringConnection.ToLower().Contains("sqlserver"))
+            if (stringConnection.Name.ToLower().Contains("sqlserver"))
             {
                 if(instanceSqlServer == null)
-                    instanceSqlServer = new DataSqlServer(stringConnection);
+                    instanceSqlServer = new DataSqlServer(stringConnection.ConnectionString);
                 return instanceSqlServer;
             }
                

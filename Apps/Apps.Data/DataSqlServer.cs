@@ -14,6 +14,9 @@ namespace Apps.Data
         {
             if (DataSqlServer.Connection == null)
                 DataSqlServer.Connection = new SqlConnection(stringConnection);
+
+            if (DataSqlServer.Command == null)
+                DataSqlServer.Command = new SqlCommand();
         }
 
         public override void ExecuteCommand(DaCommand Command)
@@ -30,11 +33,11 @@ namespace Apps.Data
             }
         }
 
-        public override IDataReader ExecuteDataReader(DaCommand command)
+        public override IDataReader ExecuteDataReader(DaCommand Command)
         {
             try
             {
-                SqlCommand store = (SqlCommand)command;
+                SqlCommand store = GetCommand(Command);
                 store.Connection = GetConnection();
                 return store.ExecuteReader();
             }
@@ -50,7 +53,7 @@ namespace Apps.Data
                 DataSqlServer.Connection.Open();
 
             return DataSqlServer.Connection;
-        }
+        }   
 
         protected SqlCommand GetCommand()
         {
@@ -74,7 +77,12 @@ namespace Apps.Data
             store.Parameters.Clear();
             foreach (var par in command.Parameters)
             {
-
+                SqlParameter parameter = new SqlParameter();
+                parameter.ParameterName = par.ParameterName;
+                parameter.Direction = par.Direction;
+                parameter.DbType = par.DbType;
+                parameter.Value = par.Value;
+                store.Parameters.Add(parameter);
             }
         }
     }
