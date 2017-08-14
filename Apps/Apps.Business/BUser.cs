@@ -41,5 +41,10 @@ namespace Apps.Business
         {
             d.Insert(user);
         }
+
+        public void Delete(string CodeUser)
+        {
+            d.Delete(CodeUser);
+        }
     }
 }

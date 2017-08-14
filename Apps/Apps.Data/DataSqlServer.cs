@@ -27,6 +27,10 @@ namespace Apps.Data
                 store.Connection = GetConnection();
                 store.ExecuteNonQuery();
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             finally
             {
                 GetConnection().Close();
@@ -40,6 +44,10 @@ namespace Apps.Data
                 SqlCommand store = GetCommand(Command);
                 store.Connection = GetConnection();
                 return store.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             finally
             {

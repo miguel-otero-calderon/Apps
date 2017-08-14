@@ -9,7 +9,7 @@ namespace Apps.Test
     public class UnitTest1
     {
         [TestMethod]
-        public void AppsBusinessFindByCodeUserNotExist()
+        public void FindByCodeUserNotExist()
         {
             BUser business = new BUser();
             EUser user = business.FindByCodeUser("xxx");
@@ -17,23 +17,26 @@ namespace Apps.Test
         }
 
         [TestMethod]
-        public void AppsBusinessInsertUser()
+        public void InsertUser()
         {
             BUser business = new BUser();
             EUser user = new EUser();
+
             user.CodeUser = "motero";
             user.Name = "Miguel Angel";
             user.Password = "123456";
-            user.Estado = 1;
-            try
-            {
-                business.Insert(user);
-                Assert.AreEqual(user, user);
-            }
-            catch
-            {
-                Assert.AreEqual(user, null);
-            }
+            user.State = 1;
+            business.Insert(user);
+            Assert.AreEqual(user, user);
+        }
+
+        [TestMethod]
+        public void DeletetUser()
+        {
+            BUser business = new BUser();
+            string CodeUser = "motero";
+            business.Delete(CodeUser);
+            Assert.AreEqual(CodeUser, CodeUser);
         }
     }
 }

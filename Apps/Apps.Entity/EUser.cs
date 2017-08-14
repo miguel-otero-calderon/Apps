@@ -12,7 +12,7 @@ namespace Apps.Entity
         public string CodeUser { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
-        public short Estado { get; set; }
+        public short State { get; set; }
         public EUser() { }
         public EUser(DataRow row,List<string>columns)
         {
@@ -25,8 +25,8 @@ namespace Apps.Entity
             if (columns.Contains("Password") && row.Validate("Password"))
                 Password = Convert.ToString(row["Password"]);
 
-            if (columns.Contains("Estado") && row.Validate("Estado"))
-                Estado = Convert.ToInt16(row["Estado"]);
+            if (columns.Contains("State") && row.Validate("State"))
+                State = Convert.ToInt16(row["State"]);
         }
     }
 }
