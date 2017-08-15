@@ -24,6 +24,8 @@ namespace Apps.Data
             command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);
             command.AddInParameter("@Name", DbType.String, user.Name);
             command.AddInParameter("@Password", DbType.String, user.Password);
+            command.AddInParameter("@Email", DbType.String, user.Email);
+            command.AddInParameter("@Profile", DbType.String, user.Profile);
             command.AddInParameter("@State", DbType.String, user.State);
             ExecuteCommand(command);
         }
@@ -41,6 +43,8 @@ namespace Apps.Data
             command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);
             command.AddInParameter("@Name", DbType.String, user.Name);
             command.AddInParameter("@Password", DbType.String, user.Password);
+            command.AddInParameter("@Email", DbType.String, user.Email);
+            command.AddInParameter("@Profile", DbType.String, user.Profile);
             command.AddInParameter("@State", DbType.String, user.State);
             ExecuteCommand(command);
         }

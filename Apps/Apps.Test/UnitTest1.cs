@@ -25,6 +25,8 @@ namespace Apps.Test
             user.CodeUser = "motero";
             user.Name = "Miguel Angel";
             user.Password = "123456";
+            user.Email = "miguel-otero@hotmail.com";
+            user.Profile = "adm";
             user.State = 1;
             business.Insert(user);
             Assert.AreEqual(user, user);
@@ -34,9 +36,26 @@ namespace Apps.Test
         public void DeletetUser()
         {
             BUser business = new BUser();
-            string CodeUser = "motero";
-            business.Delete(CodeUser);
-            Assert.AreEqual(CodeUser, CodeUser);
+            EUser user = new EUser();
+            user.CodeUser = "motero";
+            business.Delete(user);
+            Assert.AreEqual(user, user);
+        }
+
+        [TestMethod]
+        public void UpdateUser()
+        {
+            BUser business = new BUser();
+            EUser user = new EUser();
+
+            user.CodeUser = "motero";
+            user.Name = "Miguel Angel";
+            user.Password = "123456";
+            user.Email = "miguel-otero@hotmail.com";
+            user.Profile = "adm";
+            user.State = 1;
+            business.Update(user);
+            Assert.AreEqual(user, user);
         }
     }
 }

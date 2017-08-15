@@ -12,7 +12,8 @@ namespace Apps.Business
 {
     public class BUser
     {
-        DUser d = new DUser();
+        DUser data = new DUser();
+        BAudit audit = new BAudit();
         public bool Login(EUser user)
         {            
             return false;
@@ -20,7 +21,7 @@ namespace Apps.Business
 
         public EUser FindByCodeUser(string CodeUser)
         {
-            IDataReader reader = d.FindByCodeUser(CodeUser);
+            IDataReader reader = data.FindByCodeUser(CodeUser);
             DataTable table = new DataTable();
             table.Load(reader);
             reader.Close();
@@ -39,12 +40,23 @@ namespace Apps.Business
 
         public void Insert(EUser user)
         {
-            d.Insert(user);
+            data.Insert(user);
+            user.Audit.TypeEvent = "New";
+            audit.Insert(user.Audit);
         }
 
-        public void Delete(string CodeUser)
+        public void Delete(EUser user)
         {
-            d.Delete(CodeUser);
+            data.Delete(user.CodeUser);
+            user.Audit.TypeEvent = "Delete";
+            audit.Insert(user.Audit);
+        }
+
+        public void Update(EUser user)
+        {
+            data.Update(user);
+            user.Audit.TypeEvent = "Update";
+            audit.Insert(user.Audit);
         }
     }
 }
