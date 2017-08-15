@@ -28,6 +28,7 @@ namespace Apps.Test
             user.Email = "miguel-otero@hotmail.com";
             user.Profile = "adm";
             user.State = 1;
+            user.Audit.UserRegister = "admin";
             business.Insert(user);
             Assert.AreEqual(user, user);
         }
@@ -38,6 +39,7 @@ namespace Apps.Test
             BUser business = new BUser();
             EUser user = new EUser();
             user.CodeUser = "motero";
+            user.Audit.UserRegister = "admin";
             business.Delete(user);
             Assert.AreEqual(user, user);
         }
@@ -54,6 +56,7 @@ namespace Apps.Test
             user.Email = "miguel-otero@hotmail.com";
             user.Profile = "adm";
             user.State = 1;
+            user.Audit.UserRegister = "admin";
             business.Update(user);
             Assert.AreEqual(user, user);
         }
