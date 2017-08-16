@@ -6,16 +6,11 @@ namespace Apps.Data
 {
     public class DUser:DData
     {
-        public bool Login(EUser user)
-        {           
-            return true;
-        }
-
-        public IDataReader FindByCodeUser(string CodeUser)
+        public DataRow FindByCodeUser(string CodeUser)
         {
             DaCommand command = new DaCommand("UserFindByCodeUser");
             command.AddInParameter("@CodeUser", DbType.String, CodeUser);
-            return ExecuteDataReader(command);
+            return ExecuteDataRow(command);
         }
 
         public void Insert(EUser user)
@@ -41,8 +36,7 @@ namespace Apps.Data
         {
             DaCommand command = new DaCommand("UserUpdate");
             command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);
-            command.AddInParameter("@Name", DbType.String, user.Name);
-            command.AddInParameter("@Password", DbType.String, user.Password);
+            command.AddInParameter("@Name", DbType.String, user.Name);            
             command.AddInParameter("@Email", DbType.String, user.Email);
             command.AddInParameter("@Profile", DbType.String, user.Profile);
             command.AddInParameter("@State", DbType.String, user.State);

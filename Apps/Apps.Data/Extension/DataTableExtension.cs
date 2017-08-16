@@ -15,7 +15,7 @@ namespace Apps.Data.Extension
             {
                 Columns.Add(column.ColumnName);
             }
-            return null;
+            return Columns;
         }
     }
 }

@@ -11,19 +11,29 @@ namespace Apps.Data
 {
     public class DData:Data
     {
-        private static Data layerData;
+        private static Data _layerData;
+        private static Data layerData
+        {
+            get
+            {
+                if (_layerData == null)
+                    _layerData = DataFactory.CreateData();
+                return _layerData;
+            }
+        }
         public override void ExecuteCommand(DaCommand Command)
         {
-            if (layerData == null)
-                layerData = DataFactory.CreateData();
             layerData.ExecuteCommand(Command);
         }
 
-        public override IDataReader ExecuteDataReader(DaCommand Command)
+        public override DataRow ExecuteDataRow(DaCommand Command)
         {
-            if (layerData == null)
-                layerData = DataFactory.CreateData();
-            return layerData.ExecuteDataReader(Command);
+            return layerData.ExecuteDataRow(Command);
+        }
+
+        public override DataTable ExecuteDataTable(DaCommand Command)
+        {
+            return layerData.ExecuteDataTable(Command);
         }
     }
 }

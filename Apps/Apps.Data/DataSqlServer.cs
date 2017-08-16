@@ -7,16 +7,12 @@ namespace Apps.Data
 {
     public class DataSqlServer : Data
     {
-        private static SqlConnection Connection;
-        private static SqlCommand Command;
+        private SqlConnection Connection;        
         private DataSqlServer() { }
         public DataSqlServer(string stringConnection)
         {
-            if (DataSqlServer.Connection == null)
-                DataSqlServer.Connection = new SqlConnection(stringConnection);
-
-            if (DataSqlServer.Command == null)
-                DataSqlServer.Command = new SqlCommand();
+            if (Connection == null)
+                Connection = new SqlConnection(stringConnection);
         }
 
         public override void ExecuteCommand(DaCommand Command)
@@ -37,13 +33,19 @@ namespace Apps.Data
             }
         }
 
-        public override IDataReader ExecuteDataReader(DaCommand Command)
+        public override DataTable ExecuteDataTable(DaCommand Command)
         {
             try
             {
                 SqlCommand store = GetCommand(Command);
                 store.Connection = GetConnection();
-                return store.ExecuteReader();
+                DataTable table = new DataTable();
+                using (SqlDataReader reader = store.ExecuteReader())
+                {
+                    table.Load(reader);
+                    reader.Close();
+                }
+                return table;
             }
             catch (Exception ex)
             {
@@ -57,23 +59,15 @@ namespace Apps.Data
 
         protected SqlConnection GetConnection()
         {
-            if(DataSqlServer.Connection.State != ConnectionState.Open)
-                DataSqlServer.Connection.Open();
+            if(Connection.State != ConnectionState.Open)
+                Connection.Open();
 
-            return DataSqlServer.Connection;
+            return Connection;
         }   
-
-        protected SqlCommand GetCommand()
-        {
-            if (DataSqlServer.Command == null)
-                DataSqlServer.Command = new SqlCommand();
-
-            return DataSqlServer.Command;
-        }
 
         protected SqlCommand GetCommand(DaCommand Command)
         {
-            SqlCommand store = DataSqlServer.Command;
+            SqlCommand store = new SqlCommand();
             store.CommandText = Command.CommandText;
             store.CommandType = CommandType.StoredProcedure;
             SetParameters(ref store,Command);
@@ -92,6 +86,15 @@ namespace Apps.Data
                 parameter.Value = par.Value;
                 store.Parameters.Add(parameter);
             }
+        }
+
+        public override DataRow ExecuteDataRow(DaCommand Command)
+        {
+            DataTable table = ExecuteDataTable(Command);
+            if (table.Rows.Count > 0)
+                return table.Rows[0];
+            else
+                return null;
         }
     }
 }

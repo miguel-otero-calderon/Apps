@@ -7,6 +7,7 @@ namespace Apps.Data
     {
         protected Data() { }
         public abstract void ExecuteCommand(DaCommand Command);
-        public abstract IDataReader ExecuteDataReader(DaCommand Command);
+        public abstract DataTable ExecuteDataTable(DaCommand Command);
+        public abstract DataRow ExecuteDataRow(DaCommand Command);
     }
 }

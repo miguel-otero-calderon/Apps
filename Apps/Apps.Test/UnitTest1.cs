@@ -24,7 +24,7 @@ namespace Apps.Test
 
             user.CodeUser = "motero";
             user.Name = "Miguel Angel";
-            user.Password = "123456";
+            user.Password = "123456789101112131415";
             user.Email = "miguel-otero@hotmail.com";
             user.Profile = "adm";
             user.State = 1;
@@ -59,6 +59,16 @@ namespace Apps.Test
             user.Audit.UserRegister = "admin";
             business.Update(user);
             Assert.AreEqual(user, user);
+        }
+
+        [TestMethod]
+        public void LoginPasswordIncorrect()
+        {
+            BUser business = new BUser();
+            EUser user = new EUser();
+            user.CodeUser = "motero";
+            user.Password = "xxx";
+            Assert.IsFalse(business.Login(user));
         }
     }
 }

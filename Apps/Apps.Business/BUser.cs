@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Apps.Entity;
 using Apps.Data;
 using Apps.Data.Extension;
+using Apps.Util;
 using System.Data;
 
 namespace Apps.Business
@@ -15,31 +16,40 @@ namespace Apps.Business
         DUser data = new DUser();
         BAudit audit = new BAudit();
         public bool Login(EUser user)
-        {            
-            return false;
+        {
+            EUser find = FindByCodeUser(user.CodeUser);
+            if (find == null)
+                throw new Exception("El usuario no existe.");            
+
+            if (user.Password == CalculateHash(user))
+                return true;
+            else
+                return false;
         }
 
         public EUser FindByCodeUser(string CodeUser)
         {
-            IDataReader reader = data.FindByCodeUser(CodeUser);
-            DataTable table = new DataTable();
-            table.Load(reader);
-            reader.Close();
-            if (table.Rows.Count == 1)
+            EUser user;
+            DataRow row = data.FindByCodeUser(CodeUser);
+            if (row != null)
             {
-                DataRow row = table.Rows[0];
-                List<string> columns = table.GetColumns();
-                EUser user = new EUser(row, columns);
+                List<string> columns = row.Table.GetColumns();
+                user = new EUser(row, columns);
                 return user;
             }
             else
-            {
-                return null;
-            }                                    
+                return null;                     
+        }
+
+        private string CalculateHash(EUser user)
+        {
+            string text = string.Concat(user.CodeUser.ToLower().Trim(), user.Password.Trim());
+            return Security.CalculateHash(text);
         }
 
         public void Insert(EUser user)
         {
+            user.Password = CalculateHash(user);
             data.Insert(user);
             user.Audit.TypeEvent = "New";
             audit.Insert(user.Audit);
