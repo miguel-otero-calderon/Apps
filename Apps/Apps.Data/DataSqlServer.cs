@@ -96,5 +96,23 @@ namespace Apps.Data
             else
                 return null;
         }
+
+        public override object ExecuteScalar(DaCommand Command)
+        {
+            try
+            {
+                SqlCommand store = GetCommand(Command);
+                store.Connection = GetConnection();
+                return store.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                GetConnection().Close();
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Apps.Entity;
 using Apps.Data;
-using Apps.Data.Extension;
+using Apps.Extension;
 using Apps.Util;
 using System.Data;
 
@@ -30,7 +30,7 @@ namespace Apps.Business
         public EUser FindByCodeUser(string CodeUser)
         {
             EUser user;
-            DataRow row = data.FindByCodeUser(CodeUser);
+            System.Data.DataRow row = data.FindByCodeUser(CodeUser);
             if (row != null)
             {
                 List<string> columns = row.Table.GetColumns();

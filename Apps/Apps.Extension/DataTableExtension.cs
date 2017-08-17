@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Apps.Data.Extension
+namespace Apps.Extension
 {
     public static class DataTableExtension
     {
-        public static List<string> GetColumns(this DataTable table)
+        public static List<string> GetColumns(this System.Data.DataTable table)
         {
             List<string> Columns = new List<string>();
             foreach (DataColumn column in table.Columns)
@@ -18,7 +19,7 @@ namespace Apps.Data.Extension
             return Columns;
         }
 
-        public static List<string> GetValues(this DataTable table, string column)
+        public static List<string> GetValues(this System.Data.DataTable table, string column)
         {
             List<string> values = new List<string>();
             int last = table.Rows.Count - 1;

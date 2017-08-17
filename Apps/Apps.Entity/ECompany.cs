@@ -4,13 +4,13 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Apps.Entity.Extension;
+using Apps.Extension;
 
 namespace Apps.Entity
 {
     public class ECompany : Entity
     {
-        public ECompany(DataRow row, List<string> columns)
+        public ECompany(System.Data.DataRow row, List<string> columns)
         {
             if (columns.Contains("CodeCompany") && row.Validate("CodeCompany"))
                 CodeCompany = Convert.ToString(row["CodeCompany"]);
@@ -18,11 +18,11 @@ namespace Apps.Entity
             if (columns.Contains("CodeCorporation") && row.Validate("CodeCorporation"))
                 CodeCorporation = Convert.ToString(row["CodeCorporation"]);
 
-            if (columns.Contains("NameLong") && row.Validate("NameLong"))
-                NameLong = Convert.ToString(row["NameLong"]);
+            if (columns.Contains("LongName") && row.Validate("LongName"))
+                LongName = Convert.ToString(row["LongName"]);
 
-            if (columns.Contains("NameShort") && row.Validate("NameShort"))
-                NameShort = Convert.ToString(row["NameShort"]);
+            if (columns.Contains("ShortName") && row.Validate("ShortName"))
+                ShortName = Convert.ToString(row["ShortName"]);
 
             if (columns.Contains("Ruc") && row.Validate("Ruc"))
                 Ruc = Convert.ToString(row["Ruc"]);
@@ -60,8 +60,8 @@ namespace Apps.Entity
         }
         public string CodeCompany { get; set; }
         public string CodeCorporation { get; set; }
-        public string NameLong { get; set; }
-        public string NameShort { get; set; }
+        public string LongName { get; set; }
+        public string ShortName { get; set; }
         public string Ruc { get; set; }
         public string Address { get; set; }
         public string PageWeb { get; set; }

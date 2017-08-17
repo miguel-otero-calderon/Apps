@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Collections.Generic;
-using Apps.Entity.Extension;
+using Apps.Extension;
 using Apps.Entity;
 
 

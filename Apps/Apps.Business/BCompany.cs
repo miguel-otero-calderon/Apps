@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Apps.Data;
 using Apps.Entity;
-using Apps.Data.Extension;
+using Apps.Extension;
 
 namespace Apps.Business
 {
@@ -16,13 +16,13 @@ namespace Apps.Business
 
         public List<ECompany> GetCompaniesByUser(EUser user)
         {
-            DataTable table = data.GetCompaniesByUser(user);
+            System.Data.DataTable table = data.GetCompaniesByUser(user);
             int rows = table.Rows.Count;
             List<string> columns = table.GetColumns();
             List<ECompany> companies = new List<ECompany>();
             for (int i = 0; i <= rows - 1; i++)
             {
-                DataRow row = table.Rows[i];
+                System.Data.DataRow row = table.Rows[i];
                 ECompany item = new ECompany(row, columns);
                 companies.Add(item);
             }

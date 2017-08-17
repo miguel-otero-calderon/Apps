@@ -12,7 +12,7 @@ namespace Apps.Entity
         public int Correlative { get; set; }
         public ESequence(Entity entity)
         {
-                        
+            CodeSequence = entity.Audit.CodeEntity;            
         }
     }
 }

@@ -35,5 +35,10 @@ namespace Apps.Data
         {
             return layerData.ExecuteDataTable(Command);
         }
+
+        public override object ExecuteScalar(DaCommand Command)
+        {
+            return layerData.ExecuteScalar(Command);
+        }
     }
 }

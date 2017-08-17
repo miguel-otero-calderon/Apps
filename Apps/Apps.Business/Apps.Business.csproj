@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BAudit.cs" />
+    <Compile Include="BClient.cs" />
     <Compile Include="BCompany.cs" />
+    <Compile Include="BSequence.cs" />
     <Compile Include="BUser.cs" />
     <Compile Include="Business.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +57,10 @@
     <ProjectReference Include="..\Apps.Entity\Apps.Entity.csproj">
       <Project>{cdd428dc-35ea-4198-ac3d-7966b1c03d2a}</Project>
       <Name>Apps.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apps.Extension\Apps.Extension.csproj">
+      <Project>{35bd3b2d-598d-4aca-aa5f-e7de0c276af9}</Project>
+      <Name>Apps.Extension</Name>
     </ProjectReference>
     <ProjectReference Include="..\Apps.Util\Apps.Util.csproj">
       <Project>{8c39613a-4ffd-42dc-a40e-57a908385177}</Project>

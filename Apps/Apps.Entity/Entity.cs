@@ -8,6 +8,6 @@ namespace Apps.Entity
 {
     public abstract class Entity
     {
-        public abstract EAudit Audit { get; set; }
+        public abstract EAudit Audit { get; set; }        
     }
 }
