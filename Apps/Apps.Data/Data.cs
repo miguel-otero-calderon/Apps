@@ -6,7 +6,7 @@ namespace Apps.Data
     public abstract class Data
     {
         protected Data() { }
-        public abstract void ExecuteCommand(DaCommand Command);
+        public abstract void ExecuteNonQuery(DaCommand Command);
         public abstract DataTable ExecuteDataTable(DaCommand Command);
         public abstract DataRow ExecuteDataRow(DaCommand Command);
     }

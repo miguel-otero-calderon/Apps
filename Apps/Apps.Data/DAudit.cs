@@ -19,7 +19,7 @@ namespace Apps.Data
             command.AddInParameter("@Sequence", DbType.String, entity.Sequence);
             command.AddInParameter("@TypeEvent", DbType.String, entity.TypeEvent);
             command.AddInParameter("@UserRegister", DbType.String, entity.UserRegister);
-            ExecuteCommand(command);
+            ExecuteNonQuery(command);
         }
     }
 }

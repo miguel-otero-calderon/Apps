@@ -47,6 +47,7 @@
     <Compile Include="DataFactory.cs" />
     <Compile Include="DataSqlServer.cs" />
     <Compile Include="DAudit.cs" />
+    <Compile Include="DCompany.cs" />
     <Compile Include="DData.cs" />
     <Compile Include="DUser.cs" />
     <Compile Include="Extension\DataTableExtension.cs" />

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BAudit.cs" />
+    <Compile Include="BCompany.cs" />
     <Compile Include="BUser.cs" />
     <Compile Include="Business.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

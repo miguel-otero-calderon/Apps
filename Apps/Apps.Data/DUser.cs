@@ -22,14 +22,14 @@ namespace Apps.Data
             command.AddInParameter("@Email", DbType.String, user.Email);
             command.AddInParameter("@Profile", DbType.String, user.Profile);
             command.AddInParameter("@State", DbType.String, user.State);
-            ExecuteCommand(command);
+            ExecuteNonQuery(command);
         }
 
         public void Delete(string CodeUser)
         {
             DaCommand command = new DaCommand("UserDelete");
             command.AddInParameter("@CodeUser", DbType.String, CodeUser);
-            ExecuteCommand(command);
+            ExecuteNonQuery(command);
         }
 
         public void Update(EUser user)
@@ -40,7 +40,7 @@ namespace Apps.Data
             command.AddInParameter("@Email", DbType.String, user.Email);
             command.AddInParameter("@Profile", DbType.String, user.Profile);
             command.AddInParameter("@State", DbType.String, user.State);
-            ExecuteCommand(command);
+            ExecuteNonQuery(command);
         }
     }
 }

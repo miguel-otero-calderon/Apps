@@ -17,5 +17,22 @@ namespace Apps.Data.Extension
             }
             return Columns;
         }
+
+        public static List<string> GetValues(this DataTable table, string column)
+        {
+            List<string> values = new List<string>();
+            int last = table.Rows.Count - 1;
+            object value;
+
+            for (int i = 0; i <= last; i++)
+            {
+                value = table.Rows[i][column];
+                if (value != null && value != DBNull.Value)
+                    values.Add(value.ToString());
+                else
+                    values.Add(string.Empty);
+            }
+            return values;
+        }
     }
 }

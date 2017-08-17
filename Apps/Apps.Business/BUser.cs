@@ -68,5 +68,11 @@ namespace Apps.Business
             user.Audit.TypeEvent = "Update";
             audit.Insert(user.Audit);
         }
+
+        public List<ECompany> GetCompanies(EUser user)
+        {
+            BCompany bCompany = new BCompany();
+            return bCompany.GetCompaniesByUser(user);
+        }
     }
 }

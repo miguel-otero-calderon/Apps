@@ -15,7 +15,7 @@ namespace Apps.Data
                 Connection = new SqlConnection(stringConnection);
         }
 
-        public override void ExecuteCommand(DaCommand Command)
+        public override void ExecuteNonQuery(DaCommand Command)
         {
             try
             {

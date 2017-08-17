@@ -17,6 +17,20 @@ namespace Apps.Entity
         public string Profile { get; set; }
         public short State { get; set; }
         private EAudit audit;
+        private List<string> companies;
+        public List<string> Companies
+        {
+            get
+            {
+                if (companies == null)
+                    companies = new List<string>();
+                return companies;
+            }
+            set
+            {
+                companies = value;
+            }
+        }
         public override EAudit Audit
         {
             get {
@@ -33,7 +47,6 @@ namespace Apps.Entity
                 audit = value;
             }
         }
-
         public EUser() { }
         public EUser(DataRow row,List<string>columns)
         {

@@ -41,7 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EAudit.cs" />
+    <Compile Include="ECompany.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="ESequence.cs" />
     <Compile Include="EUser.cs" />
     <Compile Include="Extension\DataRowExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

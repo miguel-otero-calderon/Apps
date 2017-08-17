@@ -21,9 +21,9 @@ namespace Apps.Data
                 return _layerData;
             }
         }
-        public override void ExecuteCommand(DaCommand Command)
+        public override void ExecuteNonQuery(DaCommand Command)
         {
-            layerData.ExecuteCommand(Command);
+            layerData.ExecuteNonQuery(Command);
         }
 
         public override DataRow ExecuteDataRow(DaCommand Command)
