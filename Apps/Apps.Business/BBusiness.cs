@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Apps.Business
 {
-    public class Business
+    public class BBusiness
     {
+        public string Message { get; set; }
     }
 }

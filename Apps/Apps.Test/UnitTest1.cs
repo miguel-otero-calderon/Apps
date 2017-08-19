@@ -9,10 +9,11 @@ namespace Apps.Test
     public class UnitTest1
     {
         [TestMethod]
-        public void FindByCodeUserNotExist()
+        public void SelectUserNotExist()
         {
             BUser business = new BUser();
-            EUser user = business.FindByCodeUser("xxx");
+            EUser user = new EUser { CodeUser = "xxx" };
+            user = business.Select(user);
             Assert.AreEqual(user, null);
         }
 
@@ -64,11 +65,18 @@ namespace Apps.Test
         [TestMethod]
         public void LoginPasswordIncorrect()
         {
+            bool test;
             BUser business = new BUser();
             EUser user = new EUser();
             user.CodeUser = "motero";
-            user.Password = "xxx";
-            Assert.IsFalse(business.Login(user));
+            bool result = business.Login(user);
+            if (result == false
+                && business.Message.ToLower().Contains("password")
+                && business.Message.ToLower().Contains("incorrecto"))
+                test = true;
+            else
+                test = false;
+            Assert.IsTrue(test);
         }
     }
 }

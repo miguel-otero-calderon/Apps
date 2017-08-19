@@ -8,7 +8,7 @@ using Apps.Extension;
 
 namespace Apps.Entity
 {
-    public class ECompany : Entity
+    public class ECompany : EEntity
     {
         public ECompany(System.Data.DataRow row, List<string> columns)
         {

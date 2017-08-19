@@ -8,7 +8,7 @@ using Apps.Extension;
 
 namespace Apps.Entity
 {
-    public class EClient : Entity
+    public class EClient : EEntity
     {
         public int CodeClient { get; set; }
         public string FirstName { get; set; }

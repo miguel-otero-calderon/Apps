@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Apps.Data;
 using Apps.Entity;
+using Apps.Extension;
+using System.Data;
 
 namespace Apps.Business
 {
@@ -13,18 +15,49 @@ namespace Apps.Business
         private DSequence data = new DSequence();
         public int GetCorrelative(ESequence sequence)
         {
-            int correlative = data.GetCorrelative(sequence);
-            if (correlative == -1)
+            ESequence _sequence = Select(sequence);
+            if (_sequence == null)
             {
-                sequence.Correlative = 1;
-                data.SetCorrelativo(sequence);
+                SetCorrelativo(sequence);
             }
-            return correlative;
+            return _sequence.Correlative;
         }
 
         public void SetCorrelativo(ESequence sequence)
         {
-            data.SetCorrelativo(sequence);
+            ESequence _sequence = Select(sequence);
+            if(_sequence == null)
+            {
+                _sequence.Correlative = 1;
+                Insert(_sequence);
+            }
+            else
+            {
+                _sequence.Correlative++;
+                Update(_sequence);
+            }             
+        }
+
+        public ESequence Select(ESequence sequence)
+        {
+            DataRow row = data.Select(sequence);
+            if (row != null)
+            {
+                ESequence _sequence = new ESequence(row, row.GetColumns());
+                return _sequence;
+            }
+            else
+                return null;
+        }
+
+        public void Insert(ESequence sequence)
+        {
+            data.Insert(sequence);
+        }
+
+        public void Update(ESequence sequence)
+        {
+            data.Update(sequence);
         }
     }
 }

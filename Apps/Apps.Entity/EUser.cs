@@ -8,7 +8,7 @@ using Apps.Entity;
 
 namespace Apps.Entity
 {
-    public class EUser : Entity
+    public class EUser : EEntity
     {
         public string CodeUser { get; set; }
         public string Name { get; set; }

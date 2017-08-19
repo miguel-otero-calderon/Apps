@@ -6,10 +6,10 @@ namespace Apps.Data
 {
     public class DUser:DData
     {
-        public DataRow FindByCodeUser(string CodeUser)
+        public DataRow Select(EUser user)
         {
-            DaCommand command = new DaCommand("UserFindByCodeUser");
-            command.AddInParameter("@CodeUser", DbType.String, CodeUser);
+            DaCommand command = new DaCommand("UserSelect");
+            command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);
             return ExecuteDataRow(command);
         }
 

@@ -11,31 +11,44 @@ using System.Data;
 
 namespace Apps.Business
 {
-    public class BUser
+    public class BUser:BBusiness
     {
         DUser data = new DUser();
         BAudit audit = new BAudit();
         public bool Login(EUser user)
         {
-            EUser find = FindByCodeUser(user.CodeUser);
-            if (find == null)
-                throw new Exception("El usuario no existe.");            
-
-            if (user.Password == CalculateHash(user))
-                return true;
-            else
+            EUser _user = Select(user);
+            if (_user == null)
+            {
+                Message = String.Format("El usuario '{0}' no existe.",user.CodeUser);
                 return false;
+            }
+
+            if (_user.Password == CalculateHash(user))
+            {
+                if(_user.State == 0)
+                {
+                    Message = String.Format("El usuario '{0}' no se encuentra 'Activo'.", user.CodeUser);
+                    return false;
+                }
+                return true;
+            }                
+            else
+            {
+                Message = "Password incorrecto.";
+                return false;
+            }                
         }
 
-        public EUser FindByCodeUser(string CodeUser)
+        public EUser Select(EUser user)
         {
-            EUser user;
-            System.Data.DataRow row = data.FindByCodeUser(CodeUser);
+            EUser _user;
+            DataRow row = data.Select(user);
             if (row != null)
             {
                 List<string> columns = row.Table.GetColumns();
-                user = new EUser(row, columns);
-                return user;
+                _user = new EUser(row, columns);
+                return _user;
             }
             else
                 return null;                     

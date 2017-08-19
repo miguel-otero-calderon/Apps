@@ -46,7 +46,7 @@
     <Compile Include="BCompany.cs" />
     <Compile Include="BSequence.cs" />
     <Compile Include="BUser.cs" />
-    <Compile Include="Business.cs" />
+    <Compile Include="BBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

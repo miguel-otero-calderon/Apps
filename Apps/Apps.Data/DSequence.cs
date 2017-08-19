@@ -10,20 +10,24 @@ namespace Apps.Data
 {
     public class DSequence:DData
     {
-        public int GetCorrelative(ESequence sequence)
+        public DataRow Select(ESequence sequence)
         {
-            DaCommand command = new DaCommand("SequenceGetSequence");
+            DaCommand command = new DaCommand("SequenceSelect");
             command.AddInParameter("@CodeSequence", DbType.String, sequence.CodeSequence);
-            object value = ExecuteScalar(command);
-            if (value != null && value != DBNull.Value)
-                return Convert.ToInt32(value);
-            else
-                return -1;
+            return ExecuteDataRow(command);
         }
 
-        public void SetCorrelativo(ESequence sequence)
+        public void Insert(ESequence sequence)
         {
-            DaCommand command = new DaCommand("SequenceSetSequence");
+            DaCommand command = new DaCommand("SequenceInsert");
+            command.AddInParameter("@CodeSequence", DbType.String, sequence.CodeSequence);
+            command.AddInParameter("@Correlative", DbType.Int32, sequence.Correlative);
+            ExecuteNonQuery(command);
+        }
+
+        public void Update(ESequence sequence)
+        {
+            DaCommand command = new DaCommand("SequenceUpdate");
             command.AddInParameter("@CodeSequence", DbType.String, sequence.CodeSequence);
             command.AddInParameter("@Correlative", DbType.Int32, sequence.Correlative);
             ExecuteNonQuery(command);
