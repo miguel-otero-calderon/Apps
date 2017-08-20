@@ -13,6 +13,7 @@ namespace Apps.Entity
         public string CodeUser { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
+        public string PasswordHash { get; set; }
         public string Email { get; set; }
         public string Profile { get; set; }
         public short State { get; set; }
@@ -35,11 +36,7 @@ namespace Apps.Entity
         {
             get {
                 if (audit == null)
-                    audit = new EAudit();
-                audit.CodeCompany = "00";
-                audit.CodeEntity = "User";
-                audit.Code = CodeUser;
-                audit.Sequence = 0;
+                    audit = new EAudit(CodeCompany :"00", CodeEntity : "User", Code : CodeUser, Sequence : 0);
                 return audit;
             }
             set

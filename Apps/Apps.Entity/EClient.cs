@@ -31,11 +31,7 @@ namespace Apps.Entity
             get
             {
                 if (audit == null)
-                    audit = new EAudit();
-                audit.CodeCompany = "00";
-                audit.CodeEntity = "Client";
-                audit.Code = CodeClient.ToString();
-                audit.Sequence = 0;
+                    audit = new EAudit(CodeCompany: "00", CodeEntity: "Client", Code: CodeClient.ToString(), Sequence: 0);
                 return audit;
             }
             set

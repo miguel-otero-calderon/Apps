@@ -31,6 +31,7 @@ namespace Apps.Business
                     Message = String.Format("El usuario '{0}' no se encuentra 'Activo'.", user.CodeUser);
                     return false;
                 }
+                Message = "Ok";
                 return true;
             }                
             else
@@ -54,17 +55,19 @@ namespace Apps.Business
                 return null;                     
         }
 
-        private string CalculateHash(EUser user)
+        public string CalculateHash(EUser user)
         {
+            if (user.Password == null)
+                user.Password = string.Empty;
             string text = string.Concat(user.CodeUser.ToLower().Trim(), user.Password.Trim());
             return Security.CalculateHash(text);
         }
 
         public void Insert(EUser user)
         {
-            user.Password = CalculateHash(user);
+            user.PasswordHash = CalculateHash(user);
             data.Insert(user);
-            user.Audit.TypeEvent = "New";
+            user.Audit.TypeEvent = "Insert";
             audit.Insert(user.Audit);
         }
 
