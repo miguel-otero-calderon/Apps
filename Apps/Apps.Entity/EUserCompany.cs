@@ -10,12 +10,12 @@ namespace Apps.Entity
     public class EUserCompany
     {
         public string CodeUser { get; set; }
-        public string CodeCompanny { get; set; }
-        private EUserCompany() { }
+        public string CodeCompany { get; set; }
+        public EUserCompany() { }
         public EUserCompany(DataRow row)
         {
             CodeUser = Convert.ToString( row["CodeUser"]);
-            CodeCompanny = Convert.ToString(row["CodeCompanny"]);
+            CodeCompany = Convert.ToString(row["CodeCompany"]);
         }
     }
 }

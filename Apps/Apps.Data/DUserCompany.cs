@@ -14,7 +14,7 @@ namespace Apps.Data
         {
             DaCommand command = new DaCommand("UserCompanySelect");
             command.AddInParameter("@CodeUser", DbType.String, userCompany.CodeUser);
-            command.AddInParameter("@CodeCompany", DbType.String, userCompany.CodeCompanny);
+            command.AddInParameter("@CodeCompany", DbType.String, userCompany.CodeCompany);
             return ExecuteDataRow(command);
         }
 
@@ -22,7 +22,7 @@ namespace Apps.Data
         {
             DaCommand command = new DaCommand("UserCompanyInsert");
             command.AddInParameter("@CodeUser", DbType.String, userCompany.CodeUser);
-            command.AddInParameter("@CodeCompany", DbType.String, userCompany.CodeCompanny);
+            command.AddInParameter("@CodeCompany", DbType.String, userCompany.CodeCompany);
             ExecuteNonQuery(command);
         }
 
@@ -30,8 +30,23 @@ namespace Apps.Data
         {
             DaCommand command = new DaCommand("UserCompanyDelete");
             command.AddInParameter("@CodeUser", DbType.String, userCompany.CodeUser);
-            command.AddInParameter("@CodeCompany", DbType.String, userCompany.CodeCompanny);
+            command.AddInParameter("@CodeCompany", DbType.String, userCompany.CodeCompany);
             ExecuteNonQuery(command);
+        }
+
+        public DataTable SelectByUser(EUser user)
+        {
+            DaCommand command = new DaCommand("UserCompanySelectByUser");
+            command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);
+            return ExecuteDataTable(command);
+        }
+
+        public void DeleteByUser(EUser user)
+        {
+            string CodeCompanyList = string.Join(",", user.Companies);
+            DaCommand command = new DaCommand("UserCompanyDeleteByUser");
+            command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);            
+            ExecuteDataTable(command);
         }
     }
 }

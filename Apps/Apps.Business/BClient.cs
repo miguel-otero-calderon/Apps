@@ -23,18 +23,14 @@ namespace Apps.Business
             int CodeClient = 0;
             using (TransactionScope scope = new TransactionScope())
             {
-                /*sequence*/
                 CodeClient = bSequence.GetCorrelative(sequence);
 
-                /*client*/
                 client.CodeClient = CodeClient;
                 data.Insert(client);
 
-                /*audit*/
                 client.Audit.TypeEvent = "Insert";
                 audit.Insert(client.Audit);
 
-                /*sequence*/
                 sequence.Correlative++;
                 bSequence.SetCorrelativo(sequence);
 
