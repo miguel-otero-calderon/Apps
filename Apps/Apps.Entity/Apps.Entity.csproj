@@ -46,6 +46,7 @@
     <Compile Include="EEntity.cs" />
     <Compile Include="ESequence.cs" />
     <Compile Include="EUser.cs" />
+    <Compile Include="EUserCompany.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

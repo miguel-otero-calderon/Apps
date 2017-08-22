@@ -19,7 +19,7 @@ namespace Apps.Extension
             return Columns;
         }
 
-        public static List<string> GetValues(this System.Data.DataTable table, string column)
+        public static List<string> GetList(this System.Data.DataTable table, string column)
         {
             List<string> values = new List<string>();
             int last = table.Rows.Count - 1;

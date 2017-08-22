@@ -73,7 +73,7 @@ namespace Apps.Business
 
         public void Delete(EUser user)
         {
-            data.Delete(user.CodeUser);
+            data.Delete(user);
             user.Audit.TypeEvent = "Delete";
             audit.Insert(user.Audit);
         }
@@ -85,10 +85,10 @@ namespace Apps.Business
             audit.Insert(user.Audit);
         }
 
-        public List<ECompany> GetCompanies(EUser user)
-        {
-            BCompany bCompany = new BCompany();
-            return bCompany.GetCompaniesByUser(user);
-        }
+        //public List<ECompany> GetCompanies(EUser user)
+        //{
+        //    BCompany bCompany = new BCompany();
+        //    return bCompany.GetCompaniesByUser(user);
+        //}
     }
 }

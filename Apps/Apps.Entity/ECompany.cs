@@ -10,7 +10,33 @@ namespace Apps.Entity
 {
     public class ECompany : EEntity
     {
-        public ECompany(System.Data.DataRow row, List<string> columns)
+        private EAudit audit;
+        public override EAudit Audit
+        {
+            get
+            {
+                if (audit == null)
+                    audit = new EAudit(CodeCompany: this.CodeCompany, CodeEntity: "Company", Code: CodeCompany, Sequence: 0);
+                return audit;
+            }
+            set
+            {
+                audit = value;
+            }
+        }
+        public string CodeCompany { get; set; }
+        public string CodeCorporation { get; set; }
+        public string LongName { get; set; }
+        public string ShortName { get; set; }
+        public string Ruc { get; set; }
+        public string Address { get; set; }
+        public string PageWeb { get; set; }
+        public string Phone { get; set; }
+        public string Fax { get; set; }
+        public string Logo { get; set; }
+        public short State { get; set; }
+        public ECompany() { }
+        public ECompany(DataRow row, List<string> columns)
         {
             if (columns.Contains("CodeCompany") && row.Validate("CodeCompany"))
                 CodeCompany = Convert.ToString(row["CodeCompany"]);
@@ -43,32 +69,7 @@ namespace Apps.Entity
                 Logo = Convert.ToString(row["Logo"]);
 
             if (columns.Contains("State") && row.Validate("State"))
-                State = Convert.ToString(row["State"]);
+                State = Convert.ToInt16(row["State"]);
         }
-
-        public override EAudit Audit
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-        public string CodeCompany { get; set; }
-        public string CodeCorporation { get; set; }
-        public string LongName { get; set; }
-        public string ShortName { get; set; }
-        public string Ruc { get; set; }
-        public string Address { get; set; }
-        public string PageWeb { get; set; }
-        public string Phone { get; set; }
-        public string Fax { get; set; }
-        public string Logo { get; set; }
-        public string State { get; set; }        
-        
     }
 }

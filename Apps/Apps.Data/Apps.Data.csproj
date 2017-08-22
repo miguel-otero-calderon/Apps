@@ -52,6 +52,7 @@
     <Compile Include="DData.cs" />
     <Compile Include="DSequence.cs" />
     <Compile Include="DUser.cs" />
+    <Compile Include="DUserCompany.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

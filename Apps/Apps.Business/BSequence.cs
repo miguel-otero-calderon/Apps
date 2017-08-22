@@ -18,7 +18,10 @@ namespace Apps.Business
             ESequence _sequence = Select(sequence);
             if (_sequence == null)
             {
-                SetCorrelativo(sequence);
+                sequence.Correlative = 1;
+                Insert(sequence);
+
+                _sequence = Select(sequence);                
             }
             return _sequence.Correlative;
         }
@@ -28,6 +31,7 @@ namespace Apps.Business
             ESequence _sequence = Select(sequence);
             if(_sequence == null)
             {
+                _sequence = new ESequence(CodeSequence: sequence.CodeSequence, Correlative: sequence.Correlative);
                 _sequence.Correlative = 1;
                 Insert(_sequence);
             }
@@ -58,6 +62,11 @@ namespace Apps.Business
         public void Update(ESequence sequence)
         {
             data.Update(sequence);
+        }
+
+        public void Delete(ESequence sequence)
+        {
+            data.Delete(sequence);
         }
     }
 }

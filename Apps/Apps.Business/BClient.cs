@@ -31,7 +31,7 @@ namespace Apps.Business
                 data.Insert(client);
 
                 /*audit*/
-                client.Audit.TypeEvent = "New";
+                client.Audit.TypeEvent = "Insert";
                 audit.Insert(client.Audit);
 
                 /*sequence*/

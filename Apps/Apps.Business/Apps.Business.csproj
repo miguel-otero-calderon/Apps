@@ -47,6 +47,7 @@
     <Compile Include="BSequence.cs" />
     <Compile Include="BUser.cs" />
     <Compile Include="BBusiness.cs" />
+    <Compile Include="BUserCompany.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

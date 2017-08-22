@@ -32,5 +32,12 @@ namespace Apps.Data
             command.AddInParameter("@Correlative", DbType.Int32, sequence.Correlative);
             ExecuteNonQuery(command);
         }
+
+        public void Delete(ESequence sequence)
+        {
+            DaCommand command = new DaCommand("SequenceDelete");
+            command.AddInParameter("@CodeSequence", DbType.String, sequence.CodeSequence);
+            ExecuteNonQuery(command);
+        }
     }
 }

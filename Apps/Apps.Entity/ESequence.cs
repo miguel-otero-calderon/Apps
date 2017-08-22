@@ -15,6 +15,11 @@ namespace Apps.Entity
         {
             CodeSequence = entity.Audit.CodeEntity;
         }
+        public ESequence(string CodeSequence,int Correlative)
+        {
+            this.CodeSequence = CodeSequence;
+            this.Correlative = Correlative;
+        }
         public ESequence(DataRow row, List<string> columns)
         {
             if (columns.Contains("CodeSequence") && row.Validate("CodeSequence"))

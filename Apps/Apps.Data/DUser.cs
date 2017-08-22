@@ -25,10 +25,10 @@ namespace Apps.Data
             ExecuteNonQuery(command);
         }
 
-        public void Delete(string CodeUser)
+        public void Delete(EUser user)
         {
             DaCommand command = new DaCommand("UserDelete");
-            command.AddInParameter("@CodeUser", DbType.String, CodeUser);
+            command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);
             ExecuteNonQuery(command);
         }
 
