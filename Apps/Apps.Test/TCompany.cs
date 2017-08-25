@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Apps.Business;
 using Apps.Entity;
+using Apps.Util;
 using System.Transactions;
 
 namespace Apps.Test
@@ -14,13 +15,41 @@ namespace Apps.Test
         public void Select()
         {
             short routes = 0;
-            BCompany b = new BCompany();
+            BCompany bCompany = new BCompany();
+            ECompany eCompany = new ECompany();
+            BCorporation bCorporation = new BCorporation();
+            ECorporation eCorporation = new ECorporation();
+            ECompany selectCompany = new ECompany();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
+            
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.LongName = Aleatory.GetString(8);
+            eCompany.ShortName = Aleatory.GetString(8);
+            eCompany.State = 1;
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
 
-            if (b.Select(new ECompany { CodeCompany = "abc" }) == null)
+            selectCompany = bCompany.Select(eCompany);
+
+            if (selectCompany == null)
                 routes++;
 
-            if (b.Select(new ECompany { CodeCompany = "01" }) != null)
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(8);
+            eCorporation.State = 1;
+            eCorporation.Audit.UserRegister = "uni test";
+            bCorporation.Insert(eCorporation);
+
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            bCompany.Insert(eCompany);
+
+            selectCompany = bCompany.Select(eCompany);
+
+            if (selectCompany != null
+                && selectCompany.LongName == eCompany.LongName
+                && selectCompany.ShortName == eCompany.ShortName)
                 routes++;
+
+            ts.Dispose();
 
             Assert.AreEqual(routes, 2);
         }
@@ -29,26 +58,42 @@ namespace Apps.Test
         public void Delete()
         {
             short routes = 0;
-            BCompany b = new BCompany();
-            BAudit b2 = new BAudit();
-            ECompany company = new ECompany();
-            company.CodeCompany = "01";
-            company.Audit.UserRegister = "uni test";
-
+            BAudit bAudit = new BAudit();
+            EAudit eAudit = null;
+            BCompany bCompany = new BCompany();
+            ECompany eCompany = new ECompany();
+            ECorporation eCorporation = new ECorporation();
+            BCorporation bCorporation = new BCorporation();
             TransactionScope ts = new TransactionScope();
 
-            if (b.Select(company) != null)
-            {
-                b.Delete(company);
-                routes++;
-            }
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(8);
+            eCorporation.State = Aleatory.GetShort();
+            eCorporation.Audit.UserRegister = Aleatory.GetString(8);
+            bCorporation.Insert(eCorporation);
 
-            if (b.Select(company) == null)
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.LongName = Aleatory.GetString(8);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
+
+            if (bCompany.Select(eCompany) != null)
                 routes++;
 
-            company.Audit = b2.Select(company.Audit)[0];
-            if (company.Audit.UserRegister == "uni test"
-                && company.Audit.TypeEvent.ToLower() == "delete")
+            bCompany.Delete(eCompany);
+
+            if (bCompany.Select(eCompany) == null)
+                routes++;
+
+            eAudit = bAudit.Select(eCompany.Audit)[0];
+            if (eAudit != null
+                && eAudit.CodeCompany == eCompany.Audit.CodeCompany
+                && eAudit.CodeEntity == eCompany.Audit.CodeEntity
+                && eAudit.Code == eCompany.Audit.Code
+                && eAudit.UserRegister == eCompany.Audit.UserRegister
+                && eAudit.TypeEvent == "Delete")
                 routes++;
 
             ts.Dispose();
@@ -78,12 +123,6 @@ namespace Apps.Test
 
             TransactionScope ts = new TransactionScope();
 
-            if (b.Select(company) != null)
-                b.Delete(company);
-
-            if (b.Select(company) == null)
-                routes++;
-
             b.Insert(company);
 
             ECompany insert = b.Select(company);
@@ -98,7 +137,7 @@ namespace Apps.Test
 
             ts.Dispose();
 
-            Assert.AreEqual(routes, 3);
+            Assert.AreEqual(routes, 2);
         }
 
         [TestMethod]

@@ -49,6 +49,7 @@
     <Compile Include="DAudit.cs" />
     <Compile Include="DClient.cs" />
     <Compile Include="DCompany.cs" />
+    <Compile Include="DCorporation.cs" />
     <Compile Include="DData.cs" />
     <Compile Include="DSequence.cs" />
     <Compile Include="DUser.cs" />

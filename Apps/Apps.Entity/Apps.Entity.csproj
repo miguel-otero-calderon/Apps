@@ -43,6 +43,7 @@
     <Compile Include="EAudit.cs" />
     <Compile Include="EClient.cs" />
     <Compile Include="ECompany.cs" />
+    <Compile Include="ECorporation.cs" />
     <Compile Include="EEntity.cs" />
     <Compile Include="ESequence.cs" />
     <Compile Include="EUser.cs" />

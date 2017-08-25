@@ -59,6 +59,7 @@
     <Compile Include="TSequence.cs" />
     <Compile Include="TUserCompany.cs" />
     <Compile Include="TCompany.cs" />
+    <Compile Include="TCorporation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Apps.Business\Apps.Business.csproj">

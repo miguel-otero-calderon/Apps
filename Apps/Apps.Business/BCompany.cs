@@ -10,14 +10,10 @@ using Apps.Extension;
 
 namespace Apps.Business
 {
-    public class BCompany
+    public class BCompany : BBusiness
     {
         DCompany data = new DCompany();
         BAudit audit = new BAudit();
-
-
-
-
 
         public ECompany Select(ECompany company)
         {
@@ -31,6 +27,11 @@ namespace Apps.Business
         public void Delete(ECompany company)
         {
             data.Delete(company);
+            if (data.ExistsReference())
+            {
+                string msg = string.Format("La empresa '{0}' tiene referencias en el Sistema, no se puede eliminar el registro.",company.LongName);
+                throw new Exception(msg);
+            }
             company.Audit.TypeEvent = "Delete";
             audit.Insert(company.Audit);
         }
@@ -38,6 +39,11 @@ namespace Apps.Business
         public void Insert(ECompany company)
         {            
             data.Insert(company);
+            if (data.ExistsPrimaryKey())
+            {
+                string msg = string.Format("El código de empresa '{0}' ya existe en el Sistema, no se puede crear el registro.", company.CodeCompany);
+                throw new Exception(msg);
+            }
             company.Audit.TypeEvent = "Insert";
             audit.Insert(company.Audit);
         }

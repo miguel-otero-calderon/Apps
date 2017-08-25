@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Apps.Business;
 using Apps.Entity;
 using System.Transactions;
+using Apps.Util;
 
 namespace Apps.Test
 {
@@ -57,29 +58,17 @@ namespace Apps.Test
 
         [TestMethod]
         public void Delete()
-        {
-            short routes = 0;
-            BUserCompany b = new BUserCompany();
-            EUserCompany usercompany = new EUserCompany();
-            usercompany.CodeCompany = "xx";
-            usercompany.CodeUser = "motero";
+        {            
+            EUser eUser = new EUser();
+            eUser.CodeUser = Aleatory.GetString(4);
+            eUser.Name = Aleatory.GetString(8);
 
-            TransactionScope ts = new TransactionScope();
             
-            if (b.Select(usercompany) != null)
-            {
-                b.Delete(usercompany);
-                routes++;
-            }
 
-            if (b.Select(usercompany) == null)
-                routes++;
+            ECompany eCompany = new ECompany();
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.LongName = Aleatory.GetString(8);
 
-            b.Delete(usercompany);
-
-            ts.Dispose();
-
-            Assert.AreEqual(routes, 2);
         }
 
         [TestMethod]

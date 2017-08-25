@@ -131,7 +131,7 @@ namespace Apps.Test
             user.CodeUser = "motero";
             user.Audit.UserRegister = "uni test";
 
-            TransactionScope ts = new TransactionScope();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
             if (b.Select(user) != null)
             {

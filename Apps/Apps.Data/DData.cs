@@ -21,6 +21,25 @@ namespace Apps.Data
                 return _layerData;
             }
         }
+
+        public override Exception Exception
+        {
+            get
+            {
+                return layerData.Exception;
+            }
+        }
+
+        public override bool ExistsReference()
+        {
+            return layerData.ExistsReference();
+        }
+
+        public override bool ExistsPrimaryKey()
+        {
+            return layerData.ExistsPrimaryKey();
+        }
+
         public override void ExecuteNonQuery(DaCommand Command)
         {
             layerData.ExecuteNonQuery(Command);

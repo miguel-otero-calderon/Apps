@@ -73,6 +73,8 @@ namespace Apps.Business
 
         public void Delete(EUser user)
         {
+            DUserCompany d = new DUserCompany();
+            d.DeleteByUser(user);
             data.Delete(user);
             user.Audit.TypeEvent = "Delete";
             audit.Insert(user.Audit);

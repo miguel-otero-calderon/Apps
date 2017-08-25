@@ -15,6 +15,10 @@ namespace Apps.Business
         DAudit d = new DAudit();
         public void Insert(EAudit audit)
         {
+            if (string.IsNullOrEmpty(audit.UserRegister))
+                throw new Exception("El campo 'UserRegister' no tiene valor.");
+            if (string.IsNullOrEmpty(audit.TypeEvent))
+                throw new Exception("El campo 'TypeEvent' no tiene valor.");
             d.Insert(audit);
         }
 

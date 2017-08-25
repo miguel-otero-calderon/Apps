@@ -7,7 +7,31 @@ namespace Apps.Data
 {
     public class DataSqlServer : Data
     {
-        private SqlConnection Connection;        
+        private SqlConnection Connection;
+        private SqlException exception;
+        private const int ErrorExistsReference = 547;
+        private const int ErrorExistsPrimaryKey = 2627;
+        public override Exception Exception
+        {
+            get { return exception; }
+        }
+
+        public override bool ExistsReference()
+        {
+            if (exception != null)
+                return (exception.Number == ErrorExistsReference);
+            else
+                return false;
+        }
+
+        public override bool ExistsPrimaryKey()
+        {
+            if (exception != null)
+                return (exception.Number == ErrorExistsPrimaryKey);
+            else
+                return false;
+        }
+
         private DataSqlServer() { }
         public DataSqlServer(string stringConnection)
         {
@@ -23,9 +47,12 @@ namespace Apps.Data
                 store.Connection = GetConnection();
                 store.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                throw ex;
+                if (ex.Number == ErrorExistsReference || ex.Number == ErrorExistsPrimaryKey)
+                    exception = ex;
+                else
+                    throw ex;
             }
             finally
             {
@@ -84,6 +111,8 @@ namespace Apps.Data
                 parameter.Direction = par.Direction;
                 parameter.DbType = par.DbType;
                 parameter.Value = par.Value;
+                if (par.DbType == DbType.String && par.Value == null)
+                    parameter.Value = DBNull.Value;                                
                 store.Parameters.Add(parameter);
             }
         }
