@@ -15,7 +15,6 @@ namespace Apps.Entity
         public string Password { get; set; }
         public string PasswordHash { get; set; }
         public string Email { get; set; }
-        public string Profile { get; set; }
         public short State { get; set; }
         private EAudit audit;
         private List<string> companies;
@@ -58,9 +57,6 @@ namespace Apps.Entity
 
             if (columns.Contains("Email") && row.Validate("Email"))
                 Email = Convert.ToString(row["Email"]);
-
-            if (columns.Contains("Profile") && row.Validate("Profile"))
-                Profile = Convert.ToString(row["Profile"]);
 
             if (columns.Contains("State") && row.Validate("State"))
                 State = Convert.ToInt16(row["State"]);

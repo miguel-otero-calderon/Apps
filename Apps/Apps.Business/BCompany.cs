@@ -12,13 +12,13 @@ namespace Apps.Business
 {
     public class BCompany : BBusiness
     {
-        DCompany data = new DCompany();
-        BAudit audit = new BAudit();
+        DCompany dCompany = new DCompany();
+        BAudit bAudit = new BAudit();
 
         public ECompany Select(ECompany company)
         {
             ECompany result = null;
-            DataRow row = data.Select(company);
+            DataRow row = dCompany.Select(company);
             if(row != null)
                 result = new ECompany(row, row.GetColumns());
             return result;
@@ -26,33 +26,38 @@ namespace Apps.Business
 
         public void Delete(ECompany company)
         {
-            data.Delete(company);
-            if (data.ExistsReference())
+            dCompany.Delete(company);
+            if (dCompany.ExistsReference())
             {
                 string msg = string.Format("La empresa '{0}' tiene referencias en el Sistema, no se puede eliminar el registro.",company.LongName);
                 throw new Exception(msg);
             }
             company.Audit.TypeEvent = "Delete";
-            audit.Insert(company.Audit);
+            bAudit.Insert(company.Audit);
         }
 
         public void Insert(ECompany company)
         {            
-            data.Insert(company);
-            if (data.ExistsPrimaryKey())
+            dCompany.Insert(company);
+            if (dCompany.ExistsPrimaryKey())
             {
-                string msg = string.Format("El código de empresa '{0}' ya existe en el Sistema, no se puede crear el registro.", company.CodeCompany);
-                throw new Exception(msg);
+                Message = string.Format("El código de empresa '{0}' ya existe en el Sistema, no se puede crear el registro.", company.CodeCompany);
+                throw new Exception(Message);
+            }
+            if (dCompany.ExistsReference())
+            {
+                Message = string.Format("El código de Corporation '{0}' no existe en el Sistema", company.CodeCorporation);
+                throw new Exception(Message);
             }
             company.Audit.TypeEvent = "Insert";
-            audit.Insert(company.Audit);
+            bAudit.Insert(company.Audit);
         }
 
         public void Update(ECompany company)
         {
-            data.Update(company);
+            dCompany.Update(company);
             company.Audit.TypeEvent = "Update";
-            audit.Insert(company.Audit);
+            bAudit.Insert(company.Audit);
         }
     }
 }

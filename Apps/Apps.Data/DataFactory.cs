@@ -9,10 +9,10 @@ namespace Apps.Data
 {
     public class DataFactory
     {
-        private DataFactory() { }
-        private static DataSqlServer instanceSqlServer;
+        public DataFactory() { }
+        private DataSqlServer instanceSqlServer;
         private static ConnectionStringSettings stringConnection = new ConnectionStringSettings();
-        public static Data CreateData()
+        public Data CreateData()
         {
             if (string.IsNullOrEmpty(stringConnection.ConnectionString))
             {

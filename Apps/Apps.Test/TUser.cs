@@ -2,7 +2,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Apps.Business;
 using Apps.Entity;
+using Apps.Util;
 using System.Transactions;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Apps.Test
 {
@@ -14,47 +17,46 @@ namespace Apps.Test
         {
             bool result;
             short routes = 0;
-            BUser b = new BUser();
-            BAudit b2 = new BAudit();
-            EUser user = new EUser();
-            user.CodeUser = "motero";
-            user.Name = "Miguel Angel";
-            user.Password = "123456";
-            user.Email = "miguel-otero@hotmail.com";
-            user.Profile = "adm";
-            user.State = 1;
-            user.Audit.UserRegister = "uni test";
+            BAudit bAudit = new BAudit();
+            BUser bUser = new BUser();            
+            EUser eUser = new EUser();
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
+            eUser.Email = Aleatory.GetString(15);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);
 
-            TransactionScope ts = new TransactionScope();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
-            b.Delete(user);
+            bUser.Delete(eUser);
 
-            result = b.Login(user);
+            result = bUser.Login(eUser);
             if (result == false
-                && b.Message.Contains("usuario")
-                && b.Message.Contains("no existe"))
+                && bUser.Message.Contains("usuario")
+                && bUser.Message.Contains("no existe"))
                 routes++;
 
-            user.State = 0;
-            b.Insert(user);
-            result = b.Login(user);
+            eUser.State = 0;
+            bUser.Insert(eUser);
+            result = bUser.Login(eUser);
             if (result == false
-                && b.Message.Contains("El usuario")
-                && b.Message.Contains("no se encuentra 'Activo'."))
+                && bUser.Message.Contains("El usuario")
+                && bUser.Message.Contains("no se encuentra 'Activo'."))
                 routes++;
 
-            user.State = 1;
-            b.Update(user);
-            result = b.Login(user);
-            if (result == true && b.Message =="Ok")
+            eUser.State = 1;
+            bUser.Update(eUser);
+            result = bUser.Login(eUser);
+            if (result == true && bUser.Message =="Ok")
                 routes++;
 
-            b.Delete(user);
-            user.Password = "123456";
-            b.Insert(user);
-            user.Password = "password";
-            result = b.Login(user);
-            if (result == false && b.Message == "Password incorrecto.")
+            bUser.Delete(eUser);
+            eUser.Password = "123456";
+            bUser.Insert(eUser);
+            eUser.Password = "1234567890";
+            result = bUser.Login(eUser);
+            if (result == false && bUser.Message == "Password incorrecto.")
                 routes++;
 
             ts.Dispose();
@@ -65,55 +67,70 @@ namespace Apps.Test
         [TestMethod]
         public void Select()
         {
-            short routes = 0;
-            BUser b = new BUser();
+            bool result = false;
+            BUser bUser = new BUser();
+            EUser eUser = new EUser();
+            EUser selectedUser = null;
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
+            eUser.Email = Aleatory.GetString(15);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);
 
-            if (b.Select(new EUser { CodeUser = "abc" }) == null)
-                routes++;
+            selectedUser = bUser.Select(eUser);
+            if (selectedUser == null)
+            {
+                bUser.Insert(eUser);
+                selectedUser = bUser.Select(eUser);
+            }
 
-            if (b.Select(new EUser { CodeUser = "motero" }) != null)
-                routes++;
+            if (selectedUser != null
+                && selectedUser.CodeUser == eUser.CodeUser
+                && selectedUser.Name == eUser.Name
+                && selectedUser.State == eUser.State)
+                result = true;
 
-            Assert.AreEqual(routes, 2);
+            Assert.AreEqual(result, true);
         }
 
         [TestMethod]
         public void Insert()
         {
-            short routes = 0;
-            BUser b = new BUser();
-            BAudit b2 = new BAudit();
-            EUser user = new EUser();
-            user.CodeUser = "motero";
-            user.Name = "Miguel Angel";
-            user.Password = "123456";
-            user.Email = "miguel-otero@hotmail.com";
-            user.Profile = "adm";
-            user.State = 1;
-            user.Audit.UserRegister = "uni test";           
+            short routes = 0;            
+            BAudit bAudit = new BAudit();
+            EAudit eAudit = null;
+            BUser bUser = new BUser();
+            EUser eUser = new EUser();
+            EUser insertedUser = null;
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
+            eUser.Email = Aleatory.GetString(15);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);            
 
-            TransactionScope ts = new TransactionScope();
+            if (bUser.Select(eUser) != null)
+                bUser.Delete(eUser);
 
-            if (b.Select(user) != null)
-                b.Delete(user);
-
-            if (b.Select(user) == null)
+            if (bUser.Select(eUser) == null)
                 routes++;
 
-            b.Insert(user);
+            bUser.Insert(eUser);
 
-            EUser insert = b.Select(user);
+            insertedUser = bUser.Select(eUser);
 
-            if (insert != null)
+            if (insertedUser != null)
                 routes++;
 
-            string hash = b.CalculateHash(user);
-            if (insert.Password == hash)
+            string hash = bUser.CalculateHash(eUser);
+            if (insertedUser.Password == hash)
                 routes++;
 
-            user.Audit = b2.Select(user.Audit)[0];
-            if (user.Audit.UserRegister == "uni test"
-                && user.Audit.TypeEvent.ToLower() == "insert")
+            eAudit = bAudit.Select(eUser.Audit).Where(x => x.UserRegister == eUser.Audit.UserRegister && x.TypeEvent == "Insert").FirstOrDefault();
+            if (eAudit != null)
                 routes++;
 
             ts.Dispose();
@@ -125,82 +142,80 @@ namespace Apps.Test
         public void Delete()
         {
             short routes = 0;
-            BUser b = new BUser();
-            BAudit b2 = new BAudit();
-            EUser user = new EUser();
-            user.CodeUser = "motero";
-            user.Audit.UserRegister = "uni test";
-
+            BAudit bAudit = new BAudit();
+            EAudit eAudit = null;
+            BUser bUser = new BUser();
+            EUser eUser = new EUser();
             TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
+            eUser.Email = Aleatory.GetString(15);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);
 
-            if (b.Select(user) != null)
-            {
-                b.Delete(user);
-                routes++;                
-            }
+            bUser.Insert(eUser);
+            bUser.Delete(eUser);
 
-            if (b.Select(user) == null)
+            if (bUser.Select(eUser) == null)
                 routes++;
 
-            user.Audit = b2.Select(user.Audit)[0];
-            if (user.Audit.UserRegister == "uni test"
-                && user.Audit.TypeEvent.ToLower() == "delete")
+            eAudit = bAudit.Select(eUser.Audit).Where(x=>x.UserRegister == eUser.Audit.UserRegister && x.TypeEvent == "Delete").FirstOrDefault();
+            if (eAudit != null)
                 routes++;
 
             ts.Dispose();
 
-            Assert.AreEqual(routes, 3);
+            Assert.AreEqual(routes, 2);
         }
 
         [TestMethod]
         public void Update()
         {
             short routes = 0;
-            BUser b = new BUser();
-            BAudit b2 = new BAudit();
-            EUser user = new EUser();
-            user.CodeUser = "motero";
-            user.Name = "Miguel Angel";
-            user.Password = "123456";
-            user.Email = "miguel-otero@hotmail.com";
-            user.Profile = "adm";
-            user.State = 1;
-            user.Audit.UserRegister = "uni test";
+            BAudit bAudit = new BAudit();
+            EAudit eAudit = null;
+            BUser bUser = new BUser();
+            EUser eUser = new EUser();
+            EUser insertedUser = null;
+            EUser updatedUser = null;
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
+            eUser.Email = Aleatory.GetString(15);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);
 
-            TransactionScope ts = new TransactionScope();
+            bUser.Insert(eUser);
 
-            b.Delete(user);
-            b.Insert(user);
-
-            EUser original = b.Select(user);
-            if (original != null)
+            insertedUser = bUser.Select(eUser);
+            if (insertedUser != null)
                 routes++;
 
-            original.Name = "Update Name";
-            original.Email = "Update Email";
-            original.Audit.UserRegister = "uni test";
+            insertedUser.Name = Aleatory.GetString(8);
+            insertedUser.Email = Aleatory.GetString(15);
+            insertedUser.State = Aleatory.GetShort();
+            insertedUser.Audit.UserRegister = Aleatory.GetString(8);
 
-            b.Update(original);
+            bUser.Update(insertedUser);
 
-            EUser update = b.Select(original);
+            updatedUser = bUser.Select(insertedUser);
 
-            if (update != null)
+            if (updatedUser != null
+                && updatedUser.Name != eUser.Name 
+                && updatedUser.Email != eUser.Email
+                && updatedUser.State != eUser.State
+                && updatedUser.CodeUser == eUser.CodeUser)
                 routes++;
 
-            if (original.Password == update.Password)
-                routes++;
-
-            if (update.Name == "Update Name" && update.Email == "Update Email")
-                routes++;
-
-            update.Audit = b2.Select(update.Audit)[0];
-            if (update.Audit.UserRegister == "uni test"
-                && update.Audit.TypeEvent.ToLower() == "update")
+            eAudit = bAudit.Select(insertedUser.Audit).Where(x=>x.UserRegister == insertedUser.Audit.UserRegister && x.TypeEvent == "Update").FirstOrDefault();
+            if (eAudit != null)
                 routes++;
 
             ts.Dispose();
 
-            Assert.AreEqual(routes, 5);
+            Assert.AreEqual(routes, 3);
         }
     }
 }

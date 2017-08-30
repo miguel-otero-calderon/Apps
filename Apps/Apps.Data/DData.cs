@@ -11,13 +11,14 @@ namespace Apps.Data
 {
     public class DData:Data
     {
-        private static Data _layerData;
-        private static Data layerData
+        private DataFactory dataFactory = new DataFactory();
+        private Data _layerData;
+        private Data layerData
         {
             get
             {
                 if (_layerData == null)
-                    _layerData = DataFactory.CreateData();
+                    _layerData = dataFactory.CreateData();
                 return _layerData;
             }
         }

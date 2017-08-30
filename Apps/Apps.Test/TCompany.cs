@@ -62,13 +62,13 @@ namespace Apps.Test
             EAudit eAudit = null;
             BCompany bCompany = new BCompany();
             ECompany eCompany = new ECompany();
-            ECorporation eCorporation = new ECorporation();
             BCorporation bCorporation = new BCorporation();
-            TransactionScope ts = new TransactionScope();
+            ECorporation eCorporation = new ECorporation();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
             eCorporation.CodeCorporation = Aleatory.GetString(2);
             eCorporation.Name = Aleatory.GetString(8);
-            eCorporation.State = Aleatory.GetShort();
+            eCorporation.State = 1;
             eCorporation.Audit.UserRegister = Aleatory.GetString(8);
             bCorporation.Insert(eCorporation);
 
@@ -87,16 +87,11 @@ namespace Apps.Test
             if (bCompany.Select(eCompany) == null)
                 routes++;
 
-            eAudit = bAudit.Select(eCompany.Audit)[0];
-            if (eAudit != null
-                && eAudit.CodeCompany == eCompany.Audit.CodeCompany
-                && eAudit.CodeEntity == eCompany.Audit.CodeEntity
-                && eAudit.Code == eCompany.Audit.Code
-                && eAudit.UserRegister == eCompany.Audit.UserRegister
-                && eAudit.TypeEvent == "Delete")
+            eAudit = bAudit.Select(eCompany.Audit).Where(x => x.UserRegister == eCompany.Audit.UserRegister && x.TypeEvent == "Delete").FirstOrDefault();
+            if (eAudit != null)
                 routes++;
 
-            ts.Dispose();
+            ts.Dispose();           
 
             Assert.AreEqual(routes, 3);
         }
@@ -105,38 +100,39 @@ namespace Apps.Test
         public void Insert()
         {
             short routes = 0;
-            BCompany b = new BCompany();
-            BAudit b2 = new BAudit();
-            ECompany company = new ECompany();
-            company.CodeCompany = "xx";
-            company.CodeCorporation = "01";
-            company.LongName = "Test LongName";
-            company.ShortName = "Test ShortName";
-            company.Ruc = "Ruc";
-            company.Address = "Address";
-            company.PageWeb = "PageWeb";
-            company.Phone = "Phone";
-            company.Fax = "Fax";
-            company.Logo = "Logo";
-            company.State = 1;
-            company.Audit.UserRegister = "uni test";
+            BAudit bAudit = new BAudit();
+            EAudit eAudit = null;
+            BCompany bCompany = new BCompany();
+            ECompany eCompany = new ECompany();
+            ECompany insertedCompany = new ECompany();
+            BCorporation bCorporation = new BCorporation();
+            ECorporation eCorporation = new ECorporation();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
-            TransactionScope ts = new TransactionScope();
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(8);
+            eCorporation.State = Aleatory.GetShort();
+            eCorporation.Audit.UserRegister = Aleatory.GetString(8);
+            bCorporation.Insert(eCorporation);
 
-            b.Insert(company);
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.LongName = Aleatory.GetString(8);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
 
-            ECompany insert = b.Select(company);
-
-            if (insert != null)
+            insertedCompany = bCompany.Select(eCompany);
+            if (insertedCompany != null
+                && insertedCompany.CodeCompany == eCompany.CodeCompany
+                && insertedCompany.LongName == eCompany.LongName
+                && insertedCompany.State == eCompany.State)
                 routes++;
 
-            company.Audit = b2.Select(company.Audit)[0];
-            if (company.Audit.UserRegister == "uni test"
-                && company.Audit.TypeEvent.ToLower() == "insert")
+            eAudit = bAudit.Select(eCompany.Audit).Where(x => x.UserRegister == eCompany.Audit.UserRegister && x.TypeEvent == "Insert").FirstOrDefault();
+            if (eAudit != null)
                 routes++;
 
             ts.Dispose();
-
             Assert.AreEqual(routes, 2);
         }
 
@@ -144,53 +140,49 @@ namespace Apps.Test
         public void Update()
         {
             short routes = 0;
-            BCompany b = new BCompany();
-            BAudit b2 = new BAudit();
-            ECompany company = new ECompany();
-            company.CodeCompany = "xx";
-            company.CodeCorporation = "01";
-            company.LongName = "Test LongName";
-            company.ShortName = "Test ShortName";
-            company.Ruc = "Ruc";
-            company.Address = "Address";
-            company.PageWeb = "PageWeb";
-            company.Phone = "Phone";
-            company.Fax = "Fax";
-            company.Logo = "Logo";
-            company.State = 1;
-            company.Audit.UserRegister = "uni test";
+            BAudit bAudit = new BAudit();
+            EAudit eAudit = null;
+            BCompany bCompany = new BCompany();
+            ECompany eCompany = new ECompany();
+            ECompany updatedCompany = new ECompany();
+            BCorporation bCorporation = new BCorporation();
+            ECorporation eCorporation = new ECorporation();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
-            TransactionScope ts = new TransactionScope();
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(8);
+            eCorporation.State = Aleatory.GetShort();
+            eCorporation.Audit.UserRegister = Aleatory.GetString(8);
+            bCorporation.Insert(eCorporation);
 
-            b.Delete(company);
-            b.Insert(company);
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.LongName = Aleatory.GetString(8);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
 
-            ECompany original = b.Select(company);
-            if (original != null)
+            eCompany.LongName = Aleatory.GetString(8);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Update(eCompany);
+
+            updatedCompany = bCompany.Select(eCompany);
+
+            if (updatedCompany != null
+                && updatedCompany.CodeCompany == eCompany.CodeCompany
+                && updatedCompany.CodeCorporation == eCompany.CodeCorporation
+                && updatedCompany.LongName != eCompany.LongName
+                && updatedCompany.State == eCompany.State)
                 routes++;
 
-            original.LongName = "Update Name";
-            original.PageWeb = "Update Page Web";
-            original.Audit.UserRegister = "uni test";
+            eAudit = bAudit.Select(eCompany.Audit).Where(x=>x.UserRegister == eCompany.Audit.UserRegister && x.TypeEvent == "Update").FirstOrDefault();
 
-            b.Update(original);
-
-            ECompany update = b.Select(original);
-
-            if (update != null)
-                routes++;
-
-            if (update.LongName == "Update Name" && update.PageWeb == "Update Page Web")
-                routes++;
-
-            update.Audit = b2.Select(update.Audit)[0];
-            if (update.Audit.UserRegister == "uni test"
-                && update.Audit.TypeEvent.ToLower() == "update")
+            if (eAudit != null)
                 routes++;
 
             ts.Dispose();
 
-            Assert.AreEqual(routes, 4);
         }
     }
 }

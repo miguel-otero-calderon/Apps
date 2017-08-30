@@ -15,7 +15,11 @@ namespace Apps.Entity
             get
             {
                 if (audit == null)
-                    audit = new EAudit(CodeCompany: "00", CodeEntity: "Corporation", Code: CodeCorporation, Sequence: 0);
+                    audit = new EAudit(
+                        CodeCompany: string.Empty, 
+                        CodeEntity: "Corporation", 
+                        Code: CodeCorporation, 
+                        Sequence: 0);
                 return audit;
             }
             set

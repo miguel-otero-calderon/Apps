@@ -70,11 +70,9 @@ namespace Apps.Test
                     && insertedCorporation.State == eCorporation.State)
                     routes++;
 
-                EAudit lastAudit = bAudit.Select(eCorporation.Audit)[0];
+                EAudit lastAudit = bAudit.Select(eCorporation.Audit).Where(x => x.UserRegister == eCorporation.Audit.UserRegister && x.TypeEvent == "Insert").FirstOrDefault();
 
-                if (lastAudit != null 
-                    && lastAudit.UserRegister == eCorporation.Audit.UserRegister
-                    && lastAudit.TypeEvent.ToLower() == "insert")
+                if (lastAudit != null)
                     routes++;
             }
 
@@ -88,7 +86,6 @@ namespace Apps.Test
             BCorporation bCorporation = new BCorporation();
             BAudit bAudit = new BAudit();
             short routes = 0;
-            bool negative = true;
 
             eCorporation.CodeCorporation =Aleatory.GetString(2);
             eCorporation.Name = Aleatory.GetString(8);
@@ -106,15 +103,13 @@ namespace Apps.Test
                     && originalCorporation.State == eCorporation.State)
                     routes++;
 
-                EAudit lastAudit = bAudit.Select(eCorporation.Audit)[0];
+                EAudit lastAudit = bAudit.Select(eCorporation.Audit).Where(x => x.UserRegister == eCorporation.Audit.UserRegister && x.TypeEvent == "Insert").FirstOrDefault();
 
-                if (lastAudit != null 
-                    && lastAudit.UserRegister == eCorporation.Audit.UserRegister
-                    && lastAudit.TypeEvent.ToLower() == "insert")
+                if (lastAudit != null)
                     routes++;
 
                 eCorporation.Name = string.Format("{0} {1}", eCorporation.Name,"update");                
-                eCorporation.State = Aleatory.GetShort(negative);
+                eCorporation.State = Aleatory.GetShort();
                 eCorporation.Audit.UserRegister = Aleatory.GetString(8);
 
                 bCorporation.Update(eCorporation);
@@ -128,14 +123,83 @@ namespace Apps.Test
                     && updatedCorporation.State != originalCorporation.State)
                     routes++;
 
-                lastAudit = bAudit.Select(updatedCorporation.Audit)[0];
-                if (lastAudit != null
-                    && lastAudit.UserRegister == eCorporation.Audit.UserRegister
-                    && lastAudit.TypeEvent.ToLower() == "update")
+                lastAudit = bAudit.Select(updatedCorporation.Audit).Where(x=>x.UserRegister == eCorporation.Audit.UserRegister && x.TypeEvent == "Update").FirstOrDefault();
+                if (lastAudit != null)
                     routes++;
             }
 
             Assert.AreEqual(routes, 4);
+        }
+
+        [TestMethod]
+        public void Delete()
+        {
+            short routes = 0;
+            BAudit bAudit = new BAudit();
+            EAudit eAudit = null;
+            BCorporation bCorporation = new BCorporation();
+            ECorporation eCorporation = new ECorporation();
+            ECorporation insertedCorporation = new ECorporation();
+            BCompany bCompany = new BCompany();
+            ECompany eCompany = new ECompany();
+            ECompany insertedCompany = new ECompany();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
+
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(8);
+            eCorporation.State = Aleatory.GetShort();
+            eCorporation.Audit.UserRegister = Aleatory.GetString(8);
+            bCorporation.Insert(eCorporation);
+
+            insertedCorporation = bCorporation.Select(eCorporation);
+            if (insertedCorporation != null)
+                routes++;
+
+            insertedCorporation.Audit.UserRegister = eCorporation.Audit.UserRegister;
+            bCorporation.Delete(insertedCorporation);
+
+            if (bCorporation.Select(insertedCorporation) == null)
+                routes++;
+
+            eAudit = bAudit.Select(eCorporation.Audit).Where(x => x.UserRegister == eCorporation.Audit.UserRegister && x.TypeEvent == "Delete").FirstOrDefault();
+
+            if (eAudit != null)
+                routes++;
+
+            bCorporation.Insert(eCorporation);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.LongName = Aleatory.GetString(8);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = eCorporation.Audit.UserRegister;
+            bCompany.Insert(eCompany);
+
+            insertedCompany = bCompany.Select(eCompany);
+
+            if(insertedCompany != null)
+            {
+                try
+                {
+                    eCorporation.Audit.UserRegister = Aleatory.GetString(9);
+                    bCorporation.Delete(eCorporation);
+                }
+                catch
+                {
+
+                }
+
+                if (bCorporation.Message.Contains("La Corporación")
+                    && bCorporation.Message.Contains("tiene referencias en el Sistema, no se puede eliminar el registro."))
+                    routes++;
+
+                eAudit = bAudit.Select(eCorporation.Audit).Where(x => x.UserRegister == eCorporation.Audit.UserRegister && x.TypeEvent == "Delete").FirstOrDefault();
+                if (eAudit == null)
+                    routes++;
+            }
+
+            ts.Dispose();
+
+            Assert.AreEqual(routes,5);
         }
     }
 }

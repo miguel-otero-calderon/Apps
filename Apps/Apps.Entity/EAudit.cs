@@ -10,7 +10,6 @@ namespace Apps.Entity
 {
     public class EAudit
     {
-        public int AuditId { get; set;}
         public string CodeCompany { get; set;}
         public string CodeEntity { get; set;}
         public string Code { get; set;}
@@ -36,9 +35,6 @@ namespace Apps.Entity
         }
         public EAudit(DataRow row, List<string> columns)
         {
-            if (columns.Contains("AuditId") && row.Validate("AuditId"))
-                AuditId = Convert.ToInt32(row["AuditId"]);
-
             if (columns.Contains("CodeCompany") && row.Validate("CodeCompany"))
                 CodeCompany = Convert.ToString(row["CodeCompany"]);
 

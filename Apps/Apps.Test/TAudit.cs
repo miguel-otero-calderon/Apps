@@ -13,12 +13,13 @@ namespace Apps.Test
     {
         [TestMethod]
         public void Insert()
-        {
+        {            
             bool result = false;
             string codeCompany = Aleatory.GetString(2);
             string codeEntity = Aleatory.GetString(8);
             string code = Aleatory.GetString(8);
             BAudit bAudit = new BAudit();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
             EAudit eAudit = new EAudit(
                 CodeCompany:codeCompany,
                 CodeEntity:codeEntity,
@@ -26,15 +27,11 @@ namespace Apps.Test
             eAudit.TypeEvent = "Insert";
             eAudit.UserRegister = Aleatory.GetString(8);
             bAudit.Insert(eAudit);
-            EAudit insertedAudit = bAudit.Select(eAudit)[0];
+            EAudit insertedAudit = bAudit.Select(eAudit).Where(x => x.UserRegister == eAudit.UserRegister && x.TypeEvent == eAudit.TypeEvent).FirstOrDefault();
 
-            if (insertedAudit != null
-                && insertedAudit.CodeCompany == eAudit.CodeCompany
-                && insertedAudit.CodeEntity == eAudit.CodeEntity
-                && insertedAudit.Code == eAudit.Code
-                && insertedAudit.UserRegister == eAudit.UserRegister
-                && insertedAudit.TypeEvent == eAudit.TypeEvent)
+            if (insertedAudit != null)
                 result = true;
+            ts.Dispose();
             Assert.IsTrue(result);
         }
 
@@ -59,13 +56,8 @@ namespace Apps.Test
             if (bAudit.Select(eAudit).Count == 0)
                 routes++;
             bAudit.Insert(eAudit);
-            selectedAudit = bAudit.Select(eAudit)[0];
-            if (selectedAudit != null
-                && selectedAudit.CodeCompany == eAudit.CodeCompany
-                && selectedAudit.CodeEntity == eAudit.CodeEntity
-                && selectedAudit.Code == eAudit.Code
-                && selectedAudit.UserRegister == eAudit.UserRegister
-                && selectedAudit.TypeEvent == eAudit.TypeEvent)
+            selectedAudit = bAudit.Select(eAudit).Where(x => x.UserRegister == eAudit.UserRegister && x.TypeEvent == "Insert").FirstOrDefault();
+            if (selectedAudit != null)
                 routes++;
             ts.Dispose();
             Assert.AreEqual(routes, 2);

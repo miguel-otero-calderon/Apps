@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <Choose>
@@ -57,9 +58,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TAudit.cs" />
     <Compile Include="TSequence.cs" />
-    <Compile Include="TUserCompany.cs" />
     <Compile Include="TCompany.cs" />
     <Compile Include="TCorporation.cs" />
+    <Compile Include="TAleatory.cs" />
+    <Compile Include="TUserCompany.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Apps.Business\Apps.Business.csproj">

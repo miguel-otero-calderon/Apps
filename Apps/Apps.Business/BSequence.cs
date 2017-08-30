@@ -12,43 +12,45 @@ namespace Apps.Business
 {
     public class BSequence
     {
-        private DSequence data = new DSequence();
+        private DSequence dSequence = new DSequence();
         public int GetCorrelative(ESequence sequence)
         {
-            ESequence _sequence = Select(sequence);
-            if (_sequence == null)
+            ESequence eSequence = Select(sequence);
+            if (eSequence == null)
             {
                 sequence.Correlative = 1;
                 Insert(sequence);
 
-                _sequence = Select(sequence);                
+                eSequence = Select(sequence);                
             }
-            return _sequence.Correlative;
+            return eSequence.Correlative;
         }
 
         public void SetCorrelativo(ESequence sequence)
         {
-            ESequence _sequence = Select(sequence);
-            if(_sequence == null)
+            ESequence eSequence = Select(sequence);
+            if(eSequence == null)
             {
-                _sequence = new ESequence(CodeSequence: sequence.CodeSequence, Correlative: sequence.Correlative);
-                _sequence.Correlative = 1;
-                Insert(_sequence);
+                eSequence = new ESequence(
+                    CodeSequence: sequence.CodeSequence, 
+                    Correlative: sequence.Correlative);
+                eSequence.Correlative = 1;
+                Insert(eSequence);
             }
             else
             {
-                _sequence.Correlative++;
-                Update(_sequence);
+                eSequence.Correlative++;
+                Update(eSequence);
             }             
         }
 
         public ESequence Select(ESequence sequence)
         {
-            DataRow row = data.Select(sequence);
-            if (row != null)
+            DataRow rowSequence = dSequence.Select(sequence);
+            if (rowSequence != null)
             {
-                ESequence _sequence = new ESequence(row, row.GetColumns());
-                return _sequence;
+                ESequence eSequence = new ESequence(rowSequence, rowSequence.GetColumns());
+                return eSequence;
             }
             else
                 return null;
@@ -56,17 +58,17 @@ namespace Apps.Business
 
         public void Insert(ESequence sequence)
         {
-            data.Insert(sequence);
+            dSequence.Insert(sequence);
         }
 
         public void Update(ESequence sequence)
         {
-            data.Update(sequence);
+            dSequence.Update(sequence);
         }
 
         public void Delete(ESequence sequence)
         {
-            data.Delete(sequence);
+            dSequence.Delete(sequence);
         }
     }
 }

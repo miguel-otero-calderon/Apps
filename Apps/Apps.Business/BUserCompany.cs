@@ -12,12 +12,12 @@ namespace Apps.Business
 {
     public class BUserCompany
     {
-        DUserCompany d = new DUserCompany();
+        DUserCompany dUserCompany = new DUserCompany();
 
         public EUserCompany Select(EUserCompany userCompany)
         {
             EUserCompany result = null;
-            DataRow row = d.Select(userCompany);
+            DataRow row = dUserCompany.Select(userCompany);
             if(row != null)
                 result = new EUserCompany(row);
 
@@ -26,32 +26,49 @@ namespace Apps.Business
 
         public void Insert(EUserCompany userCompany)
         {
-            d.Insert(userCompany);
+            dUserCompany.Insert(userCompany);
         }
 
         public void Delete(EUserCompany userCompany)
         {
-            d.Delete(userCompany);
+            dUserCompany.Delete(userCompany);
         }
 
-        public List<ECompany> SelectByUser(EUser user)
+        public List<ECompany> SelectByUser(EUser eUser)
         {
-            DataTable table = d.SelectByUser(user);
-            int rows = table.Rows.Count;
-            List<string> columns = table.GetColumns();
-            List<ECompany> companies = new List<ECompany>();
-            for (int i = 0; i <= rows - 1; i++)
+            List<ECompany> listECompanies = new List<ECompany>();
+            List<string> listColumns;
+            DataTable dataTable;
+            int rowsCount;
+            DataRow dataRow;
+            ECompany eCompany;
+            dataTable = dUserCompany.SelectByUser(eUser);
+            rowsCount = dataTable.Rows.Count;
+            listColumns = dataTable.GetColumns();            
+            for (int i = 0; i <= rowsCount - 1; i++)
             {
-                DataRow row = table.Rows[i];
-                ECompany item = new ECompany(row, columns);
-                companies.Add(item);
+                dataRow = dataTable.Rows[i];
+                eCompany = new ECompany(dataRow, listColumns);
+                listECompanies.Add(eCompany);
             }
-            return companies;
+            return listECompanies;
         }
 
-        public void DeleteByUser(EUser user)
+        public void DeleteByUser(EUser eUser)
         {
-            d.DeleteByUser(user);
+            EUserCompany eUserCompany;
+            List<ECompany> listECompanies;
+            short listCount;
+            listECompanies = SelectByUser(eUser);
+            listCount = Convert.ToInt16(listECompanies.Count);
+
+            for (short i = 0; i <= listCount - 1; i++)
+            {
+                eUserCompany = new EUserCompany();
+                eUserCompany.CodeUser = eUser.CodeUser;
+                eUserCompany.CodeCompany = listECompanies[i].CodeCompany;
+                Delete(eUserCompany);
+            }
         }
     }
 }

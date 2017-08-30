@@ -13,20 +13,22 @@ namespace Apps.Business
 {
     public class BUser:BBusiness
     {
-        DUser data = new DUser();
-        BAudit audit = new BAudit();
+        DUser dUser = new DUser();
+        BAudit bAudit = new BAudit();
+        BUserCompany bUserCompany = new BUserCompany();
+
         public bool Login(EUser user)
         {
-            EUser _user = Select(user);
-            if (_user == null)
+            EUser eUser = Select(user);
+            if (eUser == null)
             {
                 Message = String.Format("El usuario '{0}' no existe.",user.CodeUser);
                 return false;
             }
 
-            if (_user.Password == CalculateHash(user))
+            if (eUser.Password == CalculateHash(user))
             {
-                if(_user.State == 0)
+                if(eUser.State == 0)
                 {
                     Message = String.Format("El usuario '{0}' no se encuentra 'Activo'.", user.CodeUser);
                     return false;
@@ -43,13 +45,13 @@ namespace Apps.Business
 
         public EUser Select(EUser user)
         {
-            EUser _user;
-            DataRow row = data.Select(user);
+            EUser eUser;
+            DataRow row = dUser.Select(user);
             if (row != null)
             {
                 List<string> columns = row.Table.GetColumns();
-                _user = new EUser(row, columns);
-                return _user;
+                eUser = new EUser(row, columns);
+                return eUser;
             }
             else
                 return null;                     
@@ -66,31 +68,24 @@ namespace Apps.Business
         public void Insert(EUser user)
         {
             user.PasswordHash = CalculateHash(user);
-            data.Insert(user);
+            dUser.Insert(user);
             user.Audit.TypeEvent = "Insert";
-            audit.Insert(user.Audit);
+            bAudit.Insert(user.Audit);
         }
 
-        public void Delete(EUser user)
+        public void Delete(EUser eUser)
         {
-            DUserCompany d = new DUserCompany();
-            d.DeleteByUser(user);
-            data.Delete(user);
-            user.Audit.TypeEvent = "Delete";
-            audit.Insert(user.Audit);
+            bUserCompany.DeleteByUser(eUser);
+            dUser.Delete(eUser);
+            eUser.Audit.TypeEvent = "Delete";
+            bAudit.Insert(eUser.Audit);
         }
 
         public void Update(EUser user)
         {
-            data.Update(user);
+            dUser.Update(user);
             user.Audit.TypeEvent = "Update";
-            audit.Insert(user.Audit);
+            bAudit.Insert(user.Audit);
         }
-
-        //public List<ECompany> GetCompanies(EUser user)
-        //{
-        //    BCompany bCompany = new BCompany();
-        //    return bCompany.GetCompaniesByUser(user);
-        //}
     }
 }

@@ -12,13 +12,13 @@ namespace Apps.Business
 {
     public class BCorporation : BBusiness
     {
-        DCorporation data = new DCorporation();
-        BAudit audit = new BAudit();
+        DCorporation dCorporation = new DCorporation();
+        BAudit bAudit = new BAudit();
 
         public ECorporation Select(ECorporation corporation)
         {
             ECorporation result = null;
-            DataRow row = data.Select(corporation);
+            DataRow row = dCorporation.Select(corporation);
             if (row != null)
                 result = new ECorporation(row, row.GetColumns());
             return result;
@@ -26,33 +26,33 @@ namespace Apps.Business
 
         public void Delete(ECorporation corporation)
         {
-            data.Delete(corporation);
-            if (data.ExistsReference())
+            dCorporation.Delete(corporation);
+            if (dCorporation.ExistsReference())
             {
-                string msg = string.Format("La Corporación '{0}' tiene referencias en el Sistema, no se puede eliminar el registro.", corporation.Name);
-                throw new Exception(msg);
+                Message = string.Format("La Corporación '{0}' tiene referencias en el Sistema, no se puede eliminar el registro.", corporation.Name);
+                throw new Exception(Message);
             }
             corporation.Audit.TypeEvent = "Delete";
-            audit.Insert(corporation.Audit);
+            bAudit.Insert(corporation.Audit);
         }
 
         public void Insert(ECorporation corporation)
         {
-            data.Insert(corporation);
-            if (data.ExistsPrimaryKey())
+            dCorporation.Insert(corporation);
+            if (dCorporation.ExistsPrimaryKey())
             {
-                string msg = string.Format("El código de Corporación '{0}' ya existe en el Sistema, no se puede crear el registro.", corporation.CodeCorporation);
-                throw new Exception(msg);
+                Message = string.Format("El código de Corporación '{0}' ya existe en el Sistema, no se puede crear el registro.", corporation.CodeCorporation);
+                throw new Exception(Message);
             }
             corporation.Audit.TypeEvent = "Insert";
-            audit.Insert(corporation.Audit);
+            bAudit.Insert(corporation.Audit);
         }
 
         public void Update(ECorporation corporation)
         {
-            data.Update(corporation);
+            dCorporation.Update(corporation);
             corporation.Audit.TypeEvent = "Update";
-            audit.Insert(corporation.Audit);
+            bAudit.Insert(corporation.Audit);
         }
     }
 }

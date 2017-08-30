@@ -39,14 +39,6 @@ namespace Apps.Data
             DaCommand command = new DaCommand("UserCompanySelectByUser");
             command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);
             return ExecuteDataTable(command);
-        }
-
-        public void DeleteByUser(EUser user)
-        {
-            string CodeCompanyList = string.Join(",", user.Companies);
-            DaCommand command = new DaCommand("UserCompanyDeleteByUser");
-            command.AddInParameter("@CodeUser", DbType.String, user.CodeUser);            
-            ExecuteDataTable(command);
-        }
+        }        
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Apps.Util;
 using Apps.Business;
 using Apps.Entity;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Transactions;
-using Apps.Util;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Apps.Test
 {
@@ -14,94 +15,290 @@ namespace Apps.Test
         [TestMethod]
         public void Select()
         {
-            short routes = 0;
-            BUserCompany b = new BUserCompany();
-            
-            if (b.Select(new EUserCompany { CodeUser="abc", CodeCompany = "abc" }) == null)
-                routes++;
+            bool result = false;
+            BUserCompany bUserCompany = new BUserCompany();
+            EUserCompany eUserCompany = new EUserCompany();
+            BCorporation bCorporation = new BCorporation();
+            ECorporation eCorporation = new ECorporation();
+            ECorporation insertedCorporation = new ECorporation();
+            BCompany bCompany = new BCompany();
+            ECompany eCompany = new ECompany();
+            BUser bUser = new BUser();
+            EUser eUser = new EUser();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
-            if (b.Select(new EUserCompany { CodeUser = "motero", CodeCompany = "xx" }) != null)
-                routes++;
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(15);
+            eCorporation.State = Aleatory.GetShort();
+            eCorporation.Audit.UserRegister = Aleatory.GetString(8);
+            bCorporation.Insert(eCorporation);
 
-            Assert.AreEqual(routes, 2);
+            insertedCorporation = bCorporation.Select(eCorporation);
+
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = insertedCorporation.CodeCorporation;
+            eCompany.LongName = Aleatory.GetString(15);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
+
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);
+            bUser.Insert(eUser);            
+
+            eUserCompany.CodeUser = eUser.CodeUser;
+            eUserCompany.CodeCompany = eCompany.CodeCompany;
+            bUserCompany.Insert(eUserCompany);
+
+            eUserCompany = bUserCompany.Select(eUserCompany);
+
+            if (eUserCompany != null
+                && eUserCompany.CodeUser == eUser.CodeUser
+                && eUserCompany.CodeCompany == eCompany.CodeCompany)
+                result = true;
+
+            ts.Dispose();
+
+            Assert.IsTrue(result);            
         }
 
         [TestMethod]
         public void Insert()
         {
-            short routes = 0;
-            BUserCompany b = new BUserCompany();
-            BAudit b2 = new BAudit();
-            EUserCompany usercompany = new EUserCompany();
-            usercompany.CodeUser = "motero";
-            usercompany.CodeCompany = "xx";
+            bool result = false;
+            BUserCompany bUserCompany = new BUserCompany();
+            EUserCompany eUserCompany = new EUserCompany();
+            EUserCompany insertedUserCompany = new EUserCompany();
+            BCorporation bCorporation = new BCorporation();
+            ECorporation eCorporation = new ECorporation();
+            BCompany bCompany = new BCompany();
+            ECompany eCompany = new ECompany();
+            BUser bUser = new BUser();
+            EUser eUser = new EUser();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
-            TransactionScope ts = new TransactionScope();
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(15);
+            eCorporation.State = Aleatory.GetShort();
+            eCorporation.Audit.UserRegister = Aleatory.GetString(8);
+            bCorporation.Insert(eCorporation);
 
-            if (b.Select(usercompany) != null)
-                b.Delete(usercompany);
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.LongName = Aleatory.GetString(15);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
 
-            if (b.Select(usercompany) == null)
-                routes++;
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);
+            bUser.Insert(eUser);
 
-            b.Insert(usercompany);
+            eUserCompany.CodeUser = eUser.CodeUser;
+            eUserCompany.CodeCompany = eCompany.CodeCompany;
+            bUserCompany.Insert(eUserCompany);
 
-            EUserCompany insert = b.Select(usercompany);
+            insertedUserCompany = bUserCompany.Select(eUserCompany);
 
-            if (insert != null)
-                routes++;
+            if (insertedUserCompany != null
+                && insertedUserCompany.CodeUser == eUserCompany.CodeUser
+                && insertedUserCompany.CodeCompany == eCompany.CodeCompany)
+                result = true;
 
             ts.Dispose();
 
-            Assert.AreEqual(routes, 2);
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void Delete()
-        {            
-            EUser eUser = new EUser();
-            eUser.CodeUser = Aleatory.GetString(4);
-            eUser.Name = Aleatory.GetString(8);
-
-            
-
+        {
+            bool result = false;
+            BUserCompany bUserCompany = new BUserCompany();
+            EUserCompany eUserCompany = new EUserCompany();
+            EUserCompany insertedUserCompany = new EUserCompany();
+            EUserCompany deletedUserCompany = new EUserCompany();
+            BCorporation bCorporation = new BCorporation();
+            ECorporation eCorporation = new ECorporation();
+            BCompany bCompany = new BCompany();
             ECompany eCompany = new ECompany();
-            eCompany.CodeCompany = Aleatory.GetString(2);
-            eCompany.LongName = Aleatory.GetString(8);
+            BUser bUser = new BUser();
+            EUser eUser = new EUser();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(15);
+            eCorporation.State = Aleatory.GetShort();
+            eCorporation.Audit.UserRegister = Aleatory.GetString(8);
+            bCorporation.Insert(eCorporation);
+
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.LongName = Aleatory.GetString(15);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
+
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);
+            bUser.Insert(eUser);
+
+            eUserCompany.CodeUser = eUser.CodeUser;
+            eUserCompany.CodeCompany = eCompany.CodeCompany;
+            bUserCompany.Insert(eUserCompany);
+
+            insertedUserCompany = bUserCompany.Select(eUserCompany);
+
+            if (insertedUserCompany != null)
+                bUserCompany.Delete(eUserCompany);
+
+            deletedUserCompany = bUserCompany.Select(eUserCompany);
+
+            if (deletedUserCompany == null)
+                result = true;
+
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void SelectByUser()
         {
-            short routes = 0;
-            BUserCompany b = new BUserCompany();
+            bool result = false;
+            List<ECompany> listECompanies = new List<ECompany>();
+            BUserCompany bUserCompany = new BUserCompany();
+            EUserCompany eUserCompany = new EUserCompany();
+            EUserCompany insertedOneUserCompany = new EUserCompany();
+            EUserCompany insertedTwoUserCompany = new EUserCompany();
+            BCorporation bCorporation = new BCorporation();
+            ECorporation eCorporation = new ECorporation();
+            BCompany bCompany = new BCompany();
+            ECompany eCompany = new ECompany();
+            BUser bUser = new BUser();
+            EUser eUser = new EUser();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
-            if (b.SelectByUser(new EUser { CodeUser = "abc"}).Count == 0)
-                routes++;
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(15);
+            eCorporation.State = Aleatory.GetShort();
+            eCorporation.Audit.UserRegister = Aleatory.GetString(8);
+            bCorporation.Insert(eCorporation);
 
-            if (b.SelectByUser(new EUser{ CodeUser = "motero" }).Count > 0)
-                routes++;
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.LongName = Aleatory.GetString(15);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
 
-            Assert.AreEqual(routes, 2);
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);
+            bUser.Insert(eUser);
+
+            eUserCompany.CodeUser = eUser.CodeUser;
+            eUserCompany.CodeCompany = eCompany.CodeCompany;
+            bUserCompany.Insert(eUserCompany);
+
+            insertedOneUserCompany = bUserCompany.Select(eUserCompany);
+
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.LongName = Aleatory.GetString(15);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
+
+            eUserCompany.CodeUser = eUser.CodeUser;
+            eUserCompany.CodeCompany = eCompany.CodeCompany;
+            bUserCompany.Insert(eUserCompany);
+
+            insertedTwoUserCompany = bUserCompany.Select(eUserCompany);
+
+            listECompanies = bUserCompany.SelectByUser(eUser);
+
+            if (listECompanies.Count == 2
+                && listECompanies.Exists(x=>x.CodeCompany == insertedOneUserCompany.CodeCompany)
+                && listECompanies.Exists(x=>x.CodeCompany == insertedTwoUserCompany.CodeCompany))
+                result = true;
+
+            ts.Dispose();
+
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void DeleteByUser()
         {
             bool result = false;
-            BUserCompany b = new BUserCompany();
+            List<ECompany> listECompanies = new List<ECompany>();
+            BUserCompany bUserCompany = new BUserCompany();
+            EUserCompany eUserCompany = new EUserCompany();
+            EUserCompany insertedOneUserCompany = new EUserCompany();
+            EUserCompany insertedTwoUserCompany = new EUserCompany();
+            BCorporation bCorporation = new BCorporation();
+            ECorporation eCorporation = new ECorporation();
+            BCompany bCompany = new BCompany();
+            ECompany eCompany = new ECompany();
+            BUser bUser = new BUser();
+            EUser eUser = new EUser();
+            TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
 
-            TransactionScope ts = new TransactionScope();
+            eCorporation.CodeCorporation = Aleatory.GetString(2);
+            eCorporation.Name = Aleatory.GetString(15);
+            eCorporation.State = Aleatory.GetShort();
+            eCorporation.Audit.UserRegister = Aleatory.GetString(8);
+            bCorporation.Insert(eCorporation);
 
-            b.DeleteByUser(new EUser { CodeUser = "abc" });
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.LongName = Aleatory.GetString(15);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
 
-            b.DeleteByUser(new EUser { CodeUser = "motero" });
+            eUser.CodeUser = Aleatory.GetString(8);
+            eUser.Name = Aleatory.GetString(8);
+            eUser.State = Aleatory.GetShort();
+            eUser.Audit.UserRegister = Aleatory.GetString(8);
+            bUser.Insert(eUser);
 
-            if (b.SelectByUser(new EUser { CodeUser = "motero" }).Count == 0)
+            eUserCompany.CodeUser = eUser.CodeUser;
+            eUserCompany.CodeCompany = eCompany.CodeCompany;
+            bUserCompany.Insert(eUserCompany);
+
+            insertedOneUserCompany = bUserCompany.Select(eUserCompany);
+
+            eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.LongName = Aleatory.GetString(15);
+            eCompany.State = Aleatory.GetShort();
+            eCompany.Audit.UserRegister = Aleatory.GetString(8);
+            bCompany.Insert(eCompany);
+
+            eUserCompany.CodeUser = eUser.CodeUser;
+            eUserCompany.CodeCompany = eCompany.CodeCompany;
+            bUserCompany.Insert(eUserCompany);
+
+            insertedTwoUserCompany = bUserCompany.Select(eUserCompany);
+
+            listECompanies = bUserCompany.SelectByUser(eUser);
+
+            if (listECompanies.Count == 2
+                && listECompanies.Exists(x => x.CodeCompany == insertedOneUserCompany.CodeCompany)
+                && listECompanies.Exists(x => x.CodeCompany == insertedTwoUserCompany.CodeCompany))
+                bUserCompany.DeleteByUser(eUser);
+
+            listECompanies = bUserCompany.SelectByUser(eUser);
+
+            if (listECompanies.Count == 0)
                 result = true;
-
-            ts.Dispose();
 
             Assert.IsTrue(result);
         }
