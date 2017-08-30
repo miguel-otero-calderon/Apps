@@ -62,6 +62,7 @@
     <Compile Include="TCorporation.cs" />
     <Compile Include="TAleatory.cs" />
     <Compile Include="TUserCompany.cs" />
+    <Compile Include="TClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Apps.Business\Apps.Business.csproj">

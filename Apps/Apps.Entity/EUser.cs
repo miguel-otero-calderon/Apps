@@ -35,7 +35,7 @@ namespace Apps.Entity
         {
             get {
                 if (audit == null)
-                    audit = new EAudit(CodeCompany :"00", CodeEntity : "User", Code : CodeUser, Sequence : 0);
+                    audit = new EAudit(CodeCompany :string.Empty, CodeEntity : "User", Code : CodeUser, Sequence : 0);
                 return audit;
             }
             set

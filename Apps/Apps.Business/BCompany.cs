@@ -29,8 +29,8 @@ namespace Apps.Business
             dCompany.Delete(company);
             if (dCompany.ExistsReference())
             {
-                string msg = string.Format("La empresa '{0}' tiene referencias en el Sistema, no se puede eliminar el registro.",company.LongName);
-                throw new Exception(msg);
+                Message = string.Format("La empresa '{0}' tiene referencias en el Sistema, no se puede eliminar el registro.",company.LongName);
+                throw new Exception(Message);
             }
             company.Audit.TypeEvent = "Delete";
             bAudit.Insert(company.Audit);
