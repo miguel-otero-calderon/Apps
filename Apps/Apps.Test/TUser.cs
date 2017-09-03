@@ -129,7 +129,10 @@ namespace Apps.Test
             if (insertedUser.Password == hash)
                 routes++;
 
-            eAudit = bAudit.Select(eUser.Audit).Where(x => x.UserRegister == eUser.Audit.UserRegister && x.TypeEvent == "Insert").FirstOrDefault();
+            eAudit = bAudit.Select(eUser.Audit).
+                Where(x => x.UserRegister == eUser.Audit.UserRegister
+                && x.Code == eUser.Audit.Code
+                && x.TypeEvent == "Insert").FirstOrDefault();
             if (eAudit != null)
                 routes++;
 
@@ -160,7 +163,10 @@ namespace Apps.Test
             if (bUser.Select(eUser) == null)
                 routes++;
 
-            eAudit = bAudit.Select(eUser.Audit).Where(x=>x.UserRegister == eUser.Audit.UserRegister && x.TypeEvent == "Delete").FirstOrDefault();
+            eAudit = bAudit.Select(eUser.Audit).
+                Where(x=>x.UserRegister == eUser.Audit.UserRegister 
+                && x.Code == eUser.Audit.Code
+                && x.TypeEvent == "Delete").FirstOrDefault();
             if (eAudit != null)
                 routes++;
 
@@ -209,7 +215,10 @@ namespace Apps.Test
                 && updatedUser.CodeUser == eUser.CodeUser)
                 routes++;
 
-            eAudit = bAudit.Select(insertedUser.Audit).Where(x=>x.UserRegister == insertedUser.Audit.UserRegister && x.TypeEvent == "Update").FirstOrDefault();
+            eAudit = bAudit.Select(insertedUser.Audit).
+                Where(x=>x.UserRegister == insertedUser.Audit.UserRegister
+                && x.Code == eUser.Audit.Code
+                && x.TypeEvent == "Update").FirstOrDefault();
             if (eAudit != null)
                 routes++;
 

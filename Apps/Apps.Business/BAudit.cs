@@ -13,13 +13,10 @@ namespace Apps.Business
     public class BAudit
     {
         DAudit d = new DAudit();
-        public void Insert(EAudit audit)
+        public void Insert(EAudit eAudit)
         {
-            if (string.IsNullOrEmpty(audit.UserRegister))
-                throw new Exception("El campo 'UserRegister' no tiene valor.");
-            if (string.IsNullOrEmpty(audit.TypeEvent))
-                throw new Exception("El campo 'TypeEvent' no tiene valor.");
-            d.Insert(audit);
+            eAudit.Validar();
+            d.Insert(eAudit);
         }
 
         public List<EAudit> Select(EAudit audit, short top = 10)

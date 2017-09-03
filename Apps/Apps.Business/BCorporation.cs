@@ -36,20 +36,22 @@ namespace Apps.Business
             bAudit.Insert(corporation.Audit);
         }
 
-        public void Insert(ECorporation corporation)
+        public void Insert(ECorporation eCorporation)
         {
-            dCorporation.Insert(corporation);
+            eCorporation.Validar();
+            dCorporation.Insert(eCorporation);
             if (dCorporation.ExistsPrimaryKey())
             {
-                Message = string.Format("El código de Corporación '{0}' ya existe en el Sistema, no se puede crear el registro.", corporation.CodeCorporation);
+                Message = string.Format("El código de Corporación '{0}' ya existe en el Sistema, no se puede crear el registro.", eCorporation.CodeCorporation);
                 throw new Exception(Message);
             }
-            corporation.Audit.TypeEvent = "Insert";
-            bAudit.Insert(corporation.Audit);
+            eCorporation.Audit.TypeEvent = "Insert";
+            bAudit.Insert(eCorporation.Audit);
         }
 
         public void Update(ECorporation corporation)
         {
+            corporation.Validar();
             dCorporation.Update(corporation);
             corporation.Audit.TypeEvent = "Update";
             bAudit.Insert(corporation.Audit);

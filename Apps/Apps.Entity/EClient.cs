@@ -11,6 +11,7 @@ namespace Apps.Entity
     public class EClient : EEntity
     {
         public int CodeClient { get; set; }
+        public string CodeCompany { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string FatherLastName { get; set; }
@@ -18,7 +19,7 @@ namespace Apps.Entity
         public string LongName { get; set; }
         public string ShortName { get; set; }
         public string SearchName { get; set; }
-        public string TypeIdentity { get; set; }
+        public string CodeTypeDocumentIdentity { get; set; }
         public string NumberIdentity { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
@@ -31,7 +32,9 @@ namespace Apps.Entity
             get
             {
                 if (audit == null)
-                    audit = new EAudit(CodeCompany: "00", CodeEntity: "Client", Code: CodeClient.ToString(), Sequence: 0);
+                {
+                    audit = new EAudit(CodeCompany, "Client", CodeClient.ToString());
+                }                    
                 return audit;
             }
             set
@@ -39,52 +42,73 @@ namespace Apps.Entity
                 audit = value;
             }
         }
-        public EClient(DataRow row, List<string> columns)
+        public EClient() { }
+        public EClient(DataRow dataRow, List<string> listColumns)
         {
-            if (columns.Contains("CodeClient") && row.Validate("CodeClient"))
-                CodeClient = Convert.ToInt32(row["CodeClient"]);
+            if (listColumns.Contains("CodeClient") && dataRow.Validate("CodeClient"))
+                CodeClient = Convert.ToInt32(dataRow["CodeClient"]);
 
-            if (columns.Contains("FirstName") && row.Validate("FirstName"))
-                FirstName = Convert.ToString(row["FirstName"]);
+            if (listColumns.Contains("CodeCompany") && dataRow.Validate("CodeCompany"))
+                CodeCompany = Convert.ToString(dataRow["CodeCompany"]);
 
-            if (columns.Contains("SecondName") && row.Validate("SecondName"))
-                SecondName = Convert.ToString(row["SecondName"]);
+            if (listColumns.Contains("FirstName") && dataRow.Validate("FirstName"))
+                FirstName = Convert.ToString(dataRow["FirstName"]);
 
-            if (columns.Contains("FatherLastName") && row.Validate("FatherLastName"))
-                FatherLastName = Convert.ToString(row["FatherLastName"]);
+            if (listColumns.Contains("SecondName") && dataRow.Validate("SecondName"))
+                SecondName = Convert.ToString(dataRow["SecondName"]);
 
-            if (columns.Contains("MotherLastName") && row.Validate("MotherLastName"))
-                MotherLastName = Convert.ToString(row["MotherLastName"]);
+            if (listColumns.Contains("FatherLastName") && dataRow.Validate("FatherLastName"))
+                FatherLastName = Convert.ToString(dataRow["FatherLastName"]);
 
-            if (columns.Contains("LongName") && row.Validate("LongName"))
-                LongName = Convert.ToString(row["LongName"]);
+            if (listColumns.Contains("MotherLastName") && dataRow.Validate("MotherLastName"))
+                MotherLastName = Convert.ToString(dataRow["MotherLastName"]);
 
-            if (columns.Contains("ShortName") && row.Validate("ShortName"))
-                ShortName = Convert.ToString(row["ShortName"]);
+            if (listColumns.Contains("LongName") && dataRow.Validate("LongName"))
+                LongName = Convert.ToString(dataRow["LongName"]);
 
-            if (columns.Contains("SearchName") && row.Validate("SearchName"))
-                SearchName = Convert.ToString(row["SearchName"]);
+            if (listColumns.Contains("ShortName") && dataRow.Validate("ShortName"))
+                ShortName = Convert.ToString(dataRow["ShortName"]);
 
-            if (columns.Contains("TypeIdentity") && row.Validate("TypeIdentity"))
-                TypeIdentity = Convert.ToString(row["TypeIdentity"]);
+            if (listColumns.Contains("SearchName") && dataRow.Validate("SearchName"))
+                SearchName = Convert.ToString(dataRow["SearchName"]);
 
-            if (columns.Contains("NumberIdentity") && row.Validate("NumberIdentity"))
-                NumberIdentity = Convert.ToString(row["NumberIdentity"]);
+            if (listColumns.Contains("CodeTypeDocumentIdentity") && dataRow.Validate("CodeTypeDocumentIdentity"))
+                CodeTypeDocumentIdentity = Convert.ToString(dataRow["CodeTypeDocumentIdentity"]);
 
-            if (columns.Contains("Address") && row.Validate("Address"))
-                Address = Convert.ToString(row["Address"]);
+            if (listColumns.Contains("NumberIdentity") && dataRow.Validate("NumberIdentity"))
+                NumberIdentity = Convert.ToString(dataRow["NumberIdentity"]);
 
-            if (columns.Contains("Phone") && row.Validate("Phone"))
-                Phone = Convert.ToString(row["Phone"]);
+            if (listColumns.Contains("Address") && dataRow.Validate("Address"))
+                Address = Convert.ToString(dataRow["Address"]);
 
-            if (columns.Contains("Fax") && row.Validate("Fax"))
-                Fax = Convert.ToString(row["Fax"]);
+            if (listColumns.Contains("Phone") && dataRow.Validate("Phone"))
+                Phone = Convert.ToString(dataRow["Phone"]);
 
-            if (columns.Contains("Email") && row.Validate("Email"))
-                Email = Convert.ToString(row["Email"]);
+            if (listColumns.Contains("Fax") && dataRow.Validate("Fax"))
+                Fax = Convert.ToString(dataRow["Fax"]);
 
-            if (columns.Contains("State") && row.Validate("State"))
-                State = Convert.ToInt16(row["State"]);
+            if (listColumns.Contains("Email") && dataRow.Validate("Email"))
+                Email = Convert.ToString(dataRow["Email"]);
+
+            if (listColumns.Contains("State") && dataRow.Validate("State"))
+                State = Convert.ToInt16(dataRow["State"]);
+        }
+        public override void Validar()
+        {
+            if (CodeClient <= 0)
+                throw new Exception("El Código de Cliente[CodeClient] es incorrecto.[Client]");
+
+            if (string.IsNullOrEmpty(SearchName))
+                throw new Exception("El Campo Busqueda[SearchName] no puede ser vacio.[Client]");
+
+            if (string.IsNullOrEmpty(CodeTypeDocumentIdentity))
+                throw new Exception("El Código de Tipo de documento de Identidad[CodeTypeDocumentIdentity] no puede ser vacio.[Client]");
+
+            if (string.IsNullOrEmpty(NumberIdentity))
+                throw new Exception("El Número de Identidad[NumberIdentity] no puede ser vacio.[Client]");
+
+            if (string.IsNullOrEmpty(CodeCompany))
+                throw new Exception("El Código de Compañia[CodeCompany] no puede ser vacio.[Client]");
         }
     }
 }

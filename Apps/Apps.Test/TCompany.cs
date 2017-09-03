@@ -87,7 +87,10 @@ namespace Apps.Test
             if (bCompany.Select(eCompany) == null)
                 routes++;
 
-            eAudit = bAudit.Select(eCompany.Audit).Where(x => x.UserRegister == eCompany.Audit.UserRegister && x.TypeEvent == "Delete").FirstOrDefault();
+            eAudit = bAudit.Select(eCompany.Audit).
+                Where(x => x.UserRegister == eCompany.Audit.UserRegister 
+                && x.TypeEvent == "Delete"
+                && x.Code == eCompany.Audit.Code).FirstOrDefault();
             if (eAudit != null)
                 routes++;
 
@@ -128,7 +131,10 @@ namespace Apps.Test
                 && insertedCompany.State == eCompany.State)
                 routes++;
 
-            eAudit = bAudit.Select(eCompany.Audit).Where(x => x.UserRegister == eCompany.Audit.UserRegister && x.TypeEvent == "Insert").FirstOrDefault();
+            eAudit = bAudit.Select(eCompany.Audit).
+                Where(x => x.UserRegister == eCompany.Audit.UserRegister 
+                    && x.Code == eCompany.Audit.Code
+                    && x.TypeEvent == "Insert").FirstOrDefault();
             if (eAudit != null)
                 routes++;
 
@@ -176,7 +182,10 @@ namespace Apps.Test
                 && updatedCompany.State == eCompany.State)
                 routes++;
 
-            eAudit = bAudit.Select(eCompany.Audit).Where(x=>x.UserRegister == eCompany.Audit.UserRegister && x.TypeEvent == "Update").FirstOrDefault();
+            eAudit = bAudit.Select(eCompany.Audit).
+                Where(x=>x.UserRegister == eCompany.Audit.UserRegister 
+                && x.Code == eCompany.Audit.Code
+                && x.TypeEvent == "Update").FirstOrDefault();
 
             if (eAudit != null)
                 routes++;

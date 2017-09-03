@@ -36,8 +36,8 @@ namespace Apps.Business
             BSequence bSequence = new BSequence();
             ESequence eSequence = new ESequence(eClient);
             int correlative = 0;
+            eClient.SearchName = ProcessSearchName(eClient);
             correlative = bSequence.GetCorrelative(eSequence);
-
             eClient.CodeClient = correlative;
             dClient.Insert(eClient);
 
@@ -46,15 +46,20 @@ namespace Apps.Business
                 Message = string.Format("El código de Cliente '{0}' ya existe en el Sistema, no se puede crear el registro.", eClient.CodeClient);
                 throw new Exception(Message);
             }
-
-            eClient.Audit.TypeEvent = "Insert";
-            bAudit.Insert(eClient.Audit);
-
+            if (dClient.ExistsReference())
+            {
+                Message = string.Format("El código de Empresa '{0}' no existe en el Sistema, no se puede crear el registro.", eClient.CodeClient);
+                throw new Exception(Message);
+            }
             correlative++;
             eSequence.Correlative = correlative;
             bSequence.SetCorrelativo(eSequence);
 
             eResult = Select(eClient);
+
+            eClient.Audit.Code = eResult.CodeClient.ToString();
+            eClient.Audit.TypeEvent = "Insert";
+            bAudit.Insert(eClient.Audit);
 
             return eResult;
         }
@@ -62,6 +67,7 @@ namespace Apps.Business
         public EClient Update(EClient eClient)
         {
             EClient eResult;
+            eClient.SearchName = ProcessSearchName(eClient);
             dClient.Update(eClient);
 
             eClient.Audit.TypeEvent = "Update";
@@ -82,5 +88,29 @@ namespace Apps.Business
             eClient.Audit.TypeEvent = "Delete";
             bAudit.Insert(eClient.Audit);
         }
-    }
+
+        public string ProcessSearchName(EClient eClient)
+        {
+            string result = string.Empty;
+            if (eClient.CodeTypeDocumentIdentity == "6")
+                result = eClient.LongName;
+            else
+            {
+                string firstName = string.Empty;
+                string secondName = string.Empty;
+                string fatherLastName = string.Empty;
+                string motherLastName = string.Empty;
+                if (!string.IsNullOrEmpty(eClient.FirstName))
+                    firstName = eClient.FirstName.Trim();
+                if (!string.IsNullOrEmpty(eClient.SecondName))
+                    secondName = " " + eClient.SecondName;
+                if (!string.IsNullOrEmpty(eClient.FatherLastName))
+                    fatherLastName = " " + eClient.FatherLastName;
+                if (!string.IsNullOrEmpty(eClient.MotherLastName))
+                    motherLastName = " " + eClient.MotherLastName;
+                result = string.Format("{0}{1}{2}{3}", firstName, secondName, fatherLastName, motherLastName);
+            }
+            return result;
+        }
+    }            
 }

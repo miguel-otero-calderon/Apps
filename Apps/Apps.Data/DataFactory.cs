@@ -28,7 +28,7 @@ namespace Apps.Data
 
             if (string.IsNullOrEmpty(stringConnection.ConnectionString))
             {
-                throw new Exception("Not exists connectionString, begin 'connection[SqlServer or Oracle]'.");
+                throw new Exception("Not exists connectionString, begin 'connection[SqlServer or Oracle]'.[DataFactory]");
             }
 
             if (stringConnection.Name.ToLower().Contains("sqlserver"))

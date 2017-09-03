@@ -123,7 +123,10 @@ namespace Apps.Test
                     && updatedCorporation.State != originalCorporation.State)
                     routes++;
 
-                lastAudit = bAudit.Select(updatedCorporation.Audit).Where(x=>x.UserRegister == eCorporation.Audit.UserRegister && x.TypeEvent == "Update").FirstOrDefault();
+                lastAudit = bAudit.Select(updatedCorporation.Audit).
+                    Where(x=>x.UserRegister == eCorporation.Audit.UserRegister
+                    && x.Code == eCorporation.Audit.Code
+                    && x.TypeEvent == "Update").FirstOrDefault();
                 if (lastAudit != null)
                     routes++;
             }
@@ -161,7 +164,10 @@ namespace Apps.Test
             if (bCorporation.Select(insertedCorporation) == null)
                 routes++;
 
-            eAudit = bAudit.Select(eCorporation.Audit).Where(x => x.UserRegister == eCorporation.Audit.UserRegister && x.TypeEvent == "Delete").FirstOrDefault();
+            eAudit = bAudit.Select(eCorporation.Audit).
+                Where(x => x.UserRegister == eCorporation.Audit.UserRegister 
+                && x.Code == eCorporation.Audit.Code
+                && x.TypeEvent == "Delete").FirstOrDefault();
 
             if (eAudit != null)
                 routes++;
@@ -192,7 +198,10 @@ namespace Apps.Test
                     && bCorporation.Message.Contains("tiene referencias en el Sistema, no se puede eliminar el registro."))
                     routes++;
 
-                eAudit = bAudit.Select(eCorporation.Audit).Where(x => x.UserRegister == eCorporation.Audit.UserRegister && x.TypeEvent == "Delete").FirstOrDefault();
+                eAudit = bAudit.Select(eCorporation.Audit).
+                    Where(x => x.UserRegister == eCorporation.Audit.UserRegister
+                    && x.Code == eCorporation.Audit.Code
+                    && x.TypeEvent == "Delete").FirstOrDefault();
                 if (eAudit == null)
                     routes++;
             }

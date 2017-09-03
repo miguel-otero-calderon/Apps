@@ -35,7 +35,11 @@ namespace Apps.Entity
         {
             get {
                 if (audit == null)
-                    audit = new EAudit(CodeCompany :string.Empty, CodeEntity : "User", Code : CodeUser, Sequence : 0);
+                    audit = new EAudit(
+                        CodeCompany :"00", 
+                        CodeEntity : "User", 
+                        Code : CodeUser, 
+                        Sequence : 0);
                 return audit;
             }
             set
@@ -60,6 +64,18 @@ namespace Apps.Entity
 
             if (columns.Contains("State") && row.Validate("State"))
                 State = Convert.ToInt16(row["State"]);
+        }
+
+        public override void Validar()
+        {
+            if (string.IsNullOrEmpty(CodeUser))
+                throw new Exception("El Código de Usuario[CodeUser] no puede ser vacio.[User]");
+
+            if (string.IsNullOrEmpty(Name))
+                throw new Exception("El Nombre de Usuario[Name] no puede ser vacio.[User]");
+
+            if (string.IsNullOrEmpty(Password))
+                throw new Exception("El Password del Usuario[Password] no puede ser vacio.[User]");
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Apps.Entity
             {
                 if (audit == null)
                     audit = new EAudit(
-                        CodeCompany: string.Empty, 
+                        CodeCompany: "00", 
                         CodeEntity: "Corporation", 
                         Code: CodeCorporation, 
                         Sequence: 0);
@@ -41,6 +41,15 @@ namespace Apps.Entity
 
             if (columns.Contains("State") && row.Validate("State"))
                 State = Convert.ToInt16(row["State"]);
+        }
+
+        public override void Validar()
+        {
+            if (string.IsNullOrEmpty(CodeCorporation))
+                throw new Exception("El Código de Corporación[CodeCorporation] no puede ser vacio.[Corporation]");
+
+            if (string.IsNullOrEmpty(Name))
+                throw new Exception("El Nombre de la Corporación[Name] no puede ser vacío.[Corporation]");
         }
     }
 }

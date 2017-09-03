@@ -19,15 +19,32 @@ namespace Apps.Entity
         public DateTime DateRegister { get; set;}
         public string HostRegister { get; set;}
         protected EAudit(){}
+        public void Validar()
+        {
+            if (string.IsNullOrEmpty(CodeCompany))
+                throw new Exception("El Código de Compañia[CodeCompany] no puede ser nulo.[Audit]");
+
+            if (string.IsNullOrEmpty(CodeEntity))
+                throw new Exception("El Código de Entidad[CodeEntity] no puede ser nulo.[Audit]");
+
+            if (string.IsNullOrEmpty(Code))
+                throw new Exception("El Código[Code] no tiene valor.[Audit]");
+
+            if (string.IsNullOrEmpty(UserRegister))
+                throw new Exception("El Usuario que registra[UserRegister] no tiene valor.[Audit]");
+
+            if (string.IsNullOrEmpty(TypeEvent))
+                throw new Exception("El Tipo de Evento[TypeEvent] no tiene valor.[Audit]");
+        }
         public EAudit(string CodeCompany, string CodeEntity, string Code)
-        {            
+        {
             this.CodeCompany = CodeCompany;
             this.CodeEntity = CodeEntity;
             this.Code = Code;
             Sequence = 0;
         }
         public EAudit(string CodeCompany, string CodeEntity, string Code,short Sequence)
-        {
+        {            
             this.CodeCompany = CodeCompany;
             this.CodeEntity = CodeEntity;
             this.Code = Code;
@@ -57,7 +74,7 @@ namespace Apps.Entity
                 DateRegister = Convert.ToDateTime(row["DateRegister"]);
 
             if (columns.Contains("HostRegister") && row.Validate("HostRegister"))
-                HostRegister = Convert.ToString(row["HostRegister"]);
+                HostRegister = Convert.ToString(row["HostRegister"]);            
         }
     }
 }

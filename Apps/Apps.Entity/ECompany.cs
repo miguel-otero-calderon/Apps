@@ -71,5 +71,19 @@ namespace Apps.Entity
             if (columns.Contains("State") && row.Validate("State"))
                 State = Convert.ToInt16(row["State"]);
         }
+        public override void Validar()
+        {
+            if (string.IsNullOrEmpty(CodeCorporation))
+                throw new Exception("El Código de Corporación[CodeCorporation] es requerido, ingrese un valor.[Company]");
+
+            if (string.IsNullOrEmpty(CodeCompany))
+                throw new Exception("El Código de Compañia[CodeCompany] es requerido, ingrese un valor.[Company]");
+
+            if (string.IsNullOrEmpty(LongName))
+                throw new Exception("El Nombre de la Compañia[LongName] es requerido, ingrese un valor.[Company]");
+
+            if (string.IsNullOrEmpty(Ruc))
+                throw new Exception("El R.U.C. de la Compañia[Ruc] es requerido, ingrese un valor.[Company]");
+        }
     }
 }

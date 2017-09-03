@@ -8,6 +8,7 @@ namespace Apps.Entity
 {
     public abstract class EEntity
     {
-        public abstract EAudit Audit { get; set; }             
+        public abstract EAudit Audit { get; set; }
+        public abstract void Validar();        
     }
 }

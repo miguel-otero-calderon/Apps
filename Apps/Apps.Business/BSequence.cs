@@ -56,14 +56,16 @@ namespace Apps.Business
                 return null;
         }
 
-        public void Insert(ESequence sequence)
+        public void Insert(ESequence eSequence)
         {
-            dSequence.Insert(sequence);
+            eSequence.Validar();
+            dSequence.Insert(eSequence);
         }
 
-        public void Update(ESequence sequence)
+        public void Update(ESequence eSequence)
         {
-            dSequence.Update(sequence);
+            eSequence.Validar();
+            dSequence.Update(eSequence);
         }
 
         public void Delete(ESequence sequence)
