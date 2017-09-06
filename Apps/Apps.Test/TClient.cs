@@ -34,6 +34,7 @@ namespace Apps.Test
             bCorporation.Insert(eCorporation);
 
             eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
             eCompany.LongName = Aleatory.GetString(8);
             eCompany.State = Aleatory.GetShort();
@@ -42,6 +43,7 @@ namespace Apps.Test
 
             eClient.CodeCompany = eCompany.CodeCompany;
             eClient.CodeTypeDocumentIdentity = "0";
+            eClient.NumberIdentity = Aleatory.GetString(11);
             eClient.FirstName = Aleatory.GetString(8);
             eClient.SecondName = Aleatory.GetString(8);
             eClient.FatherLastName = Aleatory.GetString(8);
@@ -85,6 +87,7 @@ namespace Apps.Test
             bCorporation.Insert(eCorporation);
 
             eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
             eCompany.LongName = Aleatory.GetString(8);
             eCompany.State = Aleatory.GetShort();
@@ -93,6 +96,7 @@ namespace Apps.Test
 
             eClient.CodeCompany = eCompany.CodeCompany;            
             eClient.CodeTypeDocumentIdentity = "0";
+            eClient.NumberIdentity = Aleatory.GetString(11);
             eClient.FirstName = Aleatory.GetString(8);
             eClient.SecondName = Aleatory.GetString(8);
             eClient.FatherLastName = Aleatory.GetString(8);
@@ -138,6 +142,7 @@ namespace Apps.Test
             bCorporation.Insert(eCorporation);
 
             eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
             eCompany.LongName = Aleatory.GetString(8);
             eCompany.State = Aleatory.GetShort();
@@ -146,6 +151,7 @@ namespace Apps.Test
 
             eClient.CodeCompany = eCompany.CodeCompany;
             eClient.CodeTypeDocumentIdentity = "0";
+            eClient.NumberIdentity = Aleatory.GetString(11);
             eClient.FirstName = Aleatory.GetString(8);
             eClient.SecondName = Aleatory.GetString(8);
             eClient.FatherLastName = Aleatory.GetString(8);
@@ -197,6 +203,7 @@ namespace Apps.Test
             bCorporation.Insert(eCorporation);
 
             eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
             eCompany.LongName = Aleatory.GetString(8);
             eCompany.State = Aleatory.GetShort();
@@ -205,6 +212,7 @@ namespace Apps.Test
 
             eClient.CodeCompany = eCompany.CodeCompany;
             eClient.CodeTypeDocumentIdentity = "0";
+            eClient.NumberIdentity = Aleatory.GetString(8);
             eClient.FirstName = Aleatory.GetString(8);
             eClient.SecondName = Aleatory.GetString(8);
             eClient.FatherLastName = Aleatory.GetString(8);

@@ -39,6 +39,7 @@ namespace Apps.Business
             eClient.SearchName = ProcessSearchName(eClient);
             correlative = bSequence.GetCorrelative(eSequence);
             eClient.CodeClient = correlative;
+            eClient.Validar();
             dClient.Insert(eClient);
 
             if (dClient.ExistsPrimaryKey())
@@ -68,6 +69,7 @@ namespace Apps.Business
         {
             EClient eResult;
             eClient.SearchName = ProcessSearchName(eClient);
+            eClient.Validar();
             dClient.Update(eClient);
 
             eClient.Audit.TypeEvent = "Update";

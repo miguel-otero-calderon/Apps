@@ -23,6 +23,7 @@ namespace Apps.Test
             TransactionScope ts = new TransactionScope(TransactionScopeOption.RequiresNew);
             
             eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.LongName = Aleatory.GetString(8);
             eCompany.ShortName = Aleatory.GetString(8);
             eCompany.State = 1;
@@ -73,6 +74,7 @@ namespace Apps.Test
             bCorporation.Insert(eCorporation);
 
             eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
             eCompany.LongName = Aleatory.GetString(8);
             eCompany.State = Aleatory.GetShort();
@@ -119,6 +121,8 @@ namespace Apps.Test
             bCorporation.Insert(eCorporation);
 
             eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.LongName = Aleatory.GetString(8);
             eCompany.State = Aleatory.GetShort();
             eCompany.Audit.UserRegister = Aleatory.GetString(8);
@@ -162,6 +166,7 @@ namespace Apps.Test
             bCorporation.Insert(eCorporation);
 
             eCompany.CodeCompany = Aleatory.GetString(2);
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
             eCompany.LongName = Aleatory.GetString(8);
             eCompany.State = Aleatory.GetShort();

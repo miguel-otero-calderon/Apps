@@ -174,6 +174,7 @@ namespace Apps.Test
 
             bCorporation.Insert(eCorporation);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.CodeCompany = Aleatory.GetString(2);
             eCompany.LongName = Aleatory.GetString(8);
             eCompany.State = Aleatory.GetShort();

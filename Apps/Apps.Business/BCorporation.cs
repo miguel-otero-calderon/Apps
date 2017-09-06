@@ -49,12 +49,12 @@ namespace Apps.Business
             bAudit.Insert(eCorporation.Audit);
         }
 
-        public void Update(ECorporation corporation)
+        public void Update(ECorporation eCorporation)
         {
-            corporation.Validar();
-            dCorporation.Update(corporation);
-            corporation.Audit.TypeEvent = "Update";
-            bAudit.Insert(corporation.Audit);
+            eCorporation.Validar();
+            dCorporation.Update(eCorporation);
+            eCorporation.Audit.TypeEvent = "Update";
+            bAudit.Insert(eCorporation.Audit);
         }
     }
 }

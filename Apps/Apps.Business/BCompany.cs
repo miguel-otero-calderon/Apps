@@ -38,6 +38,7 @@ namespace Apps.Business
 
         public void Insert(ECompany eCompany)
         {
+            eCompany.Validar();
             dCompany.Insert(eCompany);
             if (dCompany.ExistsPrimaryKey())
             {
@@ -53,11 +54,12 @@ namespace Apps.Business
             bAudit.Insert(eCompany.Audit);
         }
 
-        public void Update(ECompany company)
+        public void Update(ECompany eCompany)
         {
-            dCompany.Update(company);
-            company.Audit.TypeEvent = "Update";
-            bAudit.Insert(company.Audit);
+            eCompany.Validar();
+            dCompany.Update(eCompany);
+            eCompany.Audit.TypeEvent = "Update";
+            bAudit.Insert(eCompany.Audit);
         }
     }
 }

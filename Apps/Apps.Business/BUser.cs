@@ -65,12 +65,13 @@ namespace Apps.Business
             return Security.CalculateHash(text);
         }
 
-        public void Insert(EUser user)
+        public void Insert(EUser eUser)
         {
-            user.PasswordHash = CalculateHash(user);
-            dUser.Insert(user);
-            user.Audit.TypeEvent = "Insert";
-            bAudit.Insert(user.Audit);
+            eUser.PasswordHash = CalculateHash(eUser);
+            eUser.Validar();
+            dUser.Insert(eUser);
+            eUser.Audit.TypeEvent = "Insert";
+            bAudit.Insert(eUser.Audit);
         }
 
         public void Delete(EUser eUser)
@@ -81,11 +82,12 @@ namespace Apps.Business
             bAudit.Insert(eUser.Audit);
         }
 
-        public void Update(EUser user)
+        public void Update(EUser eUser)
         {
-            dUser.Update(user);
-            user.Audit.TypeEvent = "Update";
-            bAudit.Insert(user.Audit);
+            eUser.Validar();
+            dUser.Update(eUser);
+            eUser.Audit.TypeEvent = "Update";
+            bAudit.Insert(eUser.Audit);
         }
     }
 }

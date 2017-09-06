@@ -37,6 +37,7 @@ namespace Apps.Test
 
             eCompany.CodeCompany = Aleatory.GetString(2);
             eCompany.CodeCorporation = insertedCorporation.CodeCorporation;
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.LongName = Aleatory.GetString(15);
             eCompany.State = Aleatory.GetShort();
             eCompany.Audit.UserRegister = Aleatory.GetString(8);
@@ -44,6 +45,7 @@ namespace Apps.Test
 
             eUser.CodeUser = Aleatory.GetString(8);
             eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
             eUser.State = Aleatory.GetShort();
             eUser.Audit.UserRegister = Aleatory.GetString(8);
             bUser.Insert(eUser);            
@@ -87,6 +89,7 @@ namespace Apps.Test
 
             eCompany.CodeCompany = Aleatory.GetString(2);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.LongName = Aleatory.GetString(15);
             eCompany.State = Aleatory.GetShort();
             eCompany.Audit.UserRegister = Aleatory.GetString(8);
@@ -94,6 +97,7 @@ namespace Apps.Test
 
             eUser.CodeUser = Aleatory.GetString(8);
             eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
             eUser.State = Aleatory.GetShort();
             eUser.Audit.UserRegister = Aleatory.GetString(8);
             bUser.Insert(eUser);
@@ -138,6 +142,7 @@ namespace Apps.Test
 
             eCompany.CodeCompany = Aleatory.GetString(2);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.LongName = Aleatory.GetString(15);
             eCompany.State = Aleatory.GetShort();
             eCompany.Audit.UserRegister = Aleatory.GetString(8);
@@ -145,6 +150,7 @@ namespace Apps.Test
 
             eUser.CodeUser = Aleatory.GetString(8);
             eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
             eUser.State = Aleatory.GetShort();
             eUser.Audit.UserRegister = Aleatory.GetString(8);
             bUser.Insert(eUser);
@@ -191,6 +197,7 @@ namespace Apps.Test
 
             eCompany.CodeCompany = Aleatory.GetString(2);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.LongName = Aleatory.GetString(15);
             eCompany.State = Aleatory.GetShort();
             eCompany.Audit.UserRegister = Aleatory.GetString(8);
@@ -198,6 +205,7 @@ namespace Apps.Test
 
             eUser.CodeUser = Aleatory.GetString(8);
             eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
             eUser.State = Aleatory.GetShort();
             eUser.Audit.UserRegister = Aleatory.GetString(8);
             bUser.Insert(eUser);
@@ -258,6 +266,7 @@ namespace Apps.Test
 
             eCompany.CodeCompany = Aleatory.GetString(2);
             eCompany.CodeCorporation = eCorporation.CodeCorporation;
+            eCompany.Ruc = Aleatory.GetString(11);
             eCompany.LongName = Aleatory.GetString(15);
             eCompany.State = Aleatory.GetShort();
             eCompany.Audit.UserRegister = Aleatory.GetString(8);
@@ -265,6 +274,7 @@ namespace Apps.Test
 
             eUser.CodeUser = Aleatory.GetString(8);
             eUser.Name = Aleatory.GetString(8);
+            eUser.Password = Aleatory.GetString(8);
             eUser.State = Aleatory.GetShort();
             eUser.Audit.UserRegister = Aleatory.GetString(8);
             bUser.Insert(eUser);
