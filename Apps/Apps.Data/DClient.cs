@@ -21,7 +21,6 @@ namespace Apps.Data
         {
             DaCommand command = new DaCommand("ClientInsert");
             command.AddInParameter("@CodeClient", DbType.Int32, eClient.CodeClient);
-            command.AddInParameter("@CodeCompany", DbType.String, eClient.CodeCompany);
             command.AddInParameter("@FirstName", DbType.String, eClient.FirstName);
             command.AddInParameter("@SecondName", DbType.String, eClient.SecondName);
             command.AddInParameter("@FatherLastName", DbType.String, eClient.FatherLastName);

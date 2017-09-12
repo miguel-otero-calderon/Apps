@@ -11,7 +11,6 @@ namespace Apps.Entity
     public class EClient : EEntity
     {
         public int CodeClient { get; set; }
-        public string CodeCompany { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string FatherLastName { get; set; }
@@ -33,7 +32,7 @@ namespace Apps.Entity
             {
                 if (audit == null)
                 {
-                    audit = new EAudit(CodeCompany, "Client", CodeClient.ToString());
+                    audit = new EAudit("00", "Client", CodeClient.ToString());
                 }                    
                 return audit;
             }
@@ -47,9 +46,6 @@ namespace Apps.Entity
         {
             if (listColumns.Contains("CodeClient") && dataRow.Validate("CodeClient"))
                 CodeClient = Convert.ToInt32(dataRow["CodeClient"]);
-
-            if (listColumns.Contains("CodeCompany") && dataRow.Validate("CodeCompany"))
-                CodeCompany = Convert.ToString(dataRow["CodeCompany"]);
 
             if (listColumns.Contains("FirstName") && dataRow.Validate("FirstName"))
                 FirstName = Convert.ToString(dataRow["FirstName"]);
@@ -107,8 +103,6 @@ namespace Apps.Entity
             if (string.IsNullOrEmpty(NumberIdentity))
                 throw new Exception("El Número de Identidad[NumberIdentity] no puede ser vacio.[Client]");
 
-            if (string.IsNullOrEmpty(CodeCompany))
-                throw new Exception("El Código de Compañia[CodeCompany] no puede ser vacio.[Client]");
         }
     }
 }
