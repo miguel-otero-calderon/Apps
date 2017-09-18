@@ -65,5 +65,7 @@ namespace Apps.Data
             command.AddInParameter("@CodeClient", DbType.Int32, eClient.CodeClient);
             ExecuteNonQuery(command);
         }
+
+
     }
 }

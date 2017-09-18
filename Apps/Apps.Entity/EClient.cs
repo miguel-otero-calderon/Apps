@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data;
 using Apps.Extension;
 
+
 namespace Apps.Entity
 {
     public class EClient : EEntity
