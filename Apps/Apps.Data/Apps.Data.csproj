@@ -52,6 +52,7 @@
     <Compile Include="DCorporation.cs" />
     <Compile Include="DData.cs" />
     <Compile Include="DProduct.cs" />
+    <Compile Include="DProductType.cs" />
     <Compile Include="DSequence.cs" />
     <Compile Include="DUser.cs" />
     <Compile Include="DUserCompany.cs" />

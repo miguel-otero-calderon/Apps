@@ -46,6 +46,7 @@
     <Compile Include="BCompany.cs" />
     <Compile Include="BCorporation.cs" />
     <Compile Include="BProduct.cs" />
+    <Compile Include="BProductType.cs" />
     <Compile Include="BSequence.cs" />
     <Compile Include="BUser.cs" />
     <Compile Include="BBusiness.cs" />

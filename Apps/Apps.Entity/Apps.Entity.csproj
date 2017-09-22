@@ -46,6 +46,7 @@
     <Compile Include="ECorporation.cs" />
     <Compile Include="EEntity.cs" />
     <Compile Include="EProduct.cs" />
+    <Compile Include="EProductType.cs" />
     <Compile Include="ESequence.cs" />
     <Compile Include="EUser.cs" />
     <Compile Include="EUserCompany.cs" />

@@ -43,7 +43,7 @@ namespace Apps.Business
 
             if (dProduct.ExistsPrimaryKey())
             {
-                Message = string.Format("El código de Producte '{0}' ya existe en el Sistema, no se puede crear el registro.", eProduct.CodeProduct);
+                Message = string.Format("El código de Producto '{0}' ya existe en el Sistema, no se puede crear el registro.", eProduct.CodeProduct);
                 throw new Exception(Message);
             }
             if (dProduct.ExistsReference())
