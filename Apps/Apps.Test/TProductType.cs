@@ -16,7 +16,8 @@ namespace Apps.Test
         public void Load()
         {
             string file = @"D:\Miguel\Escritorio\Apps Load\ProductType.xlsx";
-            ProductType 
+            LProductType lProductType = new LProductType();
+            lProductType.Load(file);
         }
     }
 }

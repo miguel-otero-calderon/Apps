@@ -22,7 +22,7 @@ namespace Apps.Data
             command.AddInParameter("@CodeProductType", DbType.String, eProductType.CodeProductType);
             command.AddInParameter("@Description", DbType.String, eProductType.Description);
             command.AddInParameter("@CodeSunatExistence", DbType.String, eProductType.CodeSunatExistence);
-            command.AddInParameter("@CodeSunatExistence", DbType.String, eProductType.CodeSunatExistence);
+            command.AddInParameter("@State", DbType.Int16, eProductType.State);
             ExecuteNonQuery(command);
         }
         public void Update(EProductType eProductType)
@@ -31,7 +31,7 @@ namespace Apps.Data
             command.AddInParameter("@CodeProductType", DbType.String, eProductType.CodeProductType);
             command.AddInParameter("@Description", DbType.String, eProductType.Description);
             command.AddInParameter("@CodeSunatExistence", DbType.String, eProductType.CodeSunatExistence);
-            command.AddInParameter("@CodeSunatExistence", DbType.String, eProductType.CodeSunatExistence);
+            command.AddInParameter("@State", DbType.Int16, eProductType.State);
             ExecuteNonQuery(command);
         }
         public void Delete(EProductType eProductType)

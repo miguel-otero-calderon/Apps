@@ -20,7 +20,7 @@ namespace Apps.Util
             bool hasHeader = true;
             foreach (var firstRowCell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
             {
-                datatable.Columns.Add(hasHeader ? firstRowCell.Text : string.Format("Column {0}", firstRowCell.Start.Column));
+                datatable.Columns.Add(hasHeader ? firstRowCell.Text.Trim() : string.Format("Column {0}", firstRowCell.Start.Column));
             }
             var startRow = hasHeader ? 2 : 1;
             for (var rowNum = startRow; rowNum <= worksheet.Dimension.End.Row; rowNum++)
