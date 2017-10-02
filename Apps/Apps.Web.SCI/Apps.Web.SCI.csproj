@@ -89,7 +89,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\utiltario.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\Utilitario\index.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +108,8 @@
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
+    <Content Include="Views\Utilitario\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -115,7 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Utilitario\" />
+    <Folder Include="Publicado\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
