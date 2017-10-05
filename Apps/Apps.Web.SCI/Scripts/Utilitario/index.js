@@ -54,7 +54,7 @@ var validar_load_files = function () {
         $("#date1").focus();
         return false;
     }
-
+    
     if (validate_file("file1") == false)
         return false;
 
@@ -113,6 +113,10 @@ function UploadFile() {
     //but please note file name should be same like the action Parameter
     //var dataString = new FormData();
     //dataString.append("UploadedFile", selectedFile);
+
+    if ($("#status").html() !== "")
+        return;
+
     var form = $('#form1')[0];
     var dataString = new FormData(form);
     $.ajax({
