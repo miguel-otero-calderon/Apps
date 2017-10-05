@@ -18,7 +18,7 @@
                     <b>
                         <label>Process Date:</label>
                         <input type="text" id="date1" class="input-control" maxlength="10" style="width:80px"/>
-                        <label>yyyy-mm-dd</label>
+                        <label>yyyy-mm-dd</label>                        
                     </b>
                 </div>
                 <br />
@@ -34,7 +34,8 @@
                 </div>
                 <br />
                 <div>
-                    <input type="button" id="load1" value="Load files" class="input-control" />
+                    <input type="button" id="load1" value="Load files" class="input-control" onclick="validar_load_files()"/>
+                    <span id="error" style="color:red"></span>
                 </div>
             </div>            
         </form>
