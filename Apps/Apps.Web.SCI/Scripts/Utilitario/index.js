@@ -1,7 +1,9 @@
 ﻿$(document).ready(function () {      
     $("#date1").val(obtener_fecha_hoy());
-    $("#error").val("");
-
+    $("#status").val("");
+    $('#load1').click(function () {
+        UploadFile();
+    });
 })
 
 var obtener_fecha_hoy = function() {
@@ -42,13 +44,13 @@ var validar_load_files = function () {
     var value;
     var file;
 
-    $("#error").html("");
+    $("#status").html("");
     texto = $("#date1").val();
     value = validar_fecha(texto);
     if (value == false)
     {
         texto = "Digite una fecha con el formato 'yyyy-mm-dd'.";
-        $("#error").html(texto);
+        ver_error(texto)
         $("#date1").focus();
         return false;
     }
@@ -88,7 +90,7 @@ function validate_file(file_id) {
     if (file.val() == "")
     {
         texto = "Falta seleccionar el " + file_id;
-        $("#error").html(texto);
+        ver_error(texto)
         $(file).focus();
         return false;
     }
@@ -98,9 +100,43 @@ function validate_file(file_id) {
             return true;
         else {
             texto = "Nombre de archivo incorrecto...Porqye no termina en '" + date + "'";
-            $("#error").html(texto);
+            ver_error(texto)
             $(file).focus();
             return false;
         }
     }
+}
+
+function UploadFile() {
+    //we can create form by passing the form to Constructor of formData object
+    //or creating it manually using append function 
+    //but please note file name should be same like the action Parameter
+    //var dataString = new FormData();
+    //dataString.append("UploadedFile", selectedFile);
+    var form = $('#form1')[0];
+    var dataString = new FormData(form);
+    $.ajax({
+        url: '/Utilitario/UploadFile',  //Server script to process data
+        type: 'POST',
+        //Ajax events
+        success: function (data) {ver_confirmacion(data.message);},
+        //status: statusHandler,
+        //complete: completeHandler,
+        // Form data
+        data: dataString,
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+}
+
+function ver_error(message) {
+    $("#status").html(message);
+    $("#status").css("color", "red");
+}
+
+function ver_confirmacion(message) {
+    $("#status").html(message);
+    $("#status").css("color", "blue");
 }

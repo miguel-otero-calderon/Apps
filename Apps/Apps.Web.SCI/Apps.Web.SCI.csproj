@@ -113,6 +113,7 @@
     <Compile Include="Models\Archivo1.cs" />
     <Compile Include="Models\Archivo2.cs" />
     <Compile Include="Models\Archivo3.cs" />
+    <Compile Include="Models\Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

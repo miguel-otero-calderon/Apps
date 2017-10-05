@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
+using Apps.Web.SCI.Models;
 
 namespace Apps.Web.SCI.Controllers
 {
@@ -13,54 +14,68 @@ namespace Apps.Web.SCI.Controllers
         public ActionResult Index()
         {
             return View();
-        }
+        }        
 
         [HttpGet]
         public ActionResult UploadFile()
         {
-            return View();
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("UploadFile");
+            }
+            else
+            {
+                return new HttpNotFoundResult();
+            }
         }
 
         [HttpPost]
-        public ActionResult UploadFile(HttpPostedFileBase file)
+        public JsonResult UploadFile(HttpPostedFileBase file1, HttpPostedFileBase file2)
+        {
+            try
+            {
+                if (UploadFileClient(file1) && UploadFileClient(file2))
+                {
+
+                }
+                return Json(new
+                {
+                    message = "Archivos cargados correctamente!!",
+                    success = true
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new
+                {
+                    message = "Error no se pudo cargar los archivos!!",
+                    success = false
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        protected bool UploadFileClient(HttpPostedFileBase file)
         {
             try
             {
                 if (file.ContentLength > 0)
                 {
-                    string _FileName = Path.GetFileName(file.FileName);
-                    string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
-                    file.SaveAs(_path);
+                    string fileName = Path.GetFileName(file.FileName);
+                    string folder = Server.MapPath("~/UploadedFiles");
+
+                    if (!Directory.Exists(folder))
+                        Directory.CreateDirectory(folder);
+
+                    string path = Path.Combine(folder, fileName);
+                    file.SaveAs(path);
                 }
-                ViewBag.Message = "File Uploaded Successfully!!";
-                return View();
+                return true;
             }
             catch
             {
-                ViewBag.Message = "File upload failed!!";
-                return View();
+                return false;
             }
         }
 
-        //[HttpPost]
-        //public JsonResult LoadFile(HttpPostedFileBase file)
-        //{
-        //    try
-        //    {
-        //        if (file.ContentLength > 0)
-        //        {
-        //            string _FileName = Path.GetFileName(file.FileName);
-        //            string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
-        //            file.SaveAs(_path);
-        //        }
-        //        ViewBag.Message = "File Uploaded Successfully!!";
-        //        return View();
-        //    }
-        //    catch
-        //    {
-        //        ViewBag.Message = "File upload failed!!";
-        //        return View();
-        //    }
-        //}
     }
 }

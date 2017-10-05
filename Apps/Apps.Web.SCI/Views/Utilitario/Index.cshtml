@@ -10,36 +10,9 @@
     <title>Web Utility - Load Files</title>
 </head>
 <body>
-    <div> 
-        <form id="form1" class="form-control">
-            <div class="container">
-                <h1 class="h1">Load of files transactions</h1>
-                <div>
-                    <b>
-                        <label>Process Date:</label>
-                        <input type="text" id="date1" class="input-control" maxlength="10" style="width:80px"/>
-                        <label>yyyy-mm-dd</label>                        
-                    </b>
-                </div>
-                <br />
-                <div>
-                    <label>File Shopping Cart:</label>
-                    <input type="file" id="file1" accept=".csv" class="input-control" />
-                </div>
-                <br />
-                <div>
-                    <label>File Authorize.Net:</label>
-                    <input type="file" id="file2" accept=".csv" class="input-control" />
-                    <br />
-                </div>
-                <br />
-                <div>
-                    <input type="button" id="load1" value="Load files" class="input-control" onclick="validar_load_files()"/>
-                    <span id="error" style="color:red"></span>
-                </div>
-            </div>            
-        </form>
-    </div>
+
+    @Html.Partial("UploadFile");
+
     <script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="~/Scripts/Utilitario/index.js"></script>
 </body>
