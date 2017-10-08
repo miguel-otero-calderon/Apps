@@ -108,27 +108,18 @@ function validate_file(file_id) {
 }
 
 function UploadFile() {
-    //we can create form by passing the form to Constructor of formData object
-    //or creating it manually using append function 
-    //but please note file name should be same like the action Parameter
-    //var dataString = new FormData();
-    //dataString.append("UploadedFile", selectedFile);
-
     if ($("#status").html() !== "")
         return;
 
     var form = $('#form1')[0];
     var dataString = new FormData(form);
     $.ajax({
-        url: '/Utilitario/UploadFile',  //Server script to process data
+        url: '/Utilitario/UploadFile', 
         type: 'POST',
-        //Ajax events
-        success: function (data) {ver_confirmacion(data.message);},
-        //status: statusHandler,
-        //complete: completeHandler,
-        // Form data
+        success: function (data) {
+            ver_confirmacion(data.message);
+        },
         data: dataString,
-        //Options to tell jQuery not to process data or worry about content-type.
         cache: false,
         contentType: false,
         processData: false
