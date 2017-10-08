@@ -33,32 +33,101 @@ namespace Apps.Web.SCI.Controllers
         [HttpPost]
         public JsonResult UploadFile(HttpPostedFileBase file1, HttpPostedFileBase file2)
         {  
-            Result ShoppingCartResult = null;
+            Result result = null;
             try
             {
                 if (UploadFileClient(file1) && UploadFileClient(file2))
                 {
-                    ShoppingCartResult = ValidateShoppingCartFile(ShoppingCartFile:file1);    
-                   
-                    return Json(new
-                    {
-                        message = ShoppingCartResult.Message,
-                        status = ShoppingCartResult.Status,
-                    }, JsonRequestBehavior.AllowGet);
+                    result = ValidateShoppingCartFile(ShoppingCartFile:file1);
+
+                    if (result.Status)
+                        result = ValidateAuthorizeNetFile(AuthorizeNetFile: file2);
+
+
+
+                    return Json(new {message = result.Message,status = result.Status,}, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new
-                {
-                    message = "Error no se pudo cargar los archivos!!",
-                    status = false
-                }, JsonRequestBehavior.AllowGet);
+                else
+                return Json(new {message = "Error no se pudo cargar los archivos!!",status = false}, JsonRequestBehavior.AllowGet);
             }
             catch
             {
-                return Json(new
+                return Json(new {message = "Error no se pudo cargar los archivos!!",status = false}, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        private Result ValidateAuthorizeNetFile(HttpPostedFileBase AuthorizeNetFile)
+        {
+            Result result = new Result();
+            List<AuthorizeNet> AuthorizeNetList = AuthorizeNetReadFile(AuthorizeNetFile);
+
+            List<AuthorizeNet> AuthorizeNetListIncorrect = AuthorizeNetList.Where(s => s.Status == false).ToList();
+
+            if (AuthorizeNetListIncorrect.Count > 0)
+            {
+                result.Status = false;
+                result.Message = "!!File AuthorizeNet Error!! " + AuthorizeNetListIncorrect.Count.ToString() + " rows.";
+                foreach (AuthorizeNet item in AuthorizeNetListIncorrect)
                 {
-                    message = "Error no se pudo cargar los archivos!!",
-                    status = false
-                }, JsonRequestBehavior.AllowGet);
+                    result.Message = result.Message + ";Row Incorrect: { " + item.Index.ToString() + " }";
+                }
+            }
+            else
+            {
+                result.Status = true;
+                result.Message = "!!File AuthorizeNet read!! " + AuthorizeNetList.Count.ToString() + " rows.";
+            }
+            return result;
+        }
+
+        private List<AuthorizeNet> AuthorizeNetReadFile(HttpPostedFileBase fileAuthorizeNet)
+        {
+            List<AuthorizeNet> AuthorizeNetList = new List<AuthorizeNet>();
+            AuthorizeNet authorizeNet = new AuthorizeNet();
+            string fileName = Path.GetFileName(fileAuthorizeNet.FileName);
+            string folder = Server.MapPath("~/UploadedFiles");
+            string path = Path.Combine(folder, fileName);
+
+            if (System.IO.File.Exists(path))
+            {
+                int index = 0;
+                string line;
+                System.IO.StreamReader file = new System.IO.StreamReader(path);
+                while ((line = file.ReadLine()) != null)
+                {
+                    if (index > 0)
+                    {
+                        authorizeNet = AuthorizeNetReadLine(line, index);
+                        authorizeNet.Validate();
+                        AuthorizeNetList.Add(authorizeNet);
+                    }
+                    index++;
+                }
+                file.Close();
+            }
+            return AuthorizeNetList;
+        }
+
+        private AuthorizeNet AuthorizeNetReadLine(string line, int index)
+        {
+            AuthorizeNet authorizeNet = new AuthorizeNet();
+            authorizeNet.Index = index;
+            authorizeNet.Status = false;
+            try
+            {
+                line = line.Replace("\"", "");
+                authorizeNet.Load_Fields(line);
+                authorizeNet.Load_Transaction_Date(authorizeNet.Transaction_Date);
+                authorizeNet.Load_Payment_Method(authorizeNet.Payment_Method);
+                authorizeNet.Load_Credit_Card_Number(authorizeNet.Credit_Card_Number);
+                authorizeNet.Load_Auth_Code(authorizeNet.Auth_Code);
+                authorizeNet.Load_Transaction_ID(authorizeNet.Transaction_ID);
+                return authorizeNet;
+            }
+            catch
+            {
+                authorizeNet.Error = "The line format incorrect.";
+                return authorizeNet;
             }
         }
 
