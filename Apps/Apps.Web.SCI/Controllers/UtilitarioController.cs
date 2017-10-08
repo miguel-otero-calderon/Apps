@@ -32,40 +32,24 @@ namespace Apps.Web.SCI.Controllers
 
         [HttpPost]
         public JsonResult UploadFile(HttpPostedFileBase file1, HttpPostedFileBase file2)
-        {
-            bool status = false;
+        {  
             Result ShoppingCartResult = null;
             try
             {
                 if (UploadFileClient(file1) && UploadFileClient(file2))
                 {
                     ShoppingCartResult = ValidateShoppingCartFile(ShoppingCartFile:file1);    
-                    
-                    if(ShoppingCartResult.Status)
-                    {
-
-                    }
-                    else
-                    {
-                        return Json(new
-                        {
-                            message = "Archivos cargados correctamente!!",
-                            message_file1 = ShoppingCartResult.MessageShoppingCart,
-                            success = false
-                        }, JsonRequestBehavior.AllowGet);
-                    }
-
+                   
                     return Json(new
                     {
-                        message = "Archivos cargados correctamente!!",
-                        message_file1 = "",
-                        success = status
+                        message = ShoppingCartResult.Message,
+                        status = ShoppingCartResult.Status,
                     }, JsonRequestBehavior.AllowGet);
                 }
                 return Json(new
                 {
                     message = "Error no se pudo cargar los archivos!!",
-                    success = false
+                    status = false
                 }, JsonRequestBehavior.AllowGet);
             }
             catch
@@ -73,7 +57,7 @@ namespace Apps.Web.SCI.Controllers
                 return Json(new
                 {
                     message = "Error no se pudo cargar los archivos!!",
-                    success = false
+                    status = false
                 }, JsonRequestBehavior.AllowGet);
             }
         }
@@ -88,16 +72,16 @@ namespace Apps.Web.SCI.Controllers
             if (ShoppingCartListIncorrect.Count > 0)
             {
                 result.Status = false;
-                result.MessageShoppingCart = "!!File ShoppingCart Error!! " + ShoppingCartListIncorrect.Count.ToString() + " rows.";
+                result.Message = "!!File ShoppingCart Error!! " + ShoppingCartListIncorrect.Count.ToString() + " rows.";
                 foreach (ShoppingCart item in ShoppingCartListIncorrect)
                 {
-                    result.MessageShoppingCart = result.MessageShoppingCart + ";Row Incorrect: { " + item.Index.ToString() +" }" ;
+                    result.Message = result.Message + ";Row Incorrect: { " + item.Index.ToString() +" }" ;
                 }
             }
             else
             {
                 result.Status = true;
-                result.MessageShoppingCart = "!!File ShoppingCart read!! " + ShoppingCartList.Count.ToString() + " rows.";
+                result.Message = "!!File ShoppingCart read!! " + ShoppingCartList.Count.ToString() + " rows.";
             }
             return result;
         }

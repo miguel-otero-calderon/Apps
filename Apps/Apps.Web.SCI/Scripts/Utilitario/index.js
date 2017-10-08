@@ -117,7 +117,11 @@ function UploadFile() {
         url: '/Utilitario/UploadFile', 
         type: 'POST',
         success: function (data) {
-            ver_confirmacion(data.message);
+            debugger;
+            if (data.status)
+                ver_confirmacion(data.message);
+            else
+                ver_error(data.message);
         },
         data: dataString,
         cache: false,

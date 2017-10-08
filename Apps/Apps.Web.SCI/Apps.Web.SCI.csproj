@@ -110,9 +110,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Archivo2.cs" />
     <Compile Include="Models\Archivo3.cs" />
-    <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\AuthorizeNet.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

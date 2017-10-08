@@ -7,8 +7,7 @@ namespace Apps.Web.SCI.Models
 {
     public class Result
     {
-        public string Message { get; set; }
-        public string MessageShoppingCart { get; set; }
+        public string Message { get; set; }        
         public bool Status { get; set; }
     }
 }

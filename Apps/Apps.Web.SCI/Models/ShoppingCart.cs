@@ -138,7 +138,15 @@ namespace Apps.Web.SCI.Models
             {
                 if (!string.IsNullOrEmpty(value))
                 {
-
+                    char[] delimiters = new char[] { '/' };
+                    string[] values = value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                    int month = Convert.ToInt16(values[0]);
+                    int day = Convert.ToInt16(values[1]);                    
+                    int year = Convert.ToInt32(values[2]);
+                    if (year < 2000)
+                        year = year + 2000;
+                    DateTime date = new DateTime(year, month, day);
+                    Load_Transaction_Date(date);
                 }
             }
             catch

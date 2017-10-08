@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Apps.Web.SCI.Models
 {
-    public class Archivo2
+    public class AuthorizeNet
     {
         public string Date_Ordered { get; set; }
         public string Order_Number { get; set; }
