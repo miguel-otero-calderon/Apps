@@ -13,8 +13,37 @@ namespace Apps.Web.SCI.Models
         public string Credit_Card_Number { get; set; }
         public string Auth_Code { get; set; }
         public string Transaction_ID { get; set; }
+        public int IndexAuthorizeNet { get; set; }
         public string Error { get; set; }
         public bool Status { get; set; }
+        public string Key
+        {
+            get
+            {
+                string key = string.Empty;
+                if (!string.IsNullOrEmpty(Transaction_Date) && Transaction_Date != "??" &&
+                    !string.IsNullOrEmpty(Payment_Method) && Payment_Method != "??" &&
+                    !string.IsNullOrEmpty(Credit_Card_Number) && Credit_Card_Number != "??" &&
+                    !string.IsNullOrEmpty(Auth_Code) && Auth_Code != "??" &&
+                    !string.IsNullOrEmpty(Transaction_ID) && Transaction_ID != "??")
+                {
+                    char[] delimiters = new char[] { '/' };
+                    string[] values = Transaction_Date.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                    int month = Convert.ToInt16(values[0]);
+                    int day = Convert.ToInt16(values[1]);
+                    int year = Convert.ToInt32(values[2]);
+                    if (year < 2000)
+                        year = year + 2000;
+
+                    key = year.ToString() + month.ToString("00") + day.ToString("00");
+                    key = key + Payment_Method.Trim().ToLower();
+                    key = key + Credit_Card_Number.Trim().ToLower();
+                    key = key + Auth_Code.Trim().ToLower();
+                    key = key + Transaction_ID.Trim().ToLower();
+                }
+                return key;
+            }
+        }
 
         protected void Load_Transaction_Date(DateTime value)
         {

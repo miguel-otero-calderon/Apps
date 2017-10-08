@@ -11,7 +11,6 @@ namespace Apps.Web.SCI.Controllers
 {
     public class UtilitarioController : Controller
     {
-        // GET: Utilitario
         public ActionResult Index()
         {
             return View();
@@ -34,18 +33,39 @@ namespace Apps.Web.SCI.Controllers
         public JsonResult UploadFile(HttpPostedFileBase file1, HttpPostedFileBase file2)
         {  
             Result result = null;
+            Result resultShoppingCart = null;
+            Result resultAuthorizeNet = null;
+            Result resultValidate = null;
             try
             {
                 if (UploadFileClient(file1) && UploadFileClient(file2))
                 {
-                    result = ValidateShoppingCartFile(ShoppingCartFile:file1);
+                    resultShoppingCart = ValidateShoppingCartFile(ShoppingCartFile:file1);
 
-                    if (result.Status)
-                        result = ValidateAuthorizeNetFile(AuthorizeNetFile: file2);
+                    if (resultShoppingCart.Status)
+                    {
+                        resultAuthorizeNet = ValidateAuthorizeNetFile(AuthorizeNetFile: file2);
+                        if (resultAuthorizeNet.Status)
+                        {
+                            resultValidate = Validate(resultShoppingCart.ShoppingCartList, resultAuthorizeNet.AuthorizeNetList);
+                            result = resultValidate;
+                        }
+                        else
+                        {
+                            result = resultAuthorizeNet;
+                            result.ShoppingCartList = resultShoppingCart.ShoppingCartList;
+                        }
+                    }
+                    else
+                        result = resultShoppingCart;                        
 
-
-
-                    return Json(new {message = result.Message,status = result.Status,}, JsonRequestBehavior.AllowGet);
+                    return Json(new
+                        {
+                        message = result.Message,
+                        status = result.Status,
+                        shopping_cart_list = result.ShoppingCartList,
+                        authorize_net_list = result.AuthorizeNetList
+                        }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 return Json(new {message = "Error no se pudo cargar los archivos!!",status = false}, JsonRequestBehavior.AllowGet);
@@ -60,8 +80,8 @@ namespace Apps.Web.SCI.Controllers
         {
             Result result = new Result();
             List<AuthorizeNet> AuthorizeNetList = AuthorizeNetReadFile(AuthorizeNetFile);
-
             List<AuthorizeNet> AuthorizeNetListIncorrect = AuthorizeNetList.Where(s => s.Status == false).ToList();
+            result.AuthorizeNetList = AuthorizeNetList;
 
             if (AuthorizeNetListIncorrect.Count > 0)
             {
@@ -135,17 +155,16 @@ namespace Apps.Web.SCI.Controllers
         {
             Result result = new Result();
             List<ShoppingCart> ShoppingCartList = ShoppingCartReadFile(ShoppingCartFile);
-
             List<ShoppingCart> ShoppingCartListIncorrect = ShoppingCartList.Where(s => s.Status == false).ToList();
+
+            result.ShoppingCartList = ShoppingCartList;
 
             if (ShoppingCartListIncorrect.Count > 0)
             {
                 result.Status = false;
                 result.Message = "!!File ShoppingCart Error!! " + ShoppingCartListIncorrect.Count.ToString() + " rows.";
                 foreach (ShoppingCart item in ShoppingCartListIncorrect)
-                {
-                    result.Message = result.Message + ";Row Incorrect: { " + item.Index.ToString() +" }" ;
-                }
+                    result.Message = result.Message + ";Row Incorrect: { " + item.Index.ToString() + " }";
             }
             else
             {
@@ -238,6 +257,56 @@ namespace Apps.Web.SCI.Controllers
                 file.Close();
             }
             return ShoppingCartList;
+        }
+
+        protected Result Validate(List<ShoppingCart> ShoppingCartList , List<AuthorizeNet> AuthorizeNetList)
+        {
+            Result result = new Result();
+            List<AuthorizeNet> ResultAuthorizeNet = new List<AuthorizeNet>();
+            int ShoppingCartCount = ShoppingCartList.Count;
+            ShoppingCart ShoppingCartItem = null;
+            AuthorizeNet AuthorizeNetItem = null;
+
+            for (int i = 0; i<= ShoppingCartCount - 1; i++)
+            {
+                ShoppingCartItem = ShoppingCartList[i];
+                AuthorizeNetItem = AuthorizeNetList.Where(item => 
+                        item.Key == ShoppingCartItem.Key && item.IndexShoppingCart == 0).FirstOrDefault();
+
+                AuthorizeNetItem.IndexShoppingCart = ShoppingCartItem.Index;
+                ShoppingCartItem.IndexAuthorizeNet = AuthorizeNetItem.Index;            
+            }
+
+            List<ShoppingCart> ShoppingCartListInvalidate = new List<ShoppingCart>();
+            List<AuthorizeNet> AuthorizeNetListInvalidate = new List<AuthorizeNet>();
+
+            ShoppingCartListInvalidate = ShoppingCartList.Where(item => item.IndexAuthorizeNet == 0).ToList();
+            AuthorizeNetListInvalidate = AuthorizeNetList.Where(item => item.IndexShoppingCart == 0).ToList();
+
+            result.ShoppingCartList = ShoppingCartList;
+            result.AuthorizeNetList = AuthorizeNetList;
+
+            if (ShoppingCartListInvalidate.Count > 0)
+            {
+                result.Message = "!!File ShoppingCart Not equivalent " + ShoppingCartListInvalidate.Count.ToString() + " Rows.!!";
+                foreach (ShoppingCart item in ShoppingCartListInvalidate)
+                    result.Message = result.Message + ";Row Incorrect: { " + item.Index.ToString() + " }";
+                result.Status = false;
+                return result;
+            }
+
+            if (AuthorizeNetListInvalidate.Count > 0)
+            {
+                result.Message = "!!File AuthorizeNet Not equivalent " + AuthorizeNetListInvalidate.Count.ToString() + " Rows.!!";
+                foreach (AuthorizeNet item in AuthorizeNetListInvalidate)
+                    result.Message = result.Message + ";Row Incorrect: { " + item.Index.ToString() + " }";
+                result.Status = false;
+                return result;
+            }
+
+            result.Message = "!!Files ShoppingCart and AuthorizeNet equivalents!!.Total " + AuthorizeNetList.Count.ToString() + " Rows";
+            result.Status = true;
+            return result;
         }
     }
 }
