@@ -137,6 +137,14 @@ function DownloadFile() {
         url: '/Utilitario/DownloadFile',
         type: 'POST',
         success: function (data) {
+            debugger;
+            if (data.Status){
+                ver_confirmacion(data.Message);
+                window.location = "/Utilitario/DownloadFile?nameFile=" + "FileResult_" + data.ProcessDate;
+            }                         
+            else
+                ver_error(data.Message);
+            load_grid(data);
         },
         data: dataString,
         cache: false,

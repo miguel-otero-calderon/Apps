@@ -83,12 +83,11 @@ namespace Apps.Web.SCI.Controllers
             Result result = null;
             try
             {
-                jsonResult = UploadFile(file1, file2,date1);
+                jsonResult = UploadFile(file1,file2,date1);
                 result = jsonResult.Data as Result;
                 if (result.Status)
                 {
-                    string path = CreateFile(result);
-                    return (JsonResult)DownloadFile(path);
+                    CreateFile(result);
                 }
                 return jsonResult;
             }
@@ -98,17 +97,19 @@ namespace Apps.Web.SCI.Controllers
             }
         }
 
-        public ActionResult DownloadFile(string path)
+        [HttpGet]
+        public FileResult DownloadFile(string nameFile)
         {
-            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
-            MemoryStream ms = new MemoryStream(fileBytes, 0, 0, true, true);
-            Response.AddHeader("content-disposition", "attachment;filename= NombreArchivo");
-            Response.Buffer = true;
-            Response.Clear();
-            Response.OutputStream.Write(ms.GetBuffer(), 0, ms.GetBuffer().Length);
-            Response.OutputStream.Flush();
-            Response.End();
-            return new FileStreamResult(Response.OutputStream, "application/csv");
+            var absolutePath = Server.MapPath("~/UploadedFiles");
+            var urlEncode = HttpUtility.UrlEncode(nameFile, System.Text.Encoding.UTF8) ?? "File Result";
+            var pathFile = Path.Combine(absolutePath, urlEncode.Replace("+", " ") + ".csv");
+
+            var file = System.IO.File.ReadAllBytes(pathFile);
+
+            if (System.IO.File.Exists(pathFile))
+                System.IO.File.Delete(pathFile);
+
+            return File(file, System.Net.Mime.MediaTypeNames.Application.Octet, urlEncode.Replace("+", " ") + ".csv");
         }
 
         protected string CreateFile(Result result)
