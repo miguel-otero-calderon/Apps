@@ -1,9 +1,8 @@
 ﻿$(document).ready(function () {      
     $("#date1").val(obtener_fecha_hoy());
     $("#status").val("");
-    $('#load1').click(function () {
-        UploadFile();
-    });
+    $('#load').click(function () { UploadFile(); });
+    $('#download').click(function () { DownloadFile(); });
 })
 
 var obtener_fecha_hoy = function() {
@@ -117,11 +116,27 @@ function UploadFile() {
         url: '/Utilitario/UploadFile', 
         type: 'POST',
         success: function (data) {
-            if (data.status)
-                ver_confirmacion(data.message);
+            if (data.Status)
+                ver_confirmacion(data.Message);
             else
-                ver_error(data.message);
+                ver_error(data.Message);
             load_grid(data);
+        },
+        data: dataString,
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+}
+
+function DownloadFile() {
+    $("#rows").html("");
+    var form = $('#form1')[0];
+    var dataString = new FormData(form);
+    $.ajax({
+        url: '/Utilitario/DownloadFile',
+        type: 'POST',
+        success: function (data) {
         },
         data: dataString,
         cache: false,
@@ -147,23 +162,18 @@ function load_grid(data) {
         var list = [];
         var inyection = "";
         var add = false;
-        if (data.show_list == 1)
-            list = data.shopping_cart_list;
+        if (data.ShowList == 1)
+            list = data.ShoppingCartList;
         
-        if (data.show_list == 2)
-            list = data.authorize_net_list;
+        if (data.ShowList == 2)
+            list = data.AuthorizeNetList;
 
         if (list != null && list.length > 0) {
             $.each(list, function (index, value) {
-                if (data.status) {
+                if (data.Status)
                     add = true;
-                }
-                else {
-                    if (value.status == false)
-                        add = true;
-                    else
-                        add = false;
-                }
+                else
+                    add = !value.Status;
 
                 if (add) {
                     inyection = inyection + "<tr class='odd'>";
