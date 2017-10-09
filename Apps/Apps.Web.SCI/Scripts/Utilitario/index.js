@@ -108,20 +108,20 @@ function validate_file(file_id) {
 }
 
 function UploadFile() {
+    $("#rows").html("");
     if ($("#status").html() !== "")
         return;
-
     var form = $('#form1')[0];
     var dataString = new FormData(form);
     $.ajax({
         url: '/Utilitario/UploadFile', 
         type: 'POST',
         success: function (data) {
-            debugger;
             if (data.status)
                 ver_confirmacion(data.message);
             else
                 ver_error(data.message);
+            load_grid(data);
         },
         data: dataString,
         cache: false,
@@ -138,4 +138,49 @@ function ver_error(message) {
 function ver_confirmacion(message) {
     $("#status").html(message);
     $("#status").css("color", "blue");
+}
+
+function load_grid(data) {
+    $("#rows").html("");
+    if (data != null)
+    {
+        var list = [];
+        var inyection = "";
+        var add = false;
+        if (data.show_list == 1)
+            list = data.shopping_cart_list;
+        
+        if (data.show_list == 2)
+            list = data.authorize_net_list;
+
+        if (list != null && list.length > 0) {
+            $.each(list, function (index, value) {
+                if (data.status) {
+                    add = true;
+                }
+                else {
+                    if (value.status == false)
+                        add = true;
+                    else
+                        add = false;
+                }
+
+                if (add) {
+                    inyection = inyection + "<tr class='odd'>";
+                    inyection = inyection + "<td>" + value.Index + "</td>";
+                    inyection = inyection + "<td>" + value.Transaction_Date + "</td>";
+                    inyection = inyection + "<td>" + value.Payment_Method + "</td>";
+                    inyection = inyection + "<td>" + value.Credit_Card_Number + "</td>";
+                    inyection = inyection + "<td>" + value.Auth_Code + "</td>";
+                    inyection = inyection + "<td>" + value.Transaction_ID + "</td>";
+                    inyection = inyection + "<td>" + value.Error + "</td>";
+                    inyection = inyection + "</tr>"
+                }                
+            });
+        }
+       
+        if (inyection != "")
+            $("#rows").html(inyection);
+
+    }
 }

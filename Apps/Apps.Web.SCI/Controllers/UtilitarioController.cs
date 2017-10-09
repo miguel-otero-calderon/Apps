@@ -64,7 +64,8 @@ namespace Apps.Web.SCI.Controllers
                         message = result.Message,
                         status = result.Status,
                         shopping_cart_list = result.ShoppingCartList,
-                        authorize_net_list = result.AuthorizeNetList
+                        authorize_net_list = result.AuthorizeNetList,
+                        show_list = result.ShowList
                         }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -82,6 +83,7 @@ namespace Apps.Web.SCI.Controllers
             List<AuthorizeNet> AuthorizeNetList = AuthorizeNetReadFile(AuthorizeNetFile);
             List<AuthorizeNet> AuthorizeNetListIncorrect = AuthorizeNetList.Where(s => s.Status == false).ToList();
             result.AuthorizeNetList = AuthorizeNetList;
+            result.ShowList = 2;
 
             if (AuthorizeNetListIncorrect.Count > 0)
             {
@@ -158,6 +160,7 @@ namespace Apps.Web.SCI.Controllers
             List<ShoppingCart> ShoppingCartListIncorrect = ShoppingCartList.Where(s => s.Status == false).ToList();
 
             result.ShoppingCartList = ShoppingCartList;
+            result.ShowList = 1;
 
             if (ShoppingCartListIncorrect.Count > 0)
             {
@@ -171,6 +174,7 @@ namespace Apps.Web.SCI.Controllers
                 result.Status = true;
                 result.Message = "!!File ShoppingCart read!! " + ShoppingCartList.Count.ToString() + " rows.";
             }
+            
             return result;
         }
 
@@ -273,8 +277,11 @@ namespace Apps.Web.SCI.Controllers
                 AuthorizeNetItem = AuthorizeNetList.Where(item => 
                         item.Key == ShoppingCartItem.Key && item.IndexShoppingCart == 0).FirstOrDefault();
 
-                AuthorizeNetItem.IndexShoppingCart = ShoppingCartItem.Index;
-                ShoppingCartItem.IndexAuthorizeNet = AuthorizeNetItem.Index;            
+                if(AuthorizeNetItem != null)
+                {
+                    AuthorizeNetItem.IndexShoppingCart = ShoppingCartItem.Index;
+                    ShoppingCartItem.IndexAuthorizeNet = AuthorizeNetItem.Index;
+                }
             }
 
             List<ShoppingCart> ShoppingCartListInvalidate = new List<ShoppingCart>();
@@ -292,6 +299,7 @@ namespace Apps.Web.SCI.Controllers
                 foreach (ShoppingCart item in ShoppingCartListInvalidate)
                     result.Message = result.Message + ";Row Incorrect: { " + item.Index.ToString() + " }";
                 result.Status = false;
+                result.ShowList = 1;
                 return result;
             }
 
@@ -301,11 +309,13 @@ namespace Apps.Web.SCI.Controllers
                 foreach (AuthorizeNet item in AuthorizeNetListInvalidate)
                     result.Message = result.Message + ";Row Incorrect: { " + item.Index.ToString() + " }";
                 result.Status = false;
+                result.ShowList = 2;
                 return result;
             }
 
             result.Message = "!!Files ShoppingCart and AuthorizeNet equivalents!!.Total " + AuthorizeNetList.Count.ToString() + " Rows";
             result.Status = true;
+            result.ShowList = 2;
             return result;
         }
     }
