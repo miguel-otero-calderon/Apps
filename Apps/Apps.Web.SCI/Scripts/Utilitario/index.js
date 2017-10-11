@@ -3,6 +3,9 @@
     $("#status").val("");
     $('#load').click(function () { UploadFile(); });
     $('#download').click(function () { DownloadFile(); });
+    $(window).load(function () {
+        $(".loader").fadeOut("slow");
+    });
 })
 
 var obtener_fecha_hoy = function() {
@@ -133,11 +136,12 @@ function DownloadFile() {
     $("#rows").html("");
     var form = $('#form1')[0];
     var dataString = new FormData(form);
+    $(".loader").show("slow");
     $.ajax({
         url: '/Utilitario/DownloadFile',
         type: 'POST',
         success: function (data) {
-            debugger;
+            $(".loader").fadeOut("slow");
             if (data.Status){
                 ver_confirmacion(data.Message);
                 window.location = "/Utilitario/DownloadFile?nameFile=" + "FileResult_" + data.ProcessDate;
