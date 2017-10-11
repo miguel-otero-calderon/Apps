@@ -165,16 +165,21 @@ function ver_confirmacion(message) {
 
 function load_grid(data) {
     $("#rows").html("");
+    $("#fields").html("");
     if (data != null)
     {
         var list = [];
         var inyection = "";
         var add = false;
-        if (data.ShowList == 1)
+        if (data.ShowList == 1) {
             list = data.ShoppingCartList;
+            inyection = "<tr><th>Index</th><th>Transaction_Date</th><th>Payment_Method</th><th>Credit_Card_Number</th><th>Auth_Code</th><th>Transaction_ID</th><th>Error</th></tr>";
+        }            
         
-        if (data.ShowList == 2)
+        if (data.ShowList == 2) {
             list = data.AuthorizeNetList;
+            inyection = "<tr><th>Index</th><th>Transaction_Date</th><th>Payment_Method</th><th>Credit_Card_Number</th><th>Auth_Code</th><th>Transaction_ID</th><th>Error</th><th>Date_Ordered</th><th>Order_Number</th><th>Source_DNIS</th><th>KEYCODE</th><th>BILL_TO_First_Name</th><th>Last_Name</th></tr>";
+        }       
 
         if (list != null && list.length > 0) {
             $.each(list, function (index, value) {
@@ -191,7 +196,21 @@ function load_grid(data) {
                     inyection = inyection + "<td>" + value.Credit_Card_Number + "</td>";
                     inyection = inyection + "<td>" + value.Auth_Code + "</td>";
                     inyection = inyection + "<td>" + value.Transaction_ID + "</td>";
-                    inyection = inyection + "<td>" + value.Error + "</td>";
+
+                    if (value.Error != null && value.Error != "") {
+                        inyection = inyection + "<td style='color:red'>" + value.Error + "</td>";
+                    }
+                    else
+                        inyection = inyection + "<td></td>";
+
+                    if (data.ShowList == 2) {
+                        inyection = inyection + "<td>" + value.Date_Ordered + "</td>";
+                        inyection = inyection + "<td>" + value.Order_Number + "</td>";
+                        inyection = inyection + "<td>" + value.Source_DNIS + "</td>";
+                        inyection = inyection + "<td>" + value.KEYCODE + "</td>";
+                        inyection = inyection + "<td>" + value.BILL_TO_First_Name + "</td>";
+                        inyection = inyection + "<td>" + value.Last_Name + "</td>";
+                    }
                     inyection = inyection + "</tr>"
                 }                
             });

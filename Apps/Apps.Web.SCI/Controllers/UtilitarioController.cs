@@ -139,7 +139,7 @@ namespace Apps.Web.SCI.Controllers
         protected string ProcessFields(AuthorizeNet item)
         {
             string line = string.Empty;
-            line = line  + item.Date_Ordered;
+            line = line  + item.Date_Ordered + ";";
             line = line + ProcessField(item.Order_Number);
             line = line + ProcessField(item.Source_DNIS);
             line = line + ProcessField(item.KEYCODE);
