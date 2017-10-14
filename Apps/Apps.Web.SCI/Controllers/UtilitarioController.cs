@@ -68,10 +68,10 @@ namespace Apps.Web.SCI.Controllers
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }                
             }
-            catch
+            catch(Exception ex)
             {
                 result.Status = false;
-                result.Message = "Error no se pudo cargar los archivos!!";
+                result.Message = ex.Message;
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }

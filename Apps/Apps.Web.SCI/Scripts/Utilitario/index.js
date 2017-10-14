@@ -3,9 +3,6 @@
     $("#status").val("");
     $('#load').click(function () { UploadFile(); });
     $('#download').click(function () { DownloadFile(); });
-    $(window).load(function () {
-        $(".loader").fadeOut("slow");
-    });
 })
 
 var obtener_fecha_hoy = function() {
@@ -86,7 +83,7 @@ function validate_fecha_formato_ingles(fecha) {
 }
 
 function validate_file(file_id) {
-    var texto;
+    var texto = "";
     var file = $("#" + file_id);
     var date = $("#date1").val();
     if (file.val() == "")
@@ -98,10 +95,10 @@ function validate_file(file_id) {
     }
     else {
         texto = file.val();
-        if (texto.endsWith(date + ".csv"))
+        if (texto.indexOf(date + ".csv") != -1)
             return true;
         else {
-            texto = "Nombre de archivo incorrecto...Porqye no termina en '" + date + "'";
+            texto = "Nombre de archivo incorrecto...Porque no termina en '" + date + "'";
             ver_error(texto)
             $(file).focus();
             return false;
@@ -116,7 +113,7 @@ function UploadFile() {
     var form = $('#form1')[0];
     var dataString = new FormData(form);
     $.ajax({
-        url: '/Utilitario/UploadFile', 
+        url: "/Utilitario/UploadFile",
         type: 'POST',
         success: function (data) {
             if (data.Status)
@@ -136,12 +133,10 @@ function DownloadFile() {
     $("#rows").html("");
     var form = $('#form1')[0];
     var dataString = new FormData(form);
-    $(".loader").show("slow");
     $.ajax({
-        url: '/Utilitario/DownloadFile',
+        url: "/Utilitario/DownloadFile",
         type: 'POST',
         success: function (data) {
-            $(".loader").fadeOut("slow");
             if (data.Status){
                 ver_confirmacion(data.Message);
                 window.location = "/Utilitario/DownloadFile?nameFile=" + "FileResult_" + data.ProcessDate;
