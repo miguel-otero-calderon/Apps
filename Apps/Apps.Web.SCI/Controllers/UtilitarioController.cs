@@ -70,6 +70,8 @@ namespace Apps.Web.SCI.Controllers
             }
             catch(Exception ex)
             {
+                if (result == null)
+                    result = new Result();
                 result.Status = false;
                 result.Message = ex.Message;
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -261,6 +263,14 @@ namespace Apps.Web.SCI.Controllers
                 System.IO.StreamReader file = new System.IO.StreamReader(path);
                 while ((line = file.ReadLine()) != null)
                 {
+                    if (index == 0)
+                    {
+                        if (line.ToLower().Trim() != "Date_Ordered;Order_Number;Source_DNIS;KEYCODE;BILL_TO_First_Name;Last_Name;Address_1;Address_2;City;State_Province;Zip_Code;Country;Telephone_Number;E_mail_Address;Payment_Method;Credit_Card_Number;Expiry_Date;Auth_Code;Transaction_ID;TRANSACTION_DATE;Check_Routing_Number;Check_Account_Number;Check_Number;Amount_Paid_Check_Only;Ship_To_First_Name;Ship_To_Last_Name;Ship_To_Add1;Ship_To_Add2;Ship_To_City;Ship_To_State;Ship_To_Zip;Ship_To_Country;Order_Level_Tax;Order_Level_SH;Order_Level_Total_Amount;SKU_1;DESCRIPTION_1;QTY_1;PRICE_1;TAX_1;S_H_1;SKU_2;DESCRIPTION_2;QTY_2;PRICE_2;TAX_2;S_H_2;SKU_3;DESCRIPTION_3;QTY_3;PRICE_3;TAX_3;S_H_3;SKU_4;DESCRIPTION_4;QTY_4;PRICE_4;TAX_4;S_H_4;SKU_5;DESCRIPTION_5;QTY_5;PRICE_5;TAX_5;S_H_5;RESERVED_1;RESERVED_2;RESERVED_3;RESERVED_4;RESERVED_5;".ToLower())
+                        {
+                            throw new Exception(string.Format("La cabecera del archivo '{0}' es incorrecta.!!", fileName));
+                        }
+                    }
+
                     if (index > 0)
                     {
                         authorizeNet = AuthorizeNetReadLine(line, index);
@@ -394,6 +404,14 @@ namespace Apps.Web.SCI.Controllers
                 System.IO.StreamReader file = new System.IO.StreamReader(path);
                 while ((line = file.ReadLine()) != null)
                 {
+                    if(index == 0)
+                    {
+                        if(line.ToLower().Trim() != "Transaction_Date;Payment_Method;Auth_Code;Transaction_ID".ToLower())
+                        {
+                            throw new Exception(string.Format("La cabecera del archivo '{0}' es incorrecta.!!", fileName));
+                        }
+                    }
+
                     if(index > 0)
                     {
                         shoppingCart = ShoppingCartReadLine(line, index);
