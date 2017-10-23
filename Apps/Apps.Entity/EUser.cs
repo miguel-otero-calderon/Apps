@@ -65,7 +65,6 @@ namespace Apps.Entity
             if (columns.Contains("State") && row.Validate("State"))
                 State = Convert.ToInt16(row["State"]);
         }
-
         public override void Validar()
         {
             if (string.IsNullOrEmpty(CodeUser))

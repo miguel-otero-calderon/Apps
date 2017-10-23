@@ -1,8 +1,10 @@
-﻿$(document).ready(function () {      
+﻿var status = false;
+
+$(document).ready(function () {
     $("#date1").val(obtener_fecha_hoy());
     $("#status").val("");
     $('#load').click(function () { UploadFile(); });
-    $('#download').click(function () { DownloadFile(); });
+    $('#download').click(function () { EjecuteFile(); });
 })
 
 var obtener_fecha_hoy = function() {
@@ -116,6 +118,7 @@ function UploadFile() {
         url: "/Utilitario/UploadFile",
         type: 'POST',
         success: function (data) {
+            status = data.Status;
             if (data.Status)
                 ver_confirmacion(data.Message);
             else
@@ -124,9 +127,18 @@ function UploadFile() {
         },
         data: dataString,
         cache: false,
+        async :false,
         contentType: false,
         processData: false
     });
+}
+
+function EjecuteFile() {
+    status = false;
+    UploadFile();
+    if (status === true) {
+        DownloadFile();
+    }
 }
 
 function DownloadFile() {
@@ -147,6 +159,7 @@ function DownloadFile() {
         },
         data: dataString,
         cache: false,
+        async: false,
         contentType: false,
         processData: false
     });

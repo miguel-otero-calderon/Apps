@@ -1,0 +1,30 @@
+﻿@model Apps.Web.Models.UserModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Login</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true, "Login fallido, verificar los datos.");
+    <div>
+        <fieldset>
+            <legend>Inicio de Sesión</legend>
+            <div>@Html.LabelFor(entity => entity.CodeUser)</div>
+            <div>
+                @Html.TextBoxFor(entity => entity.CodeUser)
+                @Html.ValidationMessageFor(entity => entity.CodeUser)
+            </div>
+
+            <div>@Html.LabelFor(entity => entity.Password) </div>
+            <div>
+                @Html.TextBoxFor(entity => entity.Password)
+                @Html.ValidationMessageFor(entity => entity.Password)
+            </div>  
+            <input type="submit" value="Ingresar" />
+        </fieldset>
+    </div>
+}
