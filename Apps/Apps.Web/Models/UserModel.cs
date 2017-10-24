@@ -17,13 +17,14 @@ namespace Apps.Web.Models
 
         [Required]
         [Display(Name ="Usuario ")]
-        [StringLength(maximumLength:10,MinimumLength =6,ErrorMessageResourceName ="La longitud requerida es entre 6 y 10 caracteres.")]
+        [StringLength(maximumLength:10,MinimumLength =6)]
         public string CodeUser { get; set; }
         
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password ")]
-        [StringLength(maximumLength: 10, MinimumLength = 6, ErrorMessageResourceName = "El password debe tener como mínimo 6 caracteres.")]
+        [StringLength(maximumLength: 10, MinimumLength = 6)]
+
         public string Password { get; set; }
 
         public string Name { get; set; }
