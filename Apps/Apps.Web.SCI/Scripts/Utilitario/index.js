@@ -136,7 +136,8 @@ function UploadFile() {
 function EjecuteFile() {
     status = false;
     UploadFile();
-    if (status === true) {
+    debugger;
+    if (status === "true" || status === true) {
         DownloadFile();
     }
 }
