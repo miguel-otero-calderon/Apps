@@ -89,5 +89,27 @@ namespace Apps.Business
             eUser.Audit.TypeEvent = "Update";
             bAudit.Insert(eUser.Audit);
         }
+
+        public List<EUser> List()
+        {
+            EUser eUser = null;
+            DataTable table = null;
+            List<EUser> list = null;
+            List<string> columns = null;
+            int rowsCount = 0;
+
+            list = new List<EUser>();
+            table = dUser.List();
+            rowsCount = table.Rows.Count;
+            columns = table.GetColumns();
+
+            foreach(DataRow row in table.Rows)
+            {
+                eUser = new EUser(row, columns);
+                list.Add(eUser);
+            }
+
+            return list;
+        }
     }
 }

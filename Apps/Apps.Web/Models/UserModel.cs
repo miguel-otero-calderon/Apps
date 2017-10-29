@@ -3,18 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
-using Apps.Entity;
 
 namespace Apps.Web.Models
 {
     public class UserModel
-    {
-        protected EUser eUser;
-        public UserModel()
-        {
-            eUser = new EUser();
-        }
-
+    {        
         [Required]
         [Display(Name ="Usuario ")]
         [StringLength(maximumLength:10,MinimumLength =6)]
@@ -27,26 +20,25 @@ namespace Apps.Web.Models
 
         public string Password { get; set; }
 
+        [Display(Name = "Nombre ")]
         public string Name { get; set; }
+
+        [DataType(DataType.EmailAddress)]
+        [StringLength(maximumLength: 50, MinimumLength = 5)]
         public string Email { get; set; }
+
+        [Display(Name = "Estado ")]
         public short State { get; set; }
 
-        public EUser GetUser()
+        public string StateActive
         {
-            eUser = new EUser();
-            eUser.CodeUser = this.CodeUser;
-            eUser.Name = this.Name;
-            eUser.Password = this.Password;
-            eUser.Email = this.Email;
-            eUser.State = this.State;
-            return eUser;
-        }
-
-        public void SetUser(EUser eUser)
-        {
-            if (this.eUser == null)
-                this.eUser = new EUser();
-            this.eUser = eUser;
+            get
+            {
+                if (State == 1)
+                    return "Activo";
+                else
+                    return "Inactivo";
+            }
         }
     }
 }

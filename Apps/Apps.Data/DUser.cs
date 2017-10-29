@@ -40,5 +40,12 @@ namespace Apps.Data
             command.AddInParameter("@State", DbType.String, user.State);
             ExecuteNonQuery(command);
         }
+
+        public DataTable List()
+        {
+            DaCommand command = new DaCommand("UserList");
+            DataTable table = ExecuteDataTable(command);
+            return table;
+        }
     }
 }
