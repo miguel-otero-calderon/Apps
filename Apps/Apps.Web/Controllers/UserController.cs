@@ -77,6 +77,7 @@ namespace Apps.Web.Controllers
             BUser bUser = new BUser();
             try
             {
+                userModel.State = 1;
                 if (ModelState.IsValid)
                 {
                     eUser = mapperConfiguration.CreateMapper().Map<UserModel, EUser>(userModel);
