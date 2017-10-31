@@ -13,26 +13,24 @@ namespace Apps.Web.Controllers
 {
     public class UserController : Controller
     {
-        MapperConfiguration mapperConfiguration = new MapperConfiguration(
-        cfg => {
-            cfg.CreateMap<UserModel, EUser>();
-            cfg.CreateMap<EUser, UserModel>();});
+        MapperConfiguration mapping = new MapperConfiguration(
+            cfg => {
+                cfg.CreateMap<UserModel, EUser>();
+                cfg.CreateMap<EUser, UserModel>();
+            });
+        BUser bussinesLayer = new BUser();
+        List<UserModel> usersModel = new List<UserModel>();
 
-        public ActionResult Index()
+        public ActionResult List()
         {
-            BUser bUser = new BUser();
-            List<EUser> list = new List<EUser>();
-            List<UserModel> model = new List<UserModel>();
-            UserModel userModel = new UserModel();
-
-            list = bUser.List();
-            foreach(var item in list)
+            var usersEntity = bussinesLayer.List();
+            foreach(var userEntity in usersEntity)
             {
-                userModel = mapperConfiguration.CreateMapper().Map<EUser, UserModel>(item);
-                model.Add(userModel);
+                var userModel = mapping.CreateMapper().Map<EUser, UserModel>(userEntity);
+                usersModel.Add(userModel);
             }
 
-            return View(model);
+            return View(usersModel);
         }
 
         [HttpGet]
@@ -43,17 +41,14 @@ namespace Apps.Web.Controllers
 
         [HttpPost]
         public ActionResult Login(UserModel userModel)
-        {
-            EUser eUser = new EUser();
-            BUser bUser = new BUser();
-            bool exit = false;
+        {           
             if (ModelState.IsValid)
             {                
-                eUser = mapperConfiguration.CreateMapper().Map<UserModel, EUser>(userModel);
-                exit = bUser.Login(eUser);
+                var userEntity = mapping.CreateMapper().Map<UserModel, EUser>(userModel);
+                var exit = bussinesLayer.Login(userEntity);
                 if (exit)
                 {
-                    FormsAuthentication.SetAuthCookie(eUser.CodeUser, false);
+                    FormsAuthentication.SetAuthCookie(userEntity.CodeUser, false);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -73,15 +68,13 @@ namespace Apps.Web.Controllers
         [HttpPost]
         public ActionResult Insert(UserModel userModel)
         {
-            EUser eUser = new EUser();
-            BUser bUser = new BUser();
             try
             {
                 userModel.State = 1;
                 if (ModelState.IsValid)
                 {
-                    eUser = mapperConfiguration.CreateMapper().Map<UserModel, EUser>(userModel);
-                    bUser.Insert(eUser);
+                    var userEntity = mapping.CreateMapper().Map<UserModel, EUser>(userModel);
+                    bussinesLayer.Insert(userEntity);
                     return RedirectToAction("List");
                 }
             }

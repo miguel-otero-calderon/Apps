@@ -8,6 +8,7 @@ using Apps.Data;
 using Apps.Extension;
 using Apps.Util;
 using System.Data;
+using System.Transactions;
 
 namespace Apps.Business
 {
@@ -67,11 +68,15 @@ namespace Apps.Business
 
         public void Insert(EUser eUser)
         {
-            eUser.PasswordHash = CalculateHash(eUser);
-            eUser.Validar();
-            dUser.Insert(eUser);
-            eUser.Audit.TypeEvent = "Insert";
-            bAudit.Insert(eUser.Audit);
+            using (TransactionScope scope = new TransactionScope())
+            {
+                eUser.PasswordHash = CalculateHash(eUser);
+                eUser.Validar();
+                dUser.Insert(eUser);
+                eUser.Audit.TypeEvent = "Insert";
+                bAudit.Insert(eUser.Audit);
+                scope.Complete();
+            }
         }
 
         public void Delete(EUser eUser)
