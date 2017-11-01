@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using Apps.Entity;
 
 namespace Apps.Web.Models
 {
     public class UserModel
-    {        
+    {
+        public UserModel()
+        {
+            Companies = new List<CompanyModel>();
+        }
         [Required]
         [Display(Name ="Usuario ")]
         [StringLength(maximumLength:10,MinimumLength =6)]
@@ -40,5 +45,6 @@ namespace Apps.Web.Models
                     return "Inactivo";
             }
         }
+        public List<CompanyModel> Companies { get; set; }
     }
 }
