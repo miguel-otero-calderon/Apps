@@ -35,11 +35,9 @@ namespace Apps.Entity
         {
             get {
                 if (audit == null)
-                    audit = new EAudit(
-                        CodeCompany :"00", 
-                        CodeEntity : "User", 
-                        Code : CodeUser, 
-                        Sequence : 0);
+                    audit = new EAudit(CodeCompany :"00");
+                audit.CodeEntity = CodeEntity;
+                audit.Code = CodeUser;
                 return audit;
             }
             set
@@ -47,6 +45,15 @@ namespace Apps.Entity
                 audit = value;
             }
         }
+
+        public override string CodeEntity
+        {
+            get
+            {
+                return "User";
+            }
+        }
+
         public EUser() { }
         public EUser(DataRow row,List<string>columns)
         {

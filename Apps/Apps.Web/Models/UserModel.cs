@@ -11,17 +11,16 @@ namespace Apps.Web.Models
     {
         public UserModel()
         {
-            Companies = new List<CompanyModel>();
         }
         [Required]
         [Display(Name ="Usuario ")]
-        [StringLength(maximumLength:10,MinimumLength =6)]
+        [StringLength(maximumLength:10,MinimumLength =5)]
         public string CodeUser { get; set; }
         
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password ")]
-        [StringLength(maximumLength: 10, MinimumLength = 6)]
+        [StringLength(maximumLength: 10, MinimumLength = 5)]
 
         public string Password { get; set; }
 
@@ -41,8 +40,26 @@ namespace Apps.Web.Models
             {
                 if (State == 1)
                     return "Activo";
-                else
+
+                if (State == 0)
                     return "Inactivo";
+
+                return "!Estado desconocido!";
+            }
+        }
+
+        public bool StateCheck
+        {
+            get
+            {
+                return (State == 1);
+            }
+            set
+            {
+                if (value)
+                    State = 1;
+                else
+                    State = 0;
             }
         }
         public List<CompanyModel> Companies { get; set; }

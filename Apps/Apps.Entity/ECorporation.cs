@@ -17,7 +17,7 @@ namespace Apps.Entity
                 if (audit == null)
                     audit = new EAudit(
                         CodeCompany: "00", 
-                        CodeEntity: "Corporation", 
+                        CodeEntity: this.CodeEntity, 
                         Code: CodeCorporation, 
                         Sequence: 0);
                 return audit;
@@ -30,6 +30,15 @@ namespace Apps.Entity
         public string CodeCorporation { get; set; }
         public string Name { get; set; }
         public short State { get; set; }
+
+        public override string CodeEntity
+        {
+            get
+            {
+                return "Corporation";
+            }
+        }
+
         public ECorporation() { }
         public ECorporation (DataRow row, List<string> columns)
         {

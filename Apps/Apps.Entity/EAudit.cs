@@ -36,6 +36,14 @@ namespace Apps.Entity
             if (string.IsNullOrEmpty(TypeEvent))
                 throw new Exception("El Tipo de Evento[TypeEvent] no tiene valor.[Audit]");
         }
+
+        public EAudit(string CodeCompany)
+        {
+            this.CodeCompany = CodeCompany;
+            this.CodeEntity = string.Empty;
+            this.Code = string.Empty;
+            Sequence = 0;
+        }
         public EAudit(string CodeCompany, string CodeEntity, string Code)
         {
             this.CodeCompany = CodeCompany;

@@ -35,6 +35,15 @@ namespace Apps.Entity
         public string Fax { get; set; }
         public string Logo { get; set; }
         public short State { get; set; }
+
+        public override string CodeEntity
+        {
+            get
+            {
+                return "Company";
+            }
+        }
+
         public ECompany() { }
         public ECompany(DataRow row, List<string> columns)
         {

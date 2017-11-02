@@ -28,6 +28,14 @@ namespace Apps.Entity
             }
         }
 
+        public override string CodeEntity
+        {
+            get
+            {
+                return "ProductType";
+            }
+        }
+
         public EProductType(DataRow dataRow, List<string> listColumns)
         {
             if (listColumns.Contains("CodeProductType") && dataRow.Validate("CodeProductType"))

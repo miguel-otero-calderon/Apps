@@ -33,7 +33,7 @@ namespace Apps.Entity
             {
                 if (audit == null)
                 {
-                    audit = new EAudit("00", "Client", CodeClient.ToString());
+                    audit = new EAudit("00", this.CodeEntity, CodeClient.ToString());
                 }                    
                 return audit;
             }
@@ -42,6 +42,15 @@ namespace Apps.Entity
                 audit = value;
             }
         }
+
+        public override string CodeEntity
+        {
+            get
+            {
+                return "Client";
+            }
+        }
+
         public EClient() { }
         public EClient(DataRow dataRow, List<string> listColumns)
         {

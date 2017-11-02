@@ -25,6 +25,14 @@ namespace Apps.Entity
             }
         }
 
+        public override string CodeEntity
+        {
+            get
+            {
+                return "Sequence";
+            }
+        }
+
         public ESequence(EEntity entity)
         {
             CodeSequence = entity.Audit.CodeEntity;

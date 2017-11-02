@@ -57,6 +57,15 @@ namespace Apps.Entity
                 audit = value;
             }
         }
+
+        public override string CodeEntity
+        {
+            get
+            {
+                return "Product";
+            }
+        }
+
         public override void Validar()
         {
             if (string.IsNullOrEmpty(CodeProduct))

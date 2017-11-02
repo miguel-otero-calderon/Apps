@@ -17,7 +17,7 @@ namespace Apps.Web.Controllers
         List<UserModel> usersModel = new List<UserModel>();
         HelperSession helperSession = new HelperSession();
 
-        public ActionResult List()
+        public ActionResult Index()
         {
             var usersEntity = userBussines.List();
             foreach(var userEntity in usersEntity)
@@ -45,8 +45,8 @@ namespace Apps.Web.Controllers
                 if (exit)
                 {
                     helperSession.User = Select(userModel);
-                    FormsAuthentication.SetAuthCookie(userEntity.CodeUser, false);                       
-                    return RedirectToAction("Selected", "Company");
+                    FormsAuthentication.SetAuthCookie(userEntity.CodeUser, false);
+                    return RedirectToAction("Choose", "Company");
                 }
                 else
                 {
@@ -70,11 +70,17 @@ namespace Apps.Web.Controllers
                 userModel.State = 1;
                 if (ModelState.IsValid)
                 {
-                    var userEntity = helperSession.mapping.CreateMapper().Map<UserModel, EUser>(userModel);                    
-                    userEntity.Audit = new EAudit(CodeCompany: "0", CodeEntity: "", Code: "");
-                    userEntity.Audit.UserRegister = helperSession.User.CodeUser;
+                    var userEntity = helperSession.mapping.CreateMapper().Map<UserModel, EUser>(userModel);
+                    var codeCompany = "00";
+                    var userRegister = "Admin";
+                    if (helperSession.Company != null)
+                        codeCompany = helperSession.Company.CodeCompany;
+                    if (helperSession.User != null)
+                        userRegister = helperSession.User.CodeUser;
+                    userEntity.Audit.CodeCompany = codeCompany;
+                    userEntity.Audit.UserRegister = userRegister;
                     userBussines.Insert(userEntity);
-                    return RedirectToAction("List");
+                    return RedirectToAction("Index");
                 }
             }
             catch(Exception ex)
@@ -86,9 +92,10 @@ namespace Apps.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Delete()
+        public ActionResult Delete(string codeUser)
         {
-            return View();
+            var userModel = Select(new UserModel() { CodeUser = codeUser });
+            return View(userModel);
         }
 
         [HttpPost]
@@ -96,14 +103,17 @@ namespace Apps.Web.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var userEntity = helperSession.mapping.CreateMapper().Map<UserModel, EUser>(userModel);
-                    userEntity.Audit = new EAudit(CodeCompany: "0", CodeEntity: "", Code: "");
-                    userEntity.Audit.UserRegister = helperSession.User.CodeUser;
-                    userBussines.Delete(userEntity);
-                    return RedirectToAction("List");
-                }
+                var userEntity = helperSession.mapping.CreateMapper().Map<UserModel, EUser>(userModel);
+                var codeCompany = "00";
+                var userRegister = "Admin";
+                if (helperSession.Company != null)
+                    codeCompany = helperSession.Company.CodeCompany;
+                if (helperSession.User != null)
+                    userRegister = helperSession.User.CodeUser;
+                userEntity.Audit.CodeCompany = codeCompany;
+                userEntity.Audit.UserRegister = userRegister;
+                userBussines.Delete(userEntity);
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -112,19 +122,49 @@ namespace Apps.Web.Controllers
 
             return View();
         }
-        
-        protected UserModel Select(UserModel userModel)
-        {
-            var userCompanyBussines = new BUserCompany();
+
+        public UserModel Select(UserModel userModel)
+        {            
             var userEntity = helperSession.mapping.CreateMapper().Map<UserModel, EUser>(userModel);
-            var companiesEntity = userCompanyBussines.SelectByUser(userEntity);
+            userEntity = userBussines.Select(userEntity);
             userModel = helperSession.mapping.CreateMapper().Map<EUser, UserModel>(userEntity);
-            foreach(var companyEntity in companiesEntity)
-            {
-                var companyModel = helperSession.mapping.CreateMapper().Map<ECompany, CompanyModel>(companyEntity);
-                userModel.Companies.Add(companyModel);
-            }            
             return userModel;
         }
+
+        [HttpGet]
+        public ActionResult Update(string codeUser)
+        {
+            var userModel = Select(new UserModel() { CodeUser = codeUser });
+            var companies = (new CompanyController()).GetCompanies(userModel);
+            return View(userModel);
+        }
+
+        [HttpPost]
+        public ActionResult Update(UserModel userModel)
+        {
+            try
+            {
+                var userEntity = helperSession.mapping.CreateMapper().Map<UserModel, EUser>(userModel);
+                var codeCompany = "00";
+                var userRegister = "Admin";
+                if (helperSession.Company != null)
+                    codeCompany = helperSession.Company.CodeCompany;
+                if (helperSession.User != null)
+                    userRegister = helperSession.User.CodeUser;
+                userEntity.Audit.CodeCompany = codeCompany;
+                userEntity.Audit.UserRegister = userRegister;
+                userBussines.Update(userEntity);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            return View();
+        }
+
+
+
     }
 }
