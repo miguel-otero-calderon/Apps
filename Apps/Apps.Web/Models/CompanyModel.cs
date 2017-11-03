@@ -30,5 +30,7 @@ namespace Apps.Web.Models
         public string Fax { get; set; }
         public string Logo { get; set; }
         public short State { get; set; }       
+        [Display(Name ="")]
+        public bool CheckBox { get; set; }    
     }
 }

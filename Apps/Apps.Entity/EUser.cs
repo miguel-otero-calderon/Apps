@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Apps.Extension;
 using Apps.Entity;
 
-
 namespace Apps.Entity
 {
     public class EUser : EEntity

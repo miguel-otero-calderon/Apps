@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Apps.Web.Models.CompanyModel>
+
+<table class="col-md-4">
+    <tr>
+        <th>
+            @Html.Label("Detalle de Compañias")
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <div class="col-md-10">
+                    @Html.EditorFor(modelItem => item.CheckBox)
+                    @Html.DisplayFor(modelItem => item.ShortName)
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>

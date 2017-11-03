@@ -44,5 +44,18 @@ namespace Apps.Web.Controllers
             }
             return companiesModel;
         }
+
+        public List<CompanyModel> List()
+        {
+            var companyBussines = new BCompany();
+            var companiesModel = new List<CompanyModel>();            
+            var companiesEntity = companyBussines.List();
+            foreach (var companyEntity in companiesEntity)
+            {
+                var companyModel = helperSession.mapping.CreateMapper().Map<ECompany, CompanyModel>(companyEntity);
+                companiesModel.Add(companyModel);
+            }
+            return companiesModel;
+        }
     }
 }

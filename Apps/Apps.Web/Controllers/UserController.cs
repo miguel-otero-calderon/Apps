@@ -134,8 +134,7 @@ namespace Apps.Web.Controllers
         [HttpGet]
         public ActionResult Update(string codeUser)
         {
-            var userModel = Select(new UserModel() { CodeUser = codeUser });
-            var companies = (new CompanyController()).GetCompanies(userModel);
+            var userModel = Select(new UserModel() { CodeUser = codeUser });            
             return View(userModel);
         }
 
@@ -164,7 +163,47 @@ namespace Apps.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult GetCompanies(string codeUser)
+        {
+            var userModel = new UserModel() {CodeUser = codeUser };
+            var companies = (new CompanyController()).GetCompanies(userModel);
+            var subtitle = string.Empty;
+            if(companies.Count == 1)
+                subtitle = string.Format("1 empresa asociada.");
+            else
+                subtitle = string.Format("{0} empresas asociadas.",companies.Count);
+            foreach (var company in companies)
+            {
+                company.CheckBox = true;
+                company.ShortName = string.Format("{0} - {1}",company.CodeCompany,company.ShortName);
+            }
+            ViewBag.Subtitle = subtitle;
+            return PartialView(companies);
+        }
 
-
+        [HttpGet]
+        public ActionResult SetCompanies(string codeUser)
+        {
+            var userModel = new UserModel() { CodeUser = codeUser };
+            var companyController = new CompanyController();            
+            var companies = companyController.List();
+            var companiesUser = companyController.GetCompanies(userModel);
+            var subtitle = string.Empty;
+            if (companiesUser.Count == 1)
+                subtitle = string.Format("1 empresa asociada.");
+            else
+                subtitle = string.Format("{0} empresas asociadas.", companiesUser.Count);
+            foreach (var company in companies)
+            {
+                if(companiesUser.Exists(item => item.CodeCompany == company.CodeCompany))
+                    company.CheckBox = true;
+                else
+                    company.CheckBox = false;
+                company.ShortName = string.Format("{0} - {1}", company.CodeCompany, company.ShortName);
+            }
+            ViewBag.Subtitle = subtitle;
+            return PartialView(companies);
+        }
     }
 }

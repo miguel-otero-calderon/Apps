@@ -45,6 +45,11 @@
 
     </dl>
 
+    <div>
+        @{
+            Html.RenderAction("GetCompanies", "User", new { userCode = Model.CodeUser });
+        }
+    </div>
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
         <div class="form-actions no-color">

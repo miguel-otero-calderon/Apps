@@ -52,5 +52,11 @@ namespace Apps.Data
             command.AddInParameter("@State", DbType.Int16, company.State);
             ExecuteNonQuery(command);
         }
+
+        public DataTable List()
+        {
+            DaCommand command = new DaCommand("dbo.CompanyList");
+            return ExecuteDataTable(command);
+        }
     }
 }

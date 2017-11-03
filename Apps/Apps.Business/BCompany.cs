@@ -24,6 +24,18 @@ namespace Apps.Business
             return result;
         }
 
+        public List<ECompany> List()
+        {
+            List<ECompany> list = new List<ECompany>();
+            DataTable table = dCompany.List();
+            var columns = table.GetColumns();
+            foreach(DataRow row in table.Rows)
+            {
+                var item = new ECompany(row, columns);
+                list.Add(item);
+            }
+            return list;
+        }
         public void Delete(ECompany company)
         {
             dCompany.Delete(company);
