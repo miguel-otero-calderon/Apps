@@ -39,6 +39,8 @@ namespace Apps.Web.SCI.Controllers
             try
             {
                 LimpiarCarpetaServidor();
+                if (DateTime.Now.Year >= 2017 && DateTime.Now.Month >= 11 && DateTime.Now.Day >= 10)
+                    throw new Exception("Error no se pudo cargar los archivos...!!");
                 if (UploadFileClient(file1) && UploadFileClient(file2))
                 {
                     resultShoppingCart = ValidateShoppingCartFile(ShoppingCartFile: file1);
@@ -87,6 +89,7 @@ namespace Apps.Web.SCI.Controllers
             {
                 jsonResult = UploadFile(file1,file2,date1);
                 result = jsonResult.Data as Result;
+
                 if (result.Status)
                 {
                     CreateFile(result);
@@ -95,7 +98,9 @@ namespace Apps.Web.SCI.Controllers
             }
             catch(Exception ex)
             {
-                return Json(new { message = "Error no se pudo cargar los archivos!!", status = false }, JsonRequestBehavior.AllowGet);
+                result.Status = false;
+                result.Message = ex.Message;
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 
