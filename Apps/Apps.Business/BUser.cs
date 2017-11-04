@@ -89,7 +89,7 @@ namespace Apps.Business
 
         public void Update(EUser eUser)
         {
-            eUser.Validar();
+            eUser.ValidarUpdate();
             dUser.Update(eUser);
             eUser.Audit.TypeEvent = "Update";
             bAudit.Insert(eUser.Audit);

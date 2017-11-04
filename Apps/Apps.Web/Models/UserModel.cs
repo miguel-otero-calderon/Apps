@@ -33,7 +33,6 @@ namespace Apps.Web.Models
 
         [Display(Name = "Estado ")]
         public short State { get; set; }
-
         public string StateActive
         {
             get
@@ -47,7 +46,6 @@ namespace Apps.Web.Models
                 return "!Estado desconocido!";
             }
         }
-
         public bool StateCheck
         {
             get
@@ -63,5 +61,9 @@ namespace Apps.Web.Models
             }
         }
         public List<CompanyModel> Companies { get; set; }
+        /// <summary>
+        /// Códigos de las Companies seleccionadas ,separados por ","
+        /// </summary>
+        public string CompaniesUpdate { get; set; }
     }
 }

@@ -73,14 +73,19 @@ namespace Apps.Entity
         }
         public override void Validar()
         {
+            ValidarUpdate();
+
+            if (string.IsNullOrEmpty(Password))
+                throw new Exception("El Password del Usuario[Password] no puede ser vacio.[User]");
+        }
+
+        public void ValidarUpdate()
+        {
             if (string.IsNullOrEmpty(CodeUser))
                 throw new Exception("El Código de Usuario[CodeUser] no puede ser vacio.[User]");
 
             if (string.IsNullOrEmpty(Name))
                 throw new Exception("El Nombre de Usuario[Name] no puede ser vacio.[User]");
-
-            if (string.IsNullOrEmpty(Password))
-                throw new Exception("El Password del Usuario[Password] no puede ser vacio.[User]");
         }
     }
 }

@@ -47,15 +47,14 @@
             </div>
         </div>
         <br />
-        <div>
-            @{
-                Html.RenderAction("SetCompanies", "User", new { userCode = Model.CodeUser });
-            }
-        </div>
+        @{
+            Html.RenderAction("SetCompanies", "User", new { userCode = Model.CodeUser });
+        }        
+        <input type="hidden" id="CompaniesUpdate" name="CompaniesUpdate" />
         <br />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Grabar Cambios" class="btn btn-default" />
+                <input type="submit" value="Grabar Cambios" class="btn btn-default" onclick="return usermodule.companies_update();"  />
             </div>
         </div>
     </div>
@@ -65,6 +64,17 @@
     @Html.ActionLink("Listado", "Index")
 </div>
 
-@section Scripts {
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(document).ready(function () {
+                usermodule.ini({
+                    codeuser: '@Model.CodeUser',
+                    companiesupdate: 'CompaniesUpdate',
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript" src="~/Scripts/User/usermodule.js"> </script>
     @Scripts.Render("~/bundles/jqueryval")
 }
