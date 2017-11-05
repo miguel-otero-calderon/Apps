@@ -54,7 +54,7 @@
         <br />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Grabar Cambios" class="btn btn-default"  />
+                <input type="submit" value="Grabar Cambios" class="btn btn-default" onclick="return usermodule.companies_split();"  />
             </div>
         </div>
     </div>
@@ -75,6 +75,5 @@
             });
         });
     </script>
-    <script type="text/javascript" src="~/Scripts/User/usermodule.js"> </script>
-    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="~/Scripts/User/usermodule.js"> </script>    
 }

@@ -165,7 +165,7 @@ namespace Apps.Web.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
-            return View();
+            return View(userModel);
         }
 
         [HttpGet]
