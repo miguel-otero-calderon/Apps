@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Apps.Data;
 using Apps.Entity;
 using Apps.Extension;
+using System.Transactions;
 
 namespace Apps.Business
 {
@@ -59,15 +60,41 @@ namespace Apps.Business
             EUserCompany eUserCompany;
             List<ECompany> listECompanies;
             short listCount;
-            listECompanies = SelectByUser(eUser);
-            listCount = Convert.ToInt16(listECompanies.Count);
-
-            for (short i = 0; i <= listCount - 1; i++)
+            using (TransactionScope ts = new TransactionScope())
             {
-                eUserCompany = new EUserCompany();
-                eUserCompany.CodeUser = eUser.CodeUser;
-                eUserCompany.CodeCompany = listECompanies[i].CodeCompany;
-                Delete(eUserCompany);
+                listECompanies = SelectByUser(eUser);
+                listCount = Convert.ToInt16(listECompanies.Count);
+
+                for (short i = 0; i <= listCount - 1; i++)
+                {
+                    eUserCompany = new EUserCompany();
+                    eUserCompany.CodeUser = eUser.CodeUser;
+                    eUserCompany.CodeCompany = listECompanies[i].CodeCompany;
+                    Delete(eUserCompany);
+                }
+                ts.Complete();
+            }
+        }
+
+        public void UpdateByUser(EUser eUser)
+        {
+            EUserCompany eUserCompany;
+            List<string> Companies;
+            short listCount;
+            using (TransactionScope ts = new TransactionScope())
+            {                
+                DeleteByUser(eUser);
+                Companies = eUser.Companies;
+                listCount = Convert.ToInt16(Companies.Count);
+
+                for (short i = 0; i <= listCount - 1; i++)
+                {
+                    eUserCompany = new EUserCompany();
+                    eUserCompany.CodeUser = eUser.CodeUser;
+                    eUserCompany.CodeCompany = Companies[i];
+                    Insert(eUserCompany);
+                }
+                ts.Complete();
             }
         }
     }

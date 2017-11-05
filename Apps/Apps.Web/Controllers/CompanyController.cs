@@ -17,14 +17,14 @@ namespace Apps.Web.Controllers
         public ActionResult Choose()
         {
             UserModel userModel = helperSession.User;
-            int companiesCount = userModel.Companies.Count;
+            int companiesCount = userModel.CompaniesModel.Count;
 
             if(companiesCount == 0)
                 throw new Exception("El usuario no tiene empresas configuradas.");
 
             if (companiesCount == 1)
             {
-                helperSession.Company = userModel.Companies[0];
+                helperSession.Company = userModel.CompaniesModel[0];
                 return RedirectToAction("Index", "Home");
             }                
             else
@@ -56,6 +56,6 @@ namespace Apps.Web.Controllers
                 companiesModel.Add(companyModel);
             }
             return companiesModel;
-        }
+        }      
     }
 }

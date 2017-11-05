@@ -7,7 +7,7 @@ using System.Web.Security;
 using Apps.Web.Models;
 using Apps.Business;
 using Apps.Entity;
-using AutoMapper;
+using System.Transactions;
 
 namespace Apps.Web.Controllers
 {
@@ -152,7 +152,12 @@ namespace Apps.Web.Controllers
                     userRegister = helperSession.User.CodeUser;
                 userEntity.Audit.CodeCompany = codeCompany;
                 userEntity.Audit.UserRegister = userRegister;
-                userBussines.Update(userEntity);
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    userBussines.Update(userEntity);
+                    UpdateCompanies(userModel);
+                    ts.Complete();
+                }
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -204,6 +209,34 @@ namespace Apps.Web.Controllers
             }
             ViewBag.Subtitle = subtitle;
             return PartialView(companies);
+        }
+
+        public void UpdateCompanies(UserModel userModel)
+        {
+            var userCompanyBussines = new BUserCompany();
+            var userEntity = new EUser() { CodeUser = userModel.CodeUser };
+            var Companies = new List<string>();
+            if (!string.IsNullOrEmpty(userModel.CompaniesSplit))
+            {
+                Companies = userModel.CompaniesSplit.Split(
+                    separator: new char[] { ',' },
+                    options: StringSplitOptions.RemoveEmptyEntries).ToList();
+            }
+
+            if(Companies.Count == 0)
+            {
+                if(userModel.CompaniesModel.Count > 0)
+                {
+                    foreach (var item in userModel.CompaniesModel)
+                    {
+                        Companies.Add(item.CodeCompany);
+                    }
+                }
+            }
+
+            userEntity.Companies = Companies;
+
+            userCompanyBussines.UpdateByUser(userEntity);
         }
     }
 }

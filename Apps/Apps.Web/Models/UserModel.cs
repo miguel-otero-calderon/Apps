@@ -11,6 +11,7 @@ namespace Apps.Web.Models
     {
         public UserModel()
         {
+            CompaniesModel = new List<CompanyModel>();
         }
         [Required]
         [Display(Name ="Usuario ")]
@@ -60,10 +61,7 @@ namespace Apps.Web.Models
                     State = 0;
             }
         }
-        public List<CompanyModel> Companies { get; set; }
-        /// <summary>
-        /// Códigos de las Companies seleccionadas ,separados por ","
-        /// </summary>
-        public string CompaniesUpdate { get; set; }
+        public List<CompanyModel> CompaniesModel { get; set; }
+        public string CompaniesSplit { get; set; }
     }
 }

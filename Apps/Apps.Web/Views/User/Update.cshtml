@@ -50,11 +50,11 @@
         @{
             Html.RenderAction("SetCompanies", "User", new { userCode = Model.CodeUser });
         }        
-        <input type="hidden" id="CompaniesUpdate" name="CompaniesUpdate" />
+        <input type="hidden" id="CompaniesSplit" name="CompaniesSplit" />
         <br />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Grabar Cambios" class="btn btn-default" onclick="return usermodule.companies_update();"  />
+                <input type="submit" value="Grabar Cambios" class="btn btn-default"  />
             </div>
         </div>
     </div>
@@ -70,7 +70,7 @@
             $(document).ready(function () {
                 usermodule.ini({
                     codeuser: '@Model.CodeUser',
-                    companiesupdate: 'CompaniesUpdate',
+                    companiessplit: 'CompaniesSplit',
                 });
             });
         });
