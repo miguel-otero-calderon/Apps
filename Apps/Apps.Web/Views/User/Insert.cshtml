@@ -45,10 +45,13 @@
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        @{
+            Html.RenderAction("SetCompanies", "User", new { userCode = "" });
+        }
+        <input type="hidden" id="CompaniesSplit" name="CompaniesSplit" />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Guardar" class="btn btn-default" onclick="return usermodule.companies_split();"/>
             </div>
         </div>
     </div>
@@ -57,3 +60,17 @@
 <div>
     @Html.ActionLink("Listado", "Index")
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(document).ready(function () {
+                usermodule.ini({
+                    codeuser: '',
+                    companiessplit: 'CompaniesSplit',
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript" src="~/Scripts/User/UserModule.js"> </script>
+}

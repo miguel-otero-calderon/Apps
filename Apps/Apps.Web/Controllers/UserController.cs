@@ -79,7 +79,12 @@ namespace Apps.Web.Controllers
                         userRegister = helperSession.User.CodeUser;
                     userEntity.Audit.CodeCompany = codeCompany;
                     userEntity.Audit.UserRegister = userRegister;
-                    userBussines.Insert(userEntity);
+                    using (TransactionScope ts = new TransactionScope())
+                    {
+                        userBussines.Insert(userEntity);
+                        UpdateCompanies(userModel);
+                        ts.Complete();
+                    }
                     return RedirectToAction("Index");
                 }
             }
