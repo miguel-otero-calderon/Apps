@@ -177,8 +177,7 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\User\Update.cshtml" />
-    <Content Include="Views\User\GetCompanies.cshtml" />
-    <Content Include="Views\User\SetCompanies.cshtml" />
+    <Content Include="Views\User\_Companies.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

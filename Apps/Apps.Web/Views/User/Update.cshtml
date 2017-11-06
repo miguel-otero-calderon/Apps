@@ -48,7 +48,7 @@
         </div>
         <br />
         @{
-            Html.RenderAction("SetCompanies", "User", new { userCode = Model.CodeUser });
+            Html.RenderPartial("_Companies", Model.CompaniesModel);
         }        
         <input type="hidden" id="CompaniesSplit" name="CompaniesSplit" />
         <br />
@@ -58,7 +58,7 @@
             </div>
         </div>
     </div>
-}
+            }
 
 <div>
     @Html.ActionLink("Listado", "Index")

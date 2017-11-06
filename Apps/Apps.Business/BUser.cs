@@ -73,6 +73,11 @@ namespace Apps.Business
                 eUser.PasswordHash = CalculateHash(eUser);
                 eUser.Validar();
                 dUser.Insert(eUser);
+                if (dUser.ExistsPrimaryKey())
+                {
+                    Message = string.Format("El código de Usuario '{0}' ya existe en el Sistema, no se puede crear el registro.", eUser.CodeUser);
+                    throw new Exception(Message);
+                }
                 eUser.Audit.TypeEvent = "Insert";
                 bAudit.Insert(eUser.Audit);
                 scope.Complete();
@@ -81,10 +86,14 @@ namespace Apps.Business
 
         public void Delete(EUser eUser)
         {
-            bUserCompany.DeleteByUser(eUser);
-            dUser.Delete(eUser);
-            eUser.Audit.TypeEvent = "Delete";
-            bAudit.Insert(eUser.Audit);
+            using (TransactionScope scope = new TransactionScope())
+            {
+                bUserCompany.DeleteByUser(eUser);
+                dUser.Delete(eUser);
+                eUser.Audit.TypeEvent = "Delete";
+                bAudit.Insert(eUser.Audit);
+                scope.Complete();
+            }            
         }
 
         public void Update(EUser eUser)

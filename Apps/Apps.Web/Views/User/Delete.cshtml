@@ -7,7 +7,7 @@
 
 <h2>Eliminar Usuario</h2>
 
-<h3>¿Desea eliminar el Usuario '@Model.CodeUser' ?</h3>
+<h3>¿Desea eliminar el usuario '@Model.CodeUser' ?</h3>
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -44,17 +44,20 @@
         </dd>
 
     </dl>
-
-    <div>
-        @{
-            Html.RenderAction("GetCompanies", "User", new { userCode = Model.CodeUser });
-        }
-    </div>
-    @using (Html.BeginForm()) {
+    <br />
+    @{
+        Html.RenderPartial("_Companies", Model.CompaniesModel);
+    }
+    <input type="hidden" id="CompaniesSplit" name="CompaniesSplit" />
+    <br />
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
-        <div class="form-actions no-color">
-            <input type="submit" value="Eliminar" class="btn btn-default" onclick="return usermodule.confirm_delete();"/> |
-            @Html.ActionLink("Listado", "Index")
+        <div class="form-group">
+            <div class="form-actions no-color">
+                <input type="submit" value="Eliminar" class="btn btn-default" onclick="return usermodule.confirm_delete();" /> |
+                @Html.ActionLink("Listado", "Index")
+            </div>
         </div>
     }   
 </div>
@@ -68,5 +71,5 @@
             });
         });
     </script>
-    <script type="text/javascript" src="~/Scripts/User/UserModule.js"> </script>
+    <script type="text/javascript" src="~/Scripts/User/UserModule.js"></script>
     }

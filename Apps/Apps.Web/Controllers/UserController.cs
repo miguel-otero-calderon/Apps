@@ -59,7 +59,9 @@ namespace Apps.Web.Controllers
         [HttpGet]
         public ActionResult Insert()
         {
-            return View();
+            var userModel = new UserModel();
+            userModel.CompaniesModel = GetCompaniesUpdate(userModel);
+            return View(userModel);
         }
 
         [HttpPost]
@@ -68,11 +70,11 @@ namespace Apps.Web.Controllers
             try
             {
                 userModel.State = 1;
+                var userEntity = helperSession.mapping.CreateMapper().Map<UserModel, EUser>(userModel);
+                var codeCompany = "00";
+                var userRegister = "Admin";                
                 if (ModelState.IsValid)
                 {
-                    var userEntity = helperSession.mapping.CreateMapper().Map<UserModel, EUser>(userModel);
-                    var codeCompany = "00";
-                    var userRegister = "Admin";
                     if (helperSession.Company != null)
                         codeCompany = helperSession.Company.CodeCompany;
                     if (helperSession.User != null)
@@ -92,14 +94,17 @@ namespace Apps.Web.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
             }
-
-            return View();
+            //retornar las compañias ,para que vuelva a editar
+            userModel.CompaniesModel = GetCompaniesUpdate(userModel.CompaniesSplit);
+            return View(userModel);
         }
 
         [HttpGet]
         public ActionResult Delete(string codeUser)
         {
             var userModel = Select(new UserModel() { CodeUser = codeUser });
+            userModel.CompaniesModel = GetCompanies(userModel);
+            ViewBag.IsDelete = true;
             return View(userModel);
         }
 
@@ -117,7 +122,11 @@ namespace Apps.Web.Controllers
                     userRegister = helperSession.User.CodeUser;
                 userEntity.Audit.CodeCompany = codeCompany;
                 userEntity.Audit.UserRegister = userRegister;
-                userBussines.Delete(userEntity);
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    userBussines.Delete(userEntity);
+                    ts.Complete();
+                }                
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -125,7 +134,9 @@ namespace Apps.Web.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
-            return View();
+            ViewBag.IsDelete = true;
+            userModel.CompaniesModel = GetCompanies(userModel);
+            return View(userModel);
         }
 
         public UserModel Select(UserModel userModel)
@@ -139,7 +150,8 @@ namespace Apps.Web.Controllers
         [HttpGet]
         public ActionResult Update(string codeUser)
         {
-            var userModel = Select(new UserModel() { CodeUser = codeUser });            
+            var userModel = Select(new UserModel() { CodeUser = codeUser });
+            userModel.CompaniesModel = GetCompaniesUpdate(userModel);
             return View(userModel);
         }
 
@@ -170,40 +182,31 @@ namespace Apps.Web.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
+            userModel.CompaniesModel = GetCompaniesUpdate(userModel.CompaniesSplit);
             return View(userModel);
         }
 
-        [HttpGet]
-        public ActionResult GetCompanies(string codeUser)
+        public List<CompanyModel> GetCompanies(UserModel userModel)
         {
-            var userModel = new UserModel() {CodeUser = codeUser };
-            var companies = (new CompanyController()).GetCompanies(userModel);
-            var subtitle = string.Empty;
-            if(companies.Count == 1)
-                subtitle = string.Format("1 empresa asociada.");
-            else
-                subtitle = string.Format("{0} empresas asociadas.",companies.Count);
+            var companyController = new CompanyController();
+            var companies = new List<CompanyModel>();
+            companies = userModel.CompaniesModel;
+            if (companies == null || companies.Count == 0)
+                companies = companyController.GetCompanies(userModel);
+
             foreach (var company in companies)
             {
                 company.CheckBox = true;
                 company.ShortName = string.Format("{0} - {1}",company.CodeCompany,company.ShortName);
             }
-            ViewBag.Subtitle = subtitle;
-            return PartialView(companies);
+            return companies;
         }
 
-        [HttpGet]
-        public ActionResult SetCompanies(string codeUser)
+        public List<CompanyModel> GetCompaniesUpdate(UserModel userModel)
         {
-            var userModel = new UserModel() { CodeUser = codeUser };
             var companyController = new CompanyController();            
             var companies = companyController.List();
-            var companiesUser = companyController.GetCompanies(userModel);
-            var subtitle = string.Empty;
-            if (companiesUser.Count == 1)
-                subtitle = string.Format("1 empresa asociada.");
-            else
-                subtitle = string.Format("{0} empresas asociadas.", companiesUser.Count);
+            var companiesUser = GetCompanies(userModel);
             foreach (var company in companies)
             {
                 if(companiesUser.Exists(item => item.CodeCompany == company.CodeCompany))
@@ -212,8 +215,28 @@ namespace Apps.Web.Controllers
                     company.CheckBox = false;
                 company.ShortName = string.Format("{0} - {1}", company.CodeCompany, company.ShortName);
             }
-            ViewBag.Subtitle = subtitle;
-            return PartialView(companies);
+            return companies;
+        }
+
+        public List<CompanyModel> GetCompaniesUpdate(string CompaniesSplit)
+        {
+            var companyController = new CompanyController();
+            var companies = companyController.List();
+            var companiesSplit = new List<string>();
+            if(!string.IsNullOrEmpty(CompaniesSplit))
+                companiesSplit = CompaniesSplit.Split(
+                    separator: new char[] { ',' },
+                    options: StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            foreach (var company in companies)
+            {
+                if (companiesSplit.Exists(item => item == company.CodeCompany))
+                    company.CheckBox = true;
+                else
+                    company.CheckBox = false;
+                company.ShortName = string.Format("{0} - {1}", company.CodeCompany, company.ShortName);
+            }
+            return companies;
         }
 
         public void UpdateCompanies(UserModel userModel)

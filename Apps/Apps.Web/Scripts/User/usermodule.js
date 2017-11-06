@@ -28,10 +28,10 @@
             setting.companiessplit = "#" + parameters.companiessplit;
         },
         confirm_delete: function () {
-            _confirm_delete();
+            return _confirm_delete();
         },
         companies_split: function () {
-            _companies_split();
+            return _companies_split();
         },        
     }
 })();
