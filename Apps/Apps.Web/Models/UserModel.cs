@@ -25,6 +25,7 @@ namespace Apps.Web.Models
 
         public string Password { get; set; }
 
+        [Required]
         [Display(Name = "Nombre ")]
         public string Name { get; set; }
 

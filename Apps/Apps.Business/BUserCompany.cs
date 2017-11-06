@@ -46,9 +46,9 @@ namespace Apps.Business
             dataTable = dUserCompany.SelectByUser(eUser);
             rowsCount = dataTable.Rows.Count;
             listColumns = dataTable.GetColumns();            
-            for (int i = 0; i <= rowsCount - 1; i++)
+            for (int index = 0; index <= rowsCount - 1; index++)
             {
-                dataRow = dataTable.Rows[i];
+                dataRow = dataTable.Rows[index];
                 eCompany = new ECompany(dataRow, listColumns);
                 listECompanies.Add(eCompany);
             }
@@ -65,11 +65,11 @@ namespace Apps.Business
                 listECompanies = SelectByUser(eUser);
                 listCount = Convert.ToInt16(listECompanies.Count);
 
-                for (short i = 0; i <= listCount - 1; i++)
+                for (short index = 0; index <= listCount - 1; index++)
                 {
                     eUserCompany = new EUserCompany();
                     eUserCompany.CodeUser = eUser.CodeUser;
-                    eUserCompany.CodeCompany = listECompanies[i].CodeCompany;
+                    eUserCompany.CodeCompany = listECompanies[index].CodeCompany;
                     Delete(eUserCompany);
                 }
                 ts.Complete();
@@ -87,11 +87,11 @@ namespace Apps.Business
                 Companies = eUser.Companies;
                 listCount = Convert.ToInt16(Companies.Count);
 
-                for (short i = 0; i <= listCount - 1; i++)
+                for (short index = 0; index <= listCount - 1; index++)
                 {
                     eUserCompany = new EUserCompany();
                     eUserCompany.CodeUser = eUser.CodeUser;
-                    eUserCompany.CodeCompany = Companies[i];
+                    eUserCompany.CodeCompany = Companies[index];
                     Insert(eUserCompany);
                 }
                 ts.Complete();
