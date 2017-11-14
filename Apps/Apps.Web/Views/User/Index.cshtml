@@ -3,13 +3,68 @@
 @{
     ViewBag.Title = "Usuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var grid = new WebGrid(source: Model,
+        columnNames: new[] { "CodeUser","Name", "Email", "StateActive" });
 }
+
+<style type="text/css">
+    .mainpanel {
+        margin-left: 230px;
+        min-height: 636px;
+        padding: 20px;
+        padding-top: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+    }
+
+    .info th {
+        background: #E0E0E0 !important;
+    }
+
+    .info th a {
+        color: #000000;
+        font-weight: normal;
+        }
+
+    .column-customer{
+        width:10px   
+    }
+</style>
+
+  
 
 <h2>Listado</h2>
 
 <p>
     @Html.ActionLink("Crear Usuario", "Insert")
 </p>
+<div id="grid">
+    @grid.GetHtml(
+        tableStyle: "table table-bordered",
+        headerStyle: "info",
+        footerStyle: "webgrid-footer",
+        alternatingRowStyle: "webgrid-alternating-row",
+        selectedRowStyle: "webgrid-selected-row",
+        rowStyle: "gridrow",
+        columns: grid.Columns(
+        grid.Column("CodeUser","Usuario"),
+        grid.Column("Name", "Nombre"),
+        grid.Column("Email", "Email"),
+        grid.Column("StateActive", "Estado", style: "column-customer"),
+        grid.Column(header: "",style: "column-customer", format:(item) =>
+        {
+            var link = Html.ActionLink("Editar", "Update", new { codeUser = item.CodeUser });
+            return link;
+        }),
+        grid.Column(header: "", style: "column-customer", format: (item) =>
+        {
+            var link = Html.ActionLink("Eliminar", "Delete", new { codeUser = item.CodeUser });
+            return link;
+        })
+        ));
+</div>
+
 <table class="table">
     <tr>
         <th>
