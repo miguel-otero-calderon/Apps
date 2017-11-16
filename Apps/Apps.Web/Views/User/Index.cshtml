@@ -20,26 +20,28 @@
 
     .info th {
         background: #E0E0E0 !important;
+        
     }
 
     .info th a {
-        color: #000000;
-        font-weight: normal;
+        color: #2a6496;
+        font-weight: bold;
         }
 
-    .column-customer{
-        width:10px   
-    }
+    .codeuser { min-width: 80px; }
+    .name { min-width: 300px; }
+    .email { min-width: 300px;}
+    .state_active { min-width: 30px;}
+    .editar { width: 10px; }
+    .eliminar { width: 10px; }
 </style>
-
-  
-
+ 
 <h2>Listado</h2>
 
 <p>
     @Html.ActionLink("Crear Usuario", "Insert")
 </p>
-<div id="grid">
+<div id="grid" style="width:100px">
     @grid.GetHtml(
         tableStyle: "table table-bordered",
         headerStyle: "info",
@@ -48,21 +50,21 @@
         selectedRowStyle: "webgrid-selected-row",
         rowStyle: "gridrow",
         columns: grid.Columns(
-        grid.Column("CodeUser","Usuario"),
-        grid.Column("Name", "Nombre"),
-        grid.Column("Email", "Email"),
-        grid.Column("StateActive", "Estado", style: "column-customer"),
-        grid.Column(header: "",style: "column-customer", format:(item) =>
+        grid.Column(columnName: "CodeUser",header: "Usuario",style: "codeuser"),
+        grid.Column(columnName: "Name", header: "Nombre", style: "name"),
+        grid.Column(columnName: "Email", header: "Email", style: "email"),
+        grid.Column(columnName: "StateActive", header: "Estado", style: "state_active"),
+        grid.Column(header: "",style: "Editar", format:(item) =>
         {
             var link = Html.ActionLink("Editar", "Update", new { codeUser = item.CodeUser });
             return link;
         }),
-        grid.Column(header: "", style: "column-customer", format: (item) =>
+        grid.Column(header: "", style: "Eliminar", format: (item) =>
         {
             var link = Html.ActionLink("Eliminar", "Delete", new { codeUser = item.CodeUser });
             return link;
         })
-        ));
+        ))
 </div>
 
 <table class="table">
