@@ -178,10 +178,10 @@
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\User\Update.cshtml" />
     <Content Include="Views\User\_Companies.cshtml" />
+    <Content Include="Views\Company\Choose.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Company\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

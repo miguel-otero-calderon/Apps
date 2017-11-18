@@ -13,7 +13,7 @@ namespace Apps.Web.Controllers
     public class CompanyController : Controller
     {
         HelperSession helperSession = new HelperSession();
-        [HttpPost]
+        [HttpGet]
         public ActionResult Choose()
         {
             UserModel userModel = helperSession.User;

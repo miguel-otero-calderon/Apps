@@ -22,7 +22,6 @@ namespace Apps.Web.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password ")]
         [StringLength(maximumLength: 10, MinimumLength = 5)]
-
         public string Password { get; set; }
 
         [Required]

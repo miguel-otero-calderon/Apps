@@ -15,7 +15,7 @@ namespace Apps.Test
         [TestMethod]
         public void Load()
         {
-            string file = @"D:\Miguel\Escritorio\Apps Load\ProductType.xlsx";
+            string file = @"D:\Miguel\Documentos\Visual Studio 2015\Projects\Apps\Apps\Apps.Load\Files\ProductType.xlsx";
             LProductType lProductType = new LProductType();
             lProductType.Load(file);
         }

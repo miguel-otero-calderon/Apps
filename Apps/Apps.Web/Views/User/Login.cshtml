@@ -21,9 +21,11 @@
 
             <div>@Html.LabelFor(entity => entity.Password) </div>
             <div>
-                @Html.TextBoxFor(entity => entity.Password)
+                @Html.PasswordFor(entity => entity.Password)
                 @Html.ValidationMessageFor(entity => entity.Password)
             </div>  
+
+
             <input type="submit" value="Ingresar" />
         </fieldset>
     </div>

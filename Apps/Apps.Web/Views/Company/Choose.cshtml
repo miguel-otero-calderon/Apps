@@ -1,0 +1,42 @@
+﻿@model Apps.Web.Models.UserModel
+
+@{
+    bool IsDelete = false;
+    try
+    {
+        IsDelete = Convert.ToBoolean(ViewBag.IsDelete);
+    }
+    catch { }
+}
+
+@if (Model.CompaniesModel != null && Model.CompaniesModel.Count > 0)
+{
+    <table class="col-md-4">
+        <tr>
+            <th>
+                @Html.Label("Seleccionar compañia")
+            </th>
+        </tr>
+        @foreach (var item in Model.CompaniesModel)
+        {
+            <tr>
+                <td>
+                    <div class="col-md-10">
+                        @{
+                            var id = string.Format("CodeCompany-{0}", item.CodeCompany);
+                        }
+                        @if (IsDelete)
+                        {
+                            @Html.DisplayFor(modelItem => item.CheckBox);
+                        }
+                        else
+                        {
+                            <input class="check-box" id="@id" name="company" type="checkbox" checked="@item.CheckBox">
+                        }
+                        @Html.DisplayFor(modelItem => item.ShortName)
+                    </div>
+                </td>
+            </tr>
+                            }
+    </table>
+                            }
