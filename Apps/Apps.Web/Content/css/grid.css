@@ -1,0 +1,26 @@
+﻿.mainpanel {
+        margin-left: 230px;
+        min-height: 636px;
+        padding: 20px;
+        padding-top: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+    }
+
+    .info th {
+        background: #E0E0E0 !important;
+        
+    }
+
+    .info th a {
+        color: #2a6496;
+        font-weight: bold;
+        }
+
+    .codeuser { min-width: 80px; }
+    .name { min-width: 300px; }
+    .email { min-width: 300px;}
+    .state_active { min-width: 30px;}
+    .editar { width: 10px; }
+    .eliminar { width: 10px; }

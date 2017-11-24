@@ -5,61 +5,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Eliminar Usuario</h2>
+<div class="container">
 
-<h3>¿Desea eliminar el usuario '@Model.CodeUser' ?</h3>
-<div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CodeUser)
-        </dt>
+    <h2>Eliminar Usuario</h2>
 
-        <dd>
-            @Html.DisplayFor(model => model.CodeUser)
-        </dd>
+    <h3>¿Desea eliminar el usuario '@Model.CodeUser' ?</h3>
+    <div class="row clearfix">
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.CodeUser)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CodeUser)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.State)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.StateActive)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.State)
+            </dt>
 
-    </dl>
-    <br />
-    @{
-        Html.RenderPartial("_Companies", Model.CompaniesModel);
-    }
-    <input type="hidden" id="CompaniesSplit" name="CompaniesSplit" />
-    <br />
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-        <div class="form-group">
-            <div class="form-actions no-color">
-                <input type="submit" value="Eliminar" class="btn btn-default" onclick="return usermodule.confirm_delete();" /> |
-                @Html.ActionLink("Listado", "Index")
-            </div>
+            <dd>
+                @Html.DisplayFor(model => model.StateActive)
+            </dd>
+
+        </dl>
+        <br />
+        <div class="row clearfix">
+            @{
+                Html.RenderPartial("_Companies", Model.CompaniesModel);
+            }
         </div>
-    }   
+            <input type="hidden" id="CompaniesSplit" name="CompaniesSplit" />
+            <br />
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="row clearfix">
+                    <input type="submit" value="Eliminar" class="btn btn-primary" onclick="return usermodule.confirm_delete();" /> |
+                    @Html.ActionLink("Listado", "Index")
+                </div>
+            }
+        </div>
 </div>
 @section scripts{
     <script type="text/javascript">

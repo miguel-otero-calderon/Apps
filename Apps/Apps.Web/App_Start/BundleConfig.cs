@@ -25,6 +25,7 @@ namespace Apps.Web
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/css/grid.css",
                       "~/Content/site.css"));
         }
     }

@@ -38,7 +38,6 @@ namespace Apps.Web.Controllers
         [HttpPost]
         public ActionResult Login(UserModel userModel)
         {
-            int companiesCount = 0;
             if (!string.IsNullOrEmpty(userModel.CodeUser) && !string.IsNullOrEmpty(userModel.Password))
             {                
                 var userEntity = helperSession.mapping.CreateMapper().Map<UserModel, EUser>(userModel);
@@ -46,9 +45,9 @@ namespace Apps.Web.Controllers
                 if (exit)
                 {
                     userModel = Select(userModel);
-                    companiesCount = userModel.CompaniesModel.Count;
+                    userModel.CompaniesModel = GetCompanies(userModel);
 
-                    if (companiesCount == 0)
+                    if (userModel.CompaniesModel.Count == 0)
                     {
                         ModelState.AddModelError("", "Credenciales correctas, pero el usuario no tiene empresas configuradas.");                        
                         return View(userModel);
@@ -56,7 +55,7 @@ namespace Apps.Web.Controllers
 
                     helperSession.User = userModel;
                     FormsAuthentication.SetAuthCookie(userEntity.CodeUser, false);
-                    return RedirectToAction("Choose", "Company");
+                    return RedirectToAction("Choose", "Company");                                                                              
                 }
                 else
                 {

@@ -7,42 +7,15 @@
         columnNames: new[] { "CodeUser","Name", "Email", "StateActive" });
 }
 
-<style type="text/css">
-    .mainpanel {
-        margin-left: 230px;
-        min-height: 636px;
-        padding: 20px;
-        padding-top: 20px;
-        padding-right: 20px;
-        padding-bottom: 20px;
-        padding-left: 20px;
-    }
+<div class="container">
 
-    .info th {
-        background: #E0E0E0 !important;
-        
-    }
+    <h2>Listado</h2>
 
-    .info th a {
-        color: #2a6496;
-        font-weight: bold;
-        }
-
-    .codeuser { min-width: 80px; }
-    .name { min-width: 300px; }
-    .email { min-width: 300px;}
-    .state_active { min-width: 30px;}
-    .editar { width: 10px; }
-    .eliminar { width: 10px; }
-</style>
- 
-<h2>Listado</h2>
-
-<p>
-    @Html.ActionLink("Crear Usuario", "Insert")
-</p>
-<div id="grid" style="width:100px">
-    @grid.GetHtml(
+    <p>
+        @Html.ActionLink("Crear Usuario", "Insert")
+    </p>
+    <div id="grid" style="width:100px">
+        @grid.GetHtml(
         tableStyle: "table table-bordered",
         headerStyle: "info",
         footerStyle: "webgrid-footer",
@@ -50,11 +23,11 @@
         selectedRowStyle: "webgrid-selected-row",
         rowStyle: "gridrow",
         columns: grid.Columns(
-        grid.Column(columnName: "CodeUser",header: "Usuario",style: "codeuser"),
+        grid.Column(columnName: "CodeUser", header: "Usuario", style: "codeuser"),
         grid.Column(columnName: "Name", header: "Nombre", style: "name"),
         grid.Column(columnName: "Email", header: "Email", style: "email"),
         grid.Column(columnName: "StateActive", header: "Estado", style: "state_active"),
-        grid.Column(header: "",style: "Editar", format:(item) =>
+        grid.Column(header: "", style: "Editar", format: (item) =>
         {
             var link = Html.ActionLink("Editar", "Update", new { codeUser = item.CodeUser });
             return link;
@@ -65,5 +38,6 @@
             return link;
         })
         ))
-</div>
+    </div>
 
+</div>
