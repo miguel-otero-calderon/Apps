@@ -16,7 +16,8 @@ namespace Apps.Web.Controllers
         BUser userBussines = new BUser();        
         List<UserModel> usersModel = new List<UserModel>();
         HelperSession helperSession = new HelperSession();
-
+        
+        [Authorize]
         public ActionResult Index()
         {
             var usersEntity = userBussines.List();
@@ -30,12 +31,14 @@ namespace Apps.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View(); 
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult Login(UserModel userModel)
         {
             if (!string.IsNullOrEmpty(userModel.CodeUser) && !string.IsNullOrEmpty(userModel.Password))
@@ -66,6 +69,7 @@ namespace Apps.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult Insert()
         {
             var userModel = new UserModel();
@@ -74,6 +78,7 @@ namespace Apps.Web.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult Insert(UserModel userModel)
         {
             try
@@ -109,6 +114,7 @@ namespace Apps.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Delete(string codeUser)
         {
             var userModel = Select(new UserModel() { CodeUser = codeUser });
@@ -118,6 +124,7 @@ namespace Apps.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Delete(UserModel userModel)
         {
             try
@@ -157,6 +164,7 @@ namespace Apps.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Update(string codeUser)
         {
             var userModel = Select(new UserModel() { CodeUser = codeUser });
@@ -165,6 +173,7 @@ namespace Apps.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Update(UserModel userModel)
         {
             try
@@ -274,6 +283,14 @@ namespace Apps.Web.Controllers
             userEntity.Companies = Companies;
 
             userCompanyBussines.UpdateByUser(userEntity);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult Close()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

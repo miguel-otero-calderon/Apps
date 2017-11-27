@@ -1,28 +1,49 @@
 ﻿@model Apps.Web.Models.UserModel
 
-<h2>Seleccionar compañia</h2>
-<br />
-<div class="container">
-    <table class="col-md-4 table-bordered">
-        <tr>
-            <th class="info">
-                @Html.Label("Compañias asignadas al usuario: " + Model.CodeUser   )
-            </th>
-        </tr>
-        @foreach (var item in Model.CompaniesModel)
-        {
-            <tr>
-                <td>
-                    <div class="form-group">
-                        <input type="radio" class="radio-inline" id="@item.CodeCompany" name="company" />                        
-                        <span class="form-inline">@item.ShortName</span>
-                    </div>                    
-                </td>
-            </tr>
-        }
-    </table>
-</div>
-<br />
-<div class="form-horizontal">
-    <input type="submit" class="btn btn-primary" value="Aceptar" />
-</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <h2>Seleccionar compañia</h2>
+        <br />
+        <div>
+            <table class="col-md-4 table-bordered">
+                <tr>
+                    <th class="info">
+                        @Html.Label("Compañias asignadas al usuario: " + Model.CodeUser)
+                    </th>
+                </tr>
+                @foreach (var item in Model.CompaniesModel)
+                {
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <input type="radio" class="radio-inline" id="@item.CodeCompany" name="company" />
+                                <label for="@item.CodeCompany" class="form-inline" style="font-stretch:normal">@item.ShortName</label>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <br />
+        <input type="hidden" id="CodeCompany" name="CodeCompany" />
+        <div class="form-horizontal">
+            <input type="submit" class="btn btn-primary" value="Aceptar" onclick="return companymodule.validate_company_selected();" />
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(document).ready(function () {
+                companymodule.ini({
+                    codecompany: "CodeCompany",
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript" src="~/Scripts/Company/CompanyModule.js"> </script>
+}

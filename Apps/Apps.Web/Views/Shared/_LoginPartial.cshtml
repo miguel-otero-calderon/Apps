@@ -1,0 +1,42 @@
+﻿@using Apps.Web.Models; 
+
+@{ 
+    HelperSession helperSession = new HelperSession();
+    string Name = string.Empty;
+    string Company = string.Empty;
+
+    if (helperSession.User != null)
+    {
+        Name = helperSession.User.Name;
+    }
+
+    if (helperSession.Company != null)
+    {
+        Company = helperSession.Company.LongName;
+    }
+}
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("Close", "User", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>  
+                <a>@Name</a>                                      
+            </li>
+            <li>
+                <a>@Company</a>                      
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Registrarse", "Insert", "User")</li>
+        <li>@Html.ActionLink("Iniciar sesión", "Login", "User")</li>
+    </ul>
+}

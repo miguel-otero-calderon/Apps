@@ -13,13 +13,16 @@
         var checkboxes = $("input[name='company']");
         $.each(checkboxes, function (index, checkbox) {
             if (checkbox.checked)
-                companiessplit = companiessplit + checkbox.id.replace("CodeCompany-", "") + ",";
+                companiessplit = companiessplit + checkbox.id + ",";
         });
         $(setting.companiessplit).val(companiessplit);
         if (companiessplit !== "")
             return true;           
-        else
-            return confirm('¿Desea grabar los cambios ,sin elegir una Empresa para el Usuario?');
+        else {
+            alert('¿Debe seleccionar una Empresa?');
+            return false;
+        }
+
     }
 
     return {

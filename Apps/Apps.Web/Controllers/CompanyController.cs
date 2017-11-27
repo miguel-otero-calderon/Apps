@@ -13,6 +13,8 @@ namespace Apps.Web.Controllers
     public class CompanyController : Controller
     {
         HelperSession helperSession = new HelperSession();
+        BCompany companyBussines = new BCompany();
+         
         [HttpGet]
         public ActionResult Choose()
         {
@@ -30,6 +32,23 @@ namespace Apps.Web.Controllers
             else
                 return View(userModel);
         }
+
+        [HttpPost]
+        public ActionResult Choose(string CodeCompany)
+        {
+            var companyModel = Select(CodeCompany);
+            helperSession.Company = companyModel;
+            return RedirectToAction("Index", "Home");
+        }
+
+        protected CompanyModel Select(string codeCompany)
+        {
+            var companyEntity = new ECompany() { CodeCompany = codeCompany };
+            companyEntity = companyBussines.Select(companyEntity);
+            var companyModel = helperSession.mapping.CreateMapper().Map<ECompany, CompanyModel>(companyEntity);
+            return companyModel;
+        }
+
         public List<CompanyModel> GetCompanies(UserModel userModel)
         {
             var companiesModel = new List<CompanyModel>();

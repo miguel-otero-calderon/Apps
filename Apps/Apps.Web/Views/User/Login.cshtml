@@ -11,6 +11,7 @@
 
     @using (Html.BeginForm())
     {
+        @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "Login fallido, verificar los datos.");
         <div>
             <fieldset>
@@ -27,9 +28,9 @@
                     @Html.ValidationMessageFor(entity => entity.Password)
                 </div>
 
-                <div class="row clearfix">
-                    <input type="submit" value="Ingresar" class="btn btn-primary" />
-                </div>                
+                <div>
+                    <input type="submit" value="Ingresar" class="btn btn-primary form-control" />
+                </div>
             </fieldset>
         </div>
     }
