@@ -69,8 +69,6 @@ function isValidDate(day, month, year) {
     var dteDate;
     month = month - 1;
     dteDate = new Date(year, month, day);
-    if (validar_fecha_x() === -1)
-        return false;
     return ((day == dteDate.getDate()) && (month == dteDate.getMonth()) && (year == dteDate.getFullYear()));
 }
 
@@ -133,14 +131,6 @@ function UploadFile() {
         contentType: false,
         processData: false
     });
-}
-
-function validar_fecha_x() {
-    var fecha_hoy = new Date();
-    if (fecha_hoy.getFullYear() >= 2017 && (fecha_hoy.getMonth() + 1) >= 11 && fecha_hoy.getDate() >= 10)
-        return -1;
-    else
-        return 1;
 }
 
 function EjecuteFile() {
